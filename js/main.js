@@ -277,12 +277,12 @@ function studioTeaser(createKit, createStage) {
   renderer.setAnimationLoop(() => { if (isOn()) { tick(); renderer.render(scene, camera); } });
 }
 
-// Portfólio: fotos reais em img/portfolio/1.jpg…6.jpg; se não houver, mostra modelos gerados em 3D
+// Portfólio: fotos reais em img/portfolio/1.jpg…5.jpg; se não houver, mostra modelos gerados em 3D
 function folio(createKit, createStage) {
   const el = $('#folio');
   const items = [
     ['Uniformes de futebol', 0], ['Camisas de eventos', 1], ['Uniformes escolares', 2],
-    ['Times de várzea', 3], ['Camisas de igreja', 4], ['Interclasse', 1],
+    ['Times de várzea', 3], ['Camisas de igreja', 4],
   ];
   el.innerHTML = items.map(([cap], i) => `<figure class="reveal"><img src="img/portfolio/${i + 1}.jpg" alt="${cap}" loading="lazy" data-i="${i}"><figcaption>${cap}</figcaption></figure>`).join('');
   const missing = [];
@@ -302,7 +302,7 @@ function folio(createKit, createStage) {
       scene.add(kit.group);
       missing.forEach((img) => {
         const p = PRESETS[items[img.dataset.i][1]];
-        kit.paint({ ...p, name: ['SILVA', 'EVENTO', 'ESCOLA', 'VÁRZEA', 'FÉ', 'TURMA'][img.dataset.i] });
+        kit.paint({ ...p, name: ['SILVA', 'EVENTO', 'ESCOLA', 'VÁRZEA', 'FÉ'][img.dataset.i] });
         kit.group.rotation.y = Number(img.dataset.i) % 2 ? Math.PI : 0.35;
         renderer.render(scene, camera);
         img.src = c.toDataURL('image/jpeg', 0.85);

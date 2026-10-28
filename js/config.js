@@ -19,7 +19,8 @@ export const waLink = (text) => `https://wa.me/${SITE.whatsapp}?text=${encodeURI
 
 const DAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 export function hoursTable() {
-  return DAYS.map((d, i) => {
+  return [1, 2, 3, 4, 5, 6, 0].map((i) => {
+    const d = DAYS[i];
     const h = SITE.hours.find((x) => x[0] === i);
     return [d, h ? `${h[1]} – ${h[2]}` : 'Fechado'];
   });

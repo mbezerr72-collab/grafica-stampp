@@ -14,8 +14,8 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: var(--body); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { background: var(--bg); color: var(--text); font-family: var(--body); line-height: 1.6; overflow-x: clip; -webkit-font-smoothing: antialiased; }
 body.locked { overflow: hidden; }
 [hidden] { display: none !important; }
 img { max-width: 100%; display: block; }
@@ -173,7 +173,6 @@ section { position: relative; }
 .folio { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 14px; }
 .folio figure { border-radius: var(--r); overflow: hidden; position: relative; background: var(--card); }
 .folio figure:nth-child(1) { grid-row: span 2; grid-column: span 2; }
-.folio figure:nth-child(4) { grid-row: span 2; }
 .folio figure img, .folio figure canvas { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
 .folio figure:hover img { transform: scale(1.06); }
 .folio figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(0, 0, 0, .65); backdrop-filter: blur(6px); padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
@@ -385,7 +384,6 @@ footer img { height: 40px; }
   .studio-box { grid-template-columns: 1fr; padding: 30px 20px; }
   .sizes, .contact { grid-template-columns: 1fr; }
   .folio { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
-  .folio figure:nth-child(4) { grid-row: span 1; }
   .modal-box { grid-template-columns: 1fr; }
   .modal-media { min-height: 240px; }
   .sec { padding: 80px 0; }
@@ -396,6 +394,9 @@ footer img { height: 40px; }
   .card-body h3 { font-size: 14px; }
   .card-body p { display: none; }
   .price { font-size: 15px; }
+  .price small { display: block; margin-left: 0; }
+  .card-foot { align-items: end; gap: 6px; }
+  .scroll-hint { display: none; }
   .add-btn { width: 36px; height: 36px; }
   .steps { grid-template-columns: 1fr; }
   .hero-ctas .btn { flex: 1; }
