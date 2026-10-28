@@ -3,60 +3,72 @@ import { productById, defaultSelection, unitPrice, selectionLabel, MEASURES, SIZ
 import { cart, MAX_QTY } from './cart.js';
 import { SITE, waLink } from './config.js';
 import { FORMS, initialData, sizeTotal, faixa } from './forms.js';
-import { layout, icon, esc, catById, productCard, productsIn, toast, openLightbox, workTile, $ } from './ui.js';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js';
 import { worksOf } from './works.js';
 
 layout('produtos');
 const root = $('#prod');
-const p = productById(new URLSearchParams(location.search).get('id'));
+const params = new URLSearchParams(location.search);
+const p = productById(params.get('id'));
+const models = p ? worksOf(p.id) : [];
+const model = models[Number(params.get('m'))] || null; // modelo escolhido nas fileiras da página inicial
 
-if (!p) {
-  root.innerHTML = `<div class="empty" style="padding:100px 0">${icon('search')}<h1 class="h2">Produto não encontrado</h1>
-    <a class="btn btn-dark" href="produtos.html">Ver todos os produtos</a></div>`;
-} else {
-  render();
-}
+
+// Ficha técnica por categoria
+const SPECS = {
+  impressos: [['Impressão', 'Digital ou offset, em cores (CMYK)'], ['Papel', 'Couché, offset ou fotográfico, conforme o produto'], ['Acabamento', 'Corte reto; laminação, verniz, dobra ou numeração sob consulta']],
+  camisas: [['Tecidos', 'Algodão, poliéster, dry fit e misto'], ['Personalização', 'Sublimação, serigrafia, DTF ou bordado'], ['Tamanhos', 'PP ao EXG e baby look (PPBL ao EXGBL)'], ['Nome e número', 'Individuais por peça, sem custo de arte extra na lista do time']],
+  brindes: [['Personalização', 'Impressão colorida, sublimação ou gravação a laser'], ['Quantidade', 'A partir de 1 unidade em canecas; demais itens sob consulta'], ['Embalagem', 'Individual sob consulta']],
+  comunicacao: [['Materiais', 'Lona, vinil adesivo, ACM, acrílico, PVC e MDF'], ['Medidas', 'Sob medida; visita técnica se precisar'], ['Instalação', 'Feita pela equipe, sob consulta']],
+  design: [['Entrega', 'Arquivos prontos para impressão e para redes sociais'], ['Ajustes', 'Revisões combinadas no orçamento'], ['Formatos', 'PDF, PNG e vetor (AI/SVG)']],
+};
 
 function render() {
   const cat = catById(p.cat);
-  document.title = `${p.name} — Gráfica Estamp`;
+  const title = model ? model.cap : p.name;
+  document.title = `${title} — Gráfica Estamp`;
   document.querySelector('meta[name="description"]').content = p.desc;
-  const imgs = [p.img, ...(p.gallery || [])];
+  // galeria: o modelo escolhido primeiro, depois os outros modelos e as fotos do produto
+  const shots = [...(model ? [model] : []), ...models.filter((w) => w !== model), ...[p.img, ...(p.gallery || [])].map((src) => ({ src, cap: p.name, fit: 'cover', id: p.id }))];
+  const first = shots[0];
 
   root.innerHTML = `
-    <nav class="crumbs" aria-label="Você está em" style="padding-top:24px"><a href="index.html">Início</a><span><a href="produtos.html?cat=${cat.id}">${cat.label}</a></span><span>${esc(p.name)}</span></nav>
+    <nav class="crumbs" aria-label="Você está em" style="padding-top:24px"><a href="index.html">Início</a><span><a href="produtos.html?cat=${cat.id}">${cat.label}</a></span>${model ? `<span><a href="produto.html?id=${p.id}">${esc(p.name)}</a></span>` : ''}<span>${esc(title)}</span></nav>
     <div class="prod">
       <div class="gallery">
-        <div class="g-main"><img id="gMain" src="${imgs[0]}" alt="${esc(p.name)}" width="900" height="900"></div>
-        ${imgs.length > 1 ? `<div class="g-thumbs">${imgs.map((src, i) => `<button class="${i ? '' : 'on'}" data-src="${src}" aria-label="Foto ${i + 1}"><img src="${src}" alt=""></button>`).join('')}</div>` : ''}
+        <button class="g-main fit-${first.fit}" id="gMain" aria-label="Ampliar foto"><img src="${first.src}" alt="${esc(first.cap)}" width="900" height="900"><span class="g-zoom">${icon('search')}</span></button>
+        ${shots.length > 1 ? `<div class="g-thumbs">${shots.map((w, i) => `<button class="fit-${w.fit}${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1}: ${esc(w.cap)}"><img src="${w.src}" alt=""></button>`).join('')}</div>` : ''}
       </div>
       <div class="prod-info">
-        <span class="eyebrow">${cat.label}</span>
-        <h1>${esc(p.name)}</h1>
+        <span class="eyebrow">${model ? `<a href="produto.html?id=${p.id}">${esc(p.name)}</a>` : cat.label}</span>
+        <h1>${esc(title)}</h1>
         <p>${esc(p.desc)}</p>
+        ${model ? `<p class="model-note">${icon('image')}Modelo de referência. Fazemos igual ou adaptamos com a sua marca, cores e textos.</p>` : ''}
         <div class="facts" id="facts"></div>
         <div id="action"></div>
       </div>
     </div>
-    <section class="models" id="models" hidden><div class="sec-head"><div><h2>Modelos que fazemos</h2><p>Toque em uma foto para ampliar. Use como referência no seu pedido.</p></div></div><div class="models-grid" id="modelsGrid"></div></section>
+    <section class="spec-wrap"><h2 class="h2" style="font-size:24px">Detalhes do produto</h2>
+      <dl class="spec">${[['Produto', p.name], ...(model ? [['Modelo', model.cap]] : []), ['Categoria', cat.label],
+        ['Como comprar', p.flow === 'compra' ? 'Compra direta: escolha as opções e pague online ou pelo WhatsApp' : 'Sob encomenda: envie o pedido e receba o orçamento antes de pagar'],
+        ['Preço', priceLine(p)], ...(SPECS[p.cat] || []), ['Arte', 'Envie a sua ou peça para a equipe criar; você aprova antes de produzir'],
+        ['Recebimento', `Retirada na gráfica (${SITE.address}) ou entrega em Cruzeiro do Sul`]].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></section>
     <div class="details" id="details"></div>
+    ${models.length > (model ? 1 : 0) ? `<section style="padding-bottom:40px"><div class="sec-head"><div><h2>${model ? 'Outros modelos' : 'Modelos que fazemos'}</h2><p>Escolha um modelo para ver os detalhes e pedir igual.</p></div></div>
+      <div class="grid">${models.map((w, i) => ({ w, i })).filter(({ w }) => w !== model).map(({ w, i }) => shopCard({ href: `produto.html?id=${p.id}&m=${i}`, img: w.src, fit: w.fit, fav: `${p.id}:${i}`, title: w.cap, sub: p.name, price: priceLine(p) })).join('')}</div></section>` : ''}
     <section style="padding-bottom:80px"><div class="sec-head"><div><h2>Outros produtos de ${cat.label.toLowerCase()}</h2></div></div>
       <div class="grid">${productsIn(p.cat).filter((x) => x.id !== p.id).slice(0, 4).map((x) => productCard(x, { showCat: false })).join('')}</div></section>`;
 
-  root.querySelector('.g-thumbs')?.addEventListener('click', (e) => {
-    const b = e.target.closest('button');
-    if (!b) return;
-    $('#gMain').src = b.dataset.src;
-    root.querySelectorAll('.g-thumbs button').forEach((x) => x.classList.toggle('on', x === b));
-  });
+  let cur = 0;
+  const show = (i) => {
+    cur = i; const w = shots[i];
+    const main = $('#gMain'); main.className = `g-main fit-${w.fit}`; main.querySelector('img').src = w.src; main.querySelector('img').alt = w.cap;
+    root.querySelectorAll('.g-thumbs button').forEach((x, k) => x.classList.toggle('on', k === i));
+  };
+  root.querySelector('.g-thumbs')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(Number(b.dataset.i)); });
+  $('#gMain').addEventListener('click', () => openLightbox(shots, cur));
 
   renderDetails();
-  const models = worksOf(p.id);
-  if (models.length) {
-    $('#models').hidden = false;
-    $('#modelsGrid').innerHTML = models.map((w, i) => workTile(w, i, 'model')).join('');
-    $('#modelsGrid').addEventListener('click', (e) => { const b = e.target.closest('.work'); if (b) openLightbox(models, Number(b.dataset.i)); });
-  }
   if (p.flow === 'compra') renderBuy(); else renderQuote();
 }
 
@@ -103,7 +115,7 @@ function renderBuy() {
     $('#total').textContent = brl(unit * qty);
     $('#unit').textContent = qty > 1 ? `${qty} × ${brl(unit)}` : selectionLabel(p, sel);
     $('#qty').value = qty;
-    $('#buyWa').href = waLink(`Olá! Quero pedir pelo site:\n\n${qty}× ${p.name}\n${selectionLabel(p, sel)}\nTotal: ${brl(unit * qty)}`);
+    $('#buyWa').href = waLink(`Olá! Quero pedir pelo site:\n\n${qty}× ${p.name}${model ? `\nModelo: ${model.cap}` : ''}\n${selectionLabel(p, sel)}\nTotal: ${brl(unit * qty)}`);
   };
   $('#action').addEventListener('change', (e) => {
     if (e.target.type === 'radio') { sel[e.target.name] = e.target.value; update(); }
@@ -114,7 +126,7 @@ function renderBuy() {
     if (q) { qty = Math.max(1, Math.min(MAX_QTY, qty + Number(q.dataset.q))); update(); }
   });
   $('#add').addEventListener('click', () => {
-    cart.add(p.id, { ...sel }, qty);
+    cart.add(p.id, { ...sel }, qty, model?.cap);
     toast(`${icon('check')}<span>${esc(p.name)} no carrinho</span><a href="carrinho.html">Ver carrinho</a>`);
   });
   update();
@@ -288,7 +300,7 @@ function renderQuote() {
 
   // ----- revisão e envio -----
   function entries() {
-    const out = [];
+    const out = model ? [['Modelo de referência', model.cap]] : [];
     for (const s of steps) {
       for (const f of s.fields) {
         if (!visible(f)) continue;
@@ -331,4 +343,11 @@ function renderQuote() {
     if (e.target.closest('#send')) send();
   });
   draw();
+}
+
+if (!p) {
+  root.innerHTML = `<div class="empty" style="padding:100px 0">${icon('search')}<h1 class="h2">Produto não encontrado</h1>
+    <a class="btn btn-dark" href="produtos.html">Ver todos os produtos</a></div>`;
+} else {
+  render();
 }

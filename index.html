@@ -12,11 +12,23 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Michroma&family=Krona+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preload" as="image" href="img/hero.jpg">
 </head>
 <body>
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-logo">
+      <div class="intro-g"><span id="introType"></span><i class="caret"></i></div>
+      <svg class="intro-e" viewBox="0 0 1000 170" role="img" aria-label="Estamp">
+        <text x="0" y="150" font-family="Krona One, sans-serif" font-size="156" fill="#fff" textLength="400" lengthAdjust="spacingAndGlyphs">EST</text>
+        <path d="M410 150 L488 0 L566 150 L532 150 L488 64 L444 150 Z" fill="#fff"/>
+        <path class="intro-tri" d="M488 86 L516 140 L460 140 Z" fill="#ff6a00"/>
+        <text x="580" y="150" font-family="Krona One, sans-serif" font-size="156" fill="#fff" textLength="420" lengthAdjust="spacingAndGlyphs">MP</text>
+      </svg>
+    </div>
+    <button class="intro-skip" id="introSkip">Pular</button>
+  </div>
   <main id="conteudo">
     <section class="hero">
       <div class="hero-img" role="img" aria-label="Camisa, sacola, cartões, caneca, garrafa e caixa com a marca Gráfica Estamp"></div>
@@ -47,39 +59,10 @@
     <section class="sec alt">
       <div class="wrap">
         <div class="sec-head">
-          <div><h2>Mais pedidos</h2><p>Modelos que fazemos para inspirar o seu pedido. Toque em uma foto para ampliar.</p></div>
+          <div><h2>Mais pedidos</h2><p>Modelos que fazemos. Escolha um para ver os detalhes e pedir.</p></div>
           <a class="link-arrow" href="produtos.html">Ver catálogo <span data-i="arrow"></span></a>
         </div>
-        <div class="shelves" id="featured"></div>
-      </div>
-    </section>
-
-    <section class="sec">
-      <div class="wrap">
-        <div class="sec-head"><div><h2>Duas formas de comprar</h2><p>Depende do que você precisa.</p></div></div>
-        <div class="flows">
-          <div class="flow"><div class="flow-ico" data-i="cart"></div><div>
-            <h3>Produtos com preço definido</h3>
-            <p>Você escolhe quantidade, tamanho, material e acabamento. O site calcula o preço e você paga online ou pelo WhatsApp.</p>
-            <p class="ex">Ex.: cartões de visita, panfletos, adesivos, canecas e troféus.</p></div></div>
-          <div class="flow"><div class="flow-ico" data-i="chat"></div><div>
-            <h3>Produtos feitos sob encomenda</h3>
-            <p>Você descreve o projeto, informa a quantidade e envia os arquivos. A equipe analisa e retorna com preço e prazo.</p>
-            <p class="ex">Ex.: camisas personalizadas, fachadas, banners sob medida e projetos especiais.</p></div></div>
-        </div>
-        <div class="note"><span data-i="bulb"></span><p><b>Sem pagar no escuro.</b> Em produtos personalizados você só paga depois de aprovar o orçamento e a arte com a nossa equipe.</p></div>
-      </div>
-    </section>
-
-    <section class="sec alt">
-      <div class="wrap">
-        <div class="sec-head"><div><h2>Como o seu pedido chega até nós</h2><p>Tudo registrado, do primeiro clique até a entrega.</p></div></div>
-        <div class="steps">
-          <div class="step"><div class="step-ico" data-i="devices"></div><h3>Você escolhe o produto</h3><p>Preenche as opções e envia a arte ou a ideia.</p></div>
-          <div class="step"><div class="step-ico" data-i="doc"></div><h3>Pedido registrado</h3><p>Você recebe um número de pedido com todos os detalhes.</p></div>
-          <div class="step"><div class="step-ico" data-i="chat"></div><h3>A equipe recebe</h3><p>O pedido chega pelo WhatsApp, já organizado.</p></div>
-          <div class="step"><div class="step-ico" data-i="approve"></div><h3>Orçamento e aprovação</h3><p>Confirmamos valor, arte e prazo antes de produzir.</p></div>
-        </div>
+        <div class="rows" id="featured"></div>
       </div>
     </section>
 
@@ -95,7 +78,7 @@
 
     <section class="sec alt" id="sobre">
       <div class="wrap about">
-        <div class="about-img" role="img" aria-label="Profissional operando máquina de impressão"></div>
+        <div class="about-img" role="img" aria-label="Camisa, sacola, cartões, caneca, garrafa e caixa com a marca Gráfica Estamp"></div>
         <div>
           <span class="eyebrow">Sobre a Estamp</span>
           <h2 class="h2" style="margin-top:10px">Uma gráfica completa em Cruzeiro do Sul.</h2>

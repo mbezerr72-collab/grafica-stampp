@@ -21,11 +21,11 @@ const same = (a, b) => a.id === b.id && JSON.stringify(a.sel) === JSON.stringify
 export const cart = {
   items: read,
   onChange(fn) { listeners.add(fn); fn(read()); },
-  add(id, sel, qty = 1) {
+  add(id, sel, qty = 1, model) {
     const items = read();
-    const hit = items.find((i) => same(i, { id, sel }));
+    const hit = items.find((i) => same(i, { id, sel }) && i.model === model);
     if (hit) hit.qty = Math.min(MAX_QTY, hit.qty + qty);
-    else items.push({ key: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), id, sel, qty });
+    else items.push({ key: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), id, sel, qty, ...(model ? { model } : {}) });
     write(items);
   },
   setQty(key, qty) { write(read().map((i) => (i.key === key ? { ...i, qty: Math.max(1, Math.min(MAX_QTY, qty)) } : i))); },
@@ -38,7 +38,7 @@ export function lineInfo(item) {
   if (!p || p.flow !== 'compra') return null;
   try {
     const unit = unitPrice(p, item.sel);
-    return { p, unit, total: unit * item.qty, label: selectionLabel(p, item.sel) };
+    return { p, unit, total: unit * item.qty, label: [item.model && `Modelo: ${item.model}`, selectionLabel(p, item.sel)].filter(Boolean).join(' · ') };
   } catch { return null; }
 }
 

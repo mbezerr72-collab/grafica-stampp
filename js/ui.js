@@ -115,14 +115,68 @@ export function priceTag(p) {
   }
   return p.from ? `<span class="price-sm">a partir de<b>${brl(p.from)}<small style="font-size:12px;color:var(--muted)">/${p.unit}</small></b></span>` : '<span class="price-sm">Preço<b>Sob orçamento</b></span>';
 }
+// Preço curto para os cards: valor fixo, "a partir de" ou "Consultar preço"
+export function priceLine(p) {
+  if (p.flow === 'compra') return `a partir de ${brl(Math.min(...p.options.flatMap((o) => o.choices.map((c) => c.price).filter((x) => x != null))))}`;
+  return p.from ? `a partir de ${brl(p.from)}` : 'Consultar preço';
+}
+
+// Card de produto (catálogo) e card de modelo (fileiras da página inicial): foto, selo, favorito, nome, detalhe, preço e botão
+export function shopCard({ href, img, fit = 'cover', badge, fav, title, sub, price }) {
+  return `<article class="scard">
+    <a class="scard-img fit-${fit}" href="${href}"><img src="${img}" alt="${esc(title)}" loading="lazy" width="600" height="600"></a>
+    ${badge ? `<span class="scard-badge">${badge}</span>` : ''}
+    <button class="fav${isFav(fav) ? ' on' : ''}" data-fav="${fav}" aria-label="Favoritar ${esc(title)}" aria-pressed="${isFav(fav)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></button>
+    <a class="scard-body" href="${href}"><h3>${esc(title)}</h3><p>${esc(sub)}</p><b>${price}</b></a>
+    <a class="btn btn-ink btn-block" href="${href}">Quero esse</a>
+  </article>`;
+}
 export function productCard(p, { showCat = true } = {}) {
-  return `<a class="pcard" href="produto.html?id=${p.id}">
-    <div class="pcard-img"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" width="600" height="600">${p.badge ? `<span class="tag hot">${p.badge}</span>` : ''}</div>
-    <div class="pcard-body">
-      ${showCat ? `<span class="pcard-cat">${catById(p.cat)?.label}</span>` : ''}
-      <h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
-      <div class="pcard-foot">${priceTag(p)}<span class="pill ${p.flow === 'compra' ? 'a">Compra direta' : 'b">Orçamento'}</span></div>
-    </div></a>`;
+  return shopCard({ href: `produto.html?id=${p.id}`, img: p.img, badge: p.badge, fav: p.id, title: p.name,
+    sub: showCat ? catById(p.cat)?.label : (p.flow === 'compra' ? 'Compra direta' : 'Sob encomenda'), price: priceLine(p) });
+}
+
+// Favoritos (só neste navegador)
+const FAV = 'estamp-favoritos';
+const favs = () => { try { return JSON.parse(localStorage.getItem(FAV)) || []; } catch { return []; } };
+const isFav = (k) => favs().includes(k);
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-fav]');
+  if (!b) return;
+  e.preventDefault();
+  const k = b.dataset.fav, list = favs();
+  const on = !list.includes(k);
+  try { localStorage.setItem(FAV, JSON.stringify(on ? [...list, k] : list.filter((x) => x !== k))); } catch { /* sem armazenamento */ }
+  b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);
+});
+
+// Trilho horizontal: setas com deslize suave e arrastar com o mouse
+export function rail(track, prev, next) {
+  const stepW = () => track.clientWidth * 0.8;
+  const sync = () => {
+    prev.disabled = track.scrollLeft < 4;
+    next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+  };
+  prev.addEventListener('click', () => track.scrollBy({ left: -stepW(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: stepW(), behavior: 'smooth' }));
+  track.addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', sync);
+  // arrastar com o mouse (no toque o navegador já desliza sozinho)
+  let down = null, moved = false;
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = { x: e.clientX, left: track.scrollLeft }; moved = false;
+  });
+  addEventListener('pointermove', (e) => {
+    if (!down) return;
+    const dx = e.clientX - down.x;
+    if (Math.abs(dx) > 5) { moved = true; track.classList.add('dragging'); }
+    if (moved) track.scrollLeft = down.left - dx;
+  });
+  addEventListener('pointerup', () => { down = null; setTimeout(() => track.classList.remove('dragging'), 0); });
+  track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  track.addEventListener('dragstart', (e) => e.preventDefault());
+  sync();
 }
 export const productsIn = (cat) => PRODUCTS.filter((p) => p.cat === cat);
 
