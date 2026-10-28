@@ -47,10 +47,10 @@
     <section class="sec alt">
       <div class="wrap">
         <div class="sec-head">
-          <div><h2>Mais pedidos</h2><p>Os produtos que nossos clientes mais encomendam.</p></div>
+          <div><h2>Mais pedidos</h2><p>Os produtos que nossos clientes mais encomendam, com trabalhos que já entregamos.</p></div>
           <a class="link-arrow" href="produtos.html">Ver catálogo <span data-i="arrow"></span></a>
         </div>
-        <div class="pic-row" id="featured"></div>
+        <div class="feats" id="featured"></div>
       </div>
     </section>
 
@@ -120,6 +120,13 @@
       </div>
     </section>
   </main>
+  <dialog class="lightbox" id="lightbox" aria-label="Foto ampliada">
+    <img id="lbImg" alt="">
+    <p id="lbCap"></p>
+    <button class="lb-btn lb-close" data-close aria-label="Fechar">✕</button>
+    <button class="lb-btn lb-prev" data-step="-1" aria-label="Anterior">‹</button>
+    <button class="lb-btn lb-next" data-step="1" aria-label="Próxima">›</button>
+  </dialog>
   <script type="module" src="js/home.js"></script>
 </body>
 </html>
