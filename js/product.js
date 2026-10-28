@@ -3,7 +3,8 @@ import { productById, defaultSelection, unitPrice, selectionLabel, MEASURES, SIZ
 import { cart, MAX_QTY } from './cart.js';
 import { SITE, waLink } from './config.js';
 import { FORMS, initialData, sizeTotal, faixa } from './forms.js';
-import { layout, icon, esc, catById, productCard, productsIn, toast, $ } from './ui.js';
+import { layout, icon, esc, catById, productCard, productsIn, toast, openLightbox, workTile, $ } from './ui.js';
+import { worksOf } from './works.js';
 
 layout('produtos');
 const root = $('#prod');
@@ -37,6 +38,7 @@ function render() {
         <div id="action"></div>
       </div>
     </div>
+    <section class="models" id="models" hidden><div class="sec-head"><div><h2>Modelos que fazemos</h2><p>Toque em uma foto para ampliar. Use como referência no seu pedido.</p></div></div><div class="models-grid" id="modelsGrid"></div></section>
     <div class="details" id="details"></div>
     <section style="padding-bottom:80px"><div class="sec-head"><div><h2>Outros produtos de ${cat.label.toLowerCase()}</h2></div></div>
       <div class="grid">${productsIn(p.cat).filter((x) => x.id !== p.id).slice(0, 4).map((x) => productCard(x, { showCat: false })).join('')}</div></section>`;
@@ -49,6 +51,12 @@ function render() {
   });
 
   renderDetails();
+  const models = worksOf(p.id);
+  if (models.length) {
+    $('#models').hidden = false;
+    $('#modelsGrid').innerHTML = models.map((w, i) => workTile(w, i, 'model')).join('');
+    $('#modelsGrid').addEventListener('click', (e) => { const b = e.target.closest('.work'); if (b) openLightbox(models, Number(b.dataset.i)); });
+  }
   if (p.flow === 'compra') renderBuy(); else renderQuote();
 }
 

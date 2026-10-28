@@ -31,6 +31,10 @@ const P = {
   pen: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4Z"/><path d="M14 6l3 3"/>',
   shield: '<path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',
   ruler: '<path d="M3 17 17 3l4 4L7 21l-4-4Z"/><path d="m7 13 2 2M10 10l2 2M13 7l2 2"/>',
+  trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8l-1-4H9l-1 4Z"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2M14 9l2 2"/>',
+  monitor: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
   // camisas
   tee: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/>',
   polo: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3-2 3-2-3Z"/><path d="M12 6v4"/>',
@@ -130,3 +134,32 @@ export function toast(html) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('on'), 3500);
 }
+
+// ===== Foto ampliada (galerias de modelos) =====
+// items: [{ src, cap, id }] — o botão leva à página do produto da foto
+let lb, lbItems = [], lbI = 0;
+export function openLightbox(items, i) {
+  if (!lb) {
+    document.body.insertAdjacentHTML('beforeend', `<dialog class="lightbox" id="lightbox" aria-label="Foto ampliada">
+      <img id="lbImg" alt=""><div class="lb-bar"><p id="lbCap"></p><a class="btn btn-brand btn-sm" id="lbGo">Quero um igual</a></div>
+      <button class="lb-btn lb-close" data-close aria-label="Fechar">✕</button>
+      <button class="lb-btn lb-prev" data-step="-1" aria-label="Anterior">‹</button>
+      <button class="lb-btn lb-next" data-step="1" aria-label="Próxima">›</button></dialog>`);
+    lb = $('#lightbox');
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb || e.target.closest('[data-close]')) lb.close();
+      const n = e.target.closest('[data-step]');
+      if (n) step(Number(n.dataset.step));
+    });
+    lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+  }
+  lbItems = items; lbI = i; show(); lb.showModal();
+}
+function step(d) { lbI = (lbI + d + lbItems.length) % lbItems.length; show(); }
+function show() {
+  const it = lbItems[lbI];
+  $('#lbImg').src = it.src; $('#lbImg').alt = it.cap; $('#lbCap').textContent = it.cap;
+  $('#lbGo').href = `produto.html?id=${it.id}`;
+  lb.querySelectorAll('.lb-prev, .lb-next').forEach((b) => { b.hidden = lbItems.length < 2; });
+}
+export const workTile = (w, i, cls = 'shelf-item') => `<button class="${cls} work fit-${w.fit}" data-i="${i}" aria-label="Ampliar: ${esc(w.cap)}"><img src="${w.src}" alt="${esc(w.cap)}" loading="lazy"><span>${esc(w.cap)}</span></button>`;
