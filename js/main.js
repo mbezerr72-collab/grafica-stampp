@@ -277,22 +277,24 @@ function studioTeaser(createKit, createStage) {
   renderer.setAnimationLoop(() => { if (isOn()) { tick(); renderer.render(scene, camera); } });
 }
 
-// Portfólio: fotos reais em img/portfolio/1.jpg…5.jpg; se não houver, mostra modelos gerados em 3D
+// Portfólio: usa as fotos listadas em SITE.portfolio; sem fotos, mostra modelos gerados em 3D
 function folio(createKit, createStage) {
   const el = $('#folio');
+  if (SITE.portfolio.length) {
+    el.innerHTML = SITE.portfolio.slice(0, 5).map(([file, cap]) => `<figure class="reveal"><img src="img/portfolio/${file}" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption></figure>`).join('');
+    return;
+  }
   const items = [
     ['Uniformes de futebol', 0], ['Camisas de eventos', 1], ['Uniformes escolares', 2],
     ['Times de várzea', 3], ['Camisas de igreja', 4],
   ];
-  el.innerHTML = items.map(([cap], i) => `<figure class="reveal"><img src="img/portfolio/${i + 1}.jpg" alt="${cap}" loading="lazy" data-i="${i}"><figcaption>${cap}</figcaption></figure>`).join('');
-  const missing = [];
-  el.querySelectorAll('img').forEach((img) => img.addEventListener('error', () => missing.push(img), { once: true }));
-  // espera os erros de carregamento e renderiza os que faltaram com um único renderer
+  el.innerHTML = items.map(([cap], i) => `<figure class="reveal"><img alt="${cap}" data-i="${i}"><figcaption>${cap}</figcaption></figure>`).join('');
+  const imgs = [...el.querySelectorAll('img')];
+  // renderiza todos com um único renderer quando a seção se aproxima
   new IntersectionObserver((entries, obs) => {
     if (!entries[0].isIntersecting) return;
     obs.disconnect();
     setTimeout(() => {
-      if (!missing.length) return;
       const c = document.createElement('canvas');
       c.style.cssText = 'position:fixed;left:-9999px;width:600px;height:600px';
       document.body.appendChild(c);
@@ -300,7 +302,7 @@ function folio(createKit, createStage) {
       renderer.setSize(600, 600, false); camera.aspect = 1; camera.updateProjectionMatrix();
       const kit = createKit({ shorts: false });
       scene.add(kit.group);
-      missing.forEach((img) => {
+      imgs.forEach((img) => {
         const p = PRESETS[items[img.dataset.i][1]];
         kit.paint({ ...p, name: ['SILVA', 'EVENTO', 'ESCOLA', 'VÁRZEA', 'FÉ'][img.dataset.i] });
         kit.group.rotation.y = Number(img.dataset.i) % 2 ? Math.PI : 0.35;

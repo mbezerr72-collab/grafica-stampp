@@ -8,6 +8,9 @@ export const SITE = {
   address: 'R. 17 de Novembro, 1471 — Telégrafo',
   city: 'Cruzeiro do Sul — AC, 69980-000',
   mapsQuery: 'R. 17 de Novembro, 1471, Cruzeiro do Sul - AC, 69980-000',
+  // Fotos reais em img/portfolio/ — [arquivo, legenda]. Ex.: ['time-juruá.jpg', 'Uniforme Juruá FC']
+  // Até 5 fotos; a primeira aparece grande. Vazio = mostra modelos 3D.
+  portfolio: [],
   // [dia da semana (0=dom), abre, fecha]
   hours: [
     [1, '07:30', '17:30'], [2, '07:30', '17:30'], [3, '07:30', '17:30'],
