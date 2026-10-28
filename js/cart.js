@@ -34,7 +34,8 @@ export function lineInfo(item) {
   if (item.id === 'custom') {
     const c = item.config || {};
     const unit = customUnitPrice(c.fabric, c.shorts, item.qty);
-    return { title: `Uniforme personalizado 3D`, sub: `${FABRICS[c.fabric]?.label || ''}${c.shorts ? ' + short' : ''} · ${c.name || ''} ${c.number || ''}`.trim(), unit, total: unit * item.qty, thumb: item.thumb };
+    const who = c.roster?.length ? `${c.roster.length} jogador${c.roster.length > 1 ? 'es' : ''}` : `${c.name || ''} ${c.number || ''}`.trim();
+    return { title: `Uniforme personalizado 3D`, sub: `${FABRICS[c.fabric]?.label || ''}${c.shorts ? ' + short' : ''} · ${who}`, unit, total: unit * item.qty, thumb: item.thumb };
   }
   const p = PRODUCTS.find((x) => x.id === item.id);
   if (!p) return null;
