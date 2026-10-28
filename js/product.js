@@ -1,10 +1,10 @@
 // Página de um produto: compra direta (Tipo A) ou formulário de orçamento em etapas (Tipo B).
-import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js';
-import { cart, MAX_QTY } from './cart.js';
-import { SITE, waLink } from './config.js';
-import { FORMS, initialData, sizeTotal, faixa } from './forms.js';
-import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js';
-import { worksOf } from './works.js';
+import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610282008';
+import { cart, MAX_QTY } from './cart.js?v=2610282008';
+import { SITE, waLink } from './config.js?v=2610282008';
+import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610282008';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610282008';
+import { worksOf } from './works.js?v=2610282008';
 
 layout('produtos');
 const root = $('#prod');
@@ -54,10 +54,7 @@ function render() {
         ['Preço', priceLine(p)], ...(SPECS[p.cat] || []), ['Arte', 'Envie a sua ou peça para a equipe criar; você aprova antes de produzir'],
         ['Recebimento', `Retirada na gráfica (${SITE.address}) ou entrega em Cruzeiro do Sul`]].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></section>
     <div class="details" id="details"></div>
-    ${models.length > (model ? 1 : 0) ? `<section style="padding-bottom:40px"><div class="sec-head"><div><h2>${model ? 'Outros modelos' : 'Modelos que fazemos'}</h2><p>Escolha um modelo para ver os detalhes e pedir igual.</p></div></div>
-      <div class="grid">${models.map((w, i) => ({ w, i })).filter(({ w }) => w !== model).map(({ w, i }) => shopCard({ href: `produto.html?id=${p.id}&m=${i}`, img: w.src, fit: w.fit, fav: `${p.id}:${i}`, title: w.cap, sub: p.name, price: priceLine(p) })).join('')}</div></section>` : ''}
-    <section style="padding-bottom:80px"><div class="sec-head"><div><h2>Outros produtos de ${cat.label.toLowerCase()}</h2></div></div>
-      <div class="grid">${productsIn(p.cat).filter((x) => x.id !== p.id).slice(0, 4).map((x) => productCard(x, { showCat: false })).join('')}</div></section>`;
+    <div style="padding-bottom:60px"></div>`;
 
   let cur = 0;
   const show = (i) => {
@@ -155,6 +152,7 @@ const fileSummary = (slots, files) => slots.filter((s) => files[s.k]?.length).ma
 // ===================== Tipo A: compra direta =====================
 const BUY_SLOTS = [{ k: 'arte', l: 'Sua arte ou logo', i: 'upload' }, { k: 'referencia', l: 'Imagem de referência', i: 'image' }];
 const buyFiles = {};
+let buyCores = [];
 function renderBuy() {
   const sel = defaultSelection(p);
   let qty = 1;
@@ -164,6 +162,7 @@ function renderBuy() {
       ${o.choices.map((c) => `<label class="radio"><input type="radio" name="${o.key}" value="${c.v}"${sel[o.key] === c.v ? ' checked' : ''}>
         <span>${c.label}${c.price != null ? `<small>${brl(c.price)}</small>` : c.note ? `<small>${c.note}</small>` : ''}</span></label>`).join('')}
     </div></fieldset>`).join('')}
+    <div class="opt"><div class="opt-title">Cores <small>Toque em quantas quiser</small></div><div id="buyColors"></div></div>
     <div class="opt"><label class="opt-title" for="buyDesc">Como você quer? <small>Opcional</small></label>
       <textarea class="textarea" id="buyDesc" rows="3" maxlength="800" placeholder="Ex.: nome e telefone na frente, logo no verso, fundo preto…"></textarea></div>
     <div class="opt"><div class="opt-title">Imagens <small>Opcional · sua arte, logo ou referência</small></div><div id="buyUp">${uploadsField(BUY_SLOTS, buyFiles)}</div></div>
@@ -187,9 +186,20 @@ function renderBuy() {
     const desc = $('#buyDesc').value.trim();
     const imgs = fileSummary(BUY_SLOTS, buyFiles);
     $('#buyWa').href = waLink(`Olá! Quero pedir pelo site:\n\n${qty}× ${p.name}${model ? `\nModelo: ${model.cap}` : ''}\n${selectionLabel(p, sel)}\nTotal: ${brl(unit * qty)}`
-      + (desc ? `\n\n*Como eu quero:* ${desc}` : '') + (imgs ? `\n📎 Vou anexar: ${imgs}` : ''));
+      + (buyCores.length ? `\n*Cores:* ${buyCores.join(', ')}` : '') + (desc ? `\n\n*Como eu quero:* ${desc}` : '') + (imgs ? `\n📎 Vou anexar: ${imgs}` : ''));
   };
   $('#buyDesc').addEventListener('input', () => update());
+  const PAL = coresField().choices;
+  const drawColors = () => {
+    $('#buyColors').innerHTML = `<div class="swatches">${PAL.map((c) => `<label class="sw" title="${c.v}"><input type="checkbox" value="${c.v}"${buyCores.includes(c.v) ? ' checked' : ''} aria-label="${c.v}"><span style="background:${c.c}"></span><em>${c.v}</em></label>`).join('')}</div>
+      <div class="color-add"><input class="input" id="corNova" placeholder="Outra cor (ex.: verde-musgo)" maxlength="30"><button type="button" class="btn btn-line btn-sm" id="corAdd">Adicionar</button></div>
+      <div class="color-sum">${buyCores.length ? `<b>${buyCores.length} ${buyCores.length === 1 ? 'cor selecionada' : 'cores selecionadas'}:</b> ${buyCores.map((c) => { const sw = PAL.find((x) => x.v === c); return `<span class="chip-c">${sw ? `<i style="background:${sw.c}"></i>` : ''}${esc(c)}<button type="button" data-cor-rm="${esc(c)}" aria-label="Remover ${esc(c)}">×</button></span>`; }).join('')}` : '<span class="muted">Nenhuma cor selecionada ainda.</span>'}</div>`;
+    update();
+  };
+  const addCor = () => { const c = $('#corNova').value.trim(); if (c && !buyCores.some((x) => x.toLowerCase() === c.toLowerCase())) buyCores.push(c[0].toUpperCase() + c.slice(1)); drawColors(); };
+  $('#buyColors').addEventListener('change', (e) => { if (e.target.type !== 'checkbox') return; const v = e.target.value; buyCores = e.target.checked ? [...buyCores, v] : buyCores.filter((x) => x !== v); drawColors(); });
+  $('#buyColors').addEventListener('click', (e) => { if (e.target.closest('#corAdd')) addCor(); const rm = e.target.closest('[data-cor-rm]'); if (rm) { buyCores = buyCores.filter((x) => x !== rm.dataset.corRm); drawColors(); } });
+  $('#buyColors').addEventListener('keydown', (e) => { if (e.target.id === 'corNova' && e.key === 'Enter') { e.preventDefault(); addCor(); } });
   wireUploads($('#buyUp'), buyFiles, () => update());
   $('#action').addEventListener('change', (e) => {
     if (e.target.type === 'radio') { sel[e.target.name] = e.target.value; update(); }
@@ -200,10 +210,10 @@ function renderBuy() {
     if (q) { qty = Math.max(1, Math.min(MAX_QTY, qty + Number(q.dataset.q))); update(); }
   });
   $('#add').addEventListener('click', () => {
-    cart.add(p.id, { ...sel }, qty, model?.cap, $('#buyDesc').value.trim());
+    cart.add(p.id, { ...sel }, qty, model?.cap, [buyCores.length && `Cores: ${buyCores.join(', ')}`, $('#buyDesc').value.trim()].filter(Boolean).join(' · '));
     toast(`${icon('check')}<span>${esc(p.name)} no carrinho</span><a href="carrinho.html">Ver carrinho</a>`);
   });
-  update();
+  drawColors();
 }
 
 // ===================== Tipo B: orçamento em etapas =====================
@@ -246,7 +256,7 @@ function renderQuote() {
     switch (f.type) {
       case 'cards': return wrap(`<div class="cards" role="radiogroup">${f.choices.map((c) => radio(c)).join('')}</div>`);
       case 'radios': return wrap(`<div class="radios${f.wide ? ' wide' : ''}" role="radiogroup">${f.choices.map((c) => radio(c)).join('')}</div>`);
-      case 'multi': return wrap(`<div class="radios">${f.choices.map((c) => `<label class="radio"><input type="checkbox" name="${f.key}" value="${c.v}"${(v || []).includes(c.v) ? ' checked' : ''}><span>${c.l}</span></label>`).join('')}</div>`);
+      case 'multi': return wrap(`<div class="radios">${f.choices.map((c) => `<label class="radio"><input type="checkbox" name="${f.key}" value="${c.v}"${(v || []).includes(c.v) ? ' checked' : ''}><span>${c.l}${c.s ? `<small>${esc(c.s)}</small>` : ''}</span></label>`).join('')}</div>`);
       case 'colors': {
         const sel = v || [];
         const custom = sel.filter((c) => !f.choices.some((x) => x.v === c));

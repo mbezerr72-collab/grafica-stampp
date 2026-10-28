@@ -57,7 +57,7 @@ export const PRODUCTS = [
   {
     id: 'cartazes-folders', cat: 'impressos', flow: 'orcamento', form: 'impresso', name: 'Cartazes e folders',
     desc: 'Cartazes para eventos e folders dobrados para apresentar sua empresa.',
-    img: 'img/trabalhos/cartazes-folders/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/cartazes-folders/01.jpg', fit: 'contain', from: 25, unit: 'un',
   },
   {
     id: 'adesivos-etiquetas', cat: 'impressos', flow: 'compra', name: 'Adesivos e etiquetas',
@@ -73,7 +73,7 @@ export const PRODUCTS = [
   {
     id: 'blocos-receituarios', cat: 'impressos', flow: 'orcamento', form: 'impresso', name: 'Blocos e receituários',
     desc: 'Blocos de pedido, receituários e comandas com a sua marca, numerados se precisar.',
-    img: 'img/trabalhos/blocos-receituarios/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/blocos-receituarios/01.jpg', fit: 'contain', from: 45, unit: 'bloco',
   },
 
   // ===== Camisas e uniformes =====
@@ -132,44 +132,44 @@ export const PRODUCTS = [
   {
     id: 'chaveiros', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Chaveiros',
     desc: 'Chaveiros em acrílico ou MDF com a sua arte. Ótimos para lembrancinhas e times.',
-    img: 'img/trabalhos/chaveiros/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/chaveiros/01.jpg', fit: 'contain', from: 6, unit: 'un',
   },
   {
     id: 'canetas', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Canetas personalizadas',
     desc: 'Canetas com o nome e o contato da sua empresa para distribuir aos clientes.',
-    img: 'img/trabalhos/canetas/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/canetas/01.jpg', fit: 'contain', from: 3, unit: 'un',
   },
   {
     id: 'ecobags', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Ecobags',
     desc: 'Sacolas de tecido personalizadas para lojas, eventos e brindes.',
-    img: 'img/cards/prod-ecobags-body.jpg', fit: 'cover',
+    img: 'img/cards/prod-ecobags-body.jpg', fit: 'cover', from: 18, unit: 'un',
   },
   {
     id: 'kits-empresas', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Kits para empresas',
     desc: 'Kits de boas-vindas e de fim de ano com vários itens personalizados.',
-    img: 'img/trabalhos/kits-empresas/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/kits-empresas/01.jpg', fit: 'contain', from: 60, unit: 'kit',
   },
 
   // ===== Comunicação visual =====
   {
     id: 'banners-lonas', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Banners e lonas',
     desc: 'Banners com bastão, lonas para fachada e faixas para eventos.',
-    img: 'img/trabalhos/banners-lonas/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/banners-lonas/01.jpg', fit: 'contain', from: 60, unit: 'm²',
   },
   {
     id: 'fachadas-letreiros', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Fachadas e letreiros',
     desc: 'Letreiros em ACM, MDF e acrílico. Fazemos a medição e a instalação.',
-    img: 'img/trabalhos/fachadas-letreiros/01.jpg', fit: 'cover',
+    img: 'img/trabalhos/fachadas-letreiros/01.jpg', fit: 'cover', from: 450, unit: 'projeto',
   },
   {
     id: 'adesivos-vitrine', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Adesivos para vitrines e adesivação',
     desc: 'Promoções, horários e adesivação de vidros, paredes e veículos.',
-    img: 'img/trabalhos/adesivos-vitrine/01.jpg', fit: 'cover',
+    img: 'img/trabalhos/adesivos-vitrine/01.jpg', fit: 'cover', from: 50, unit: 'm²',
   },
   {
     id: 'placas-personalizadas', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Placas personalizadas',
     desc: 'Placas em acrílico, PVC ou ACM para recepções, salas e sinalização.',
-    img: 'img/trabalhos/placas-personalizadas/01.jpg', fit: 'contain',
+    img: 'img/trabalhos/placas-personalizadas/01.jpg', fit: 'contain', from: 35, unit: 'un',
   },
 
   // ===== Design e criação =====

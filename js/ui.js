@@ -1,7 +1,7 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js';
-import { cart, totals } from './cart.js';
-import { SITE, waLink } from './config.js';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610282008';
+import { cart, totals } from './cart.js?v=2610282008';
+import { SITE, waLink } from './config.js?v=2610282008';
 
 // Ícones (traço simples, 24×24)
 const P = {
@@ -54,9 +54,13 @@ export const catById = (id) => CATEGORIES.find((c) => c.id === id);
 
 // ===== Cabeçalho e rodapé =====
 export function layout(active) {
-  // toda página abre no topo (o navegador às vezes restaura a rolagem da visita anterior)
+  // toda página abre no topo. scrollIntoView também rola a moldura em volta do site
+  // (o link do Claude mostra o site dentro de uma, que guarda a rolagem da página anterior)
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  if (!location.hash) scrollTo(0, 0);
+  if (!location.hash) {
+    const top = () => { scrollTo(0, 0); document.body.firstElementChild?.scrollIntoView({ block: 'start', behavior: 'instant' }); };
+    top(); requestAnimationFrame(top); addEventListener('load', top, { once: true }); setTimeout(top, 300);
+  }
   const nav = [['index.html', 'Início', 'inicio'], ['produtos.html', 'Produtos', 'produtos'], ['index.html#sobre', 'Sobre', 'sobre'], ['index.html#contato', 'Contato', 'contato']];
   document.body.insertAdjacentHTML('afterbegin', `
     <a class="sr" href="#conteudo">Pular para o conteúdo</a>

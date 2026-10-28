@@ -1,7 +1,7 @@
-import { brl } from '../data/products.js';
-import { cart, lineInfo, totals, MAX_QTY } from './cart.js';
-import { SITE, waLink } from './config.js';
-import { layout, icon, esc, toast, $ } from './ui.js';
+import { brl } from '../data/products.js?v=2610282008';
+import { cart, lineInfo, totals, MAX_QTY } from './cart.js?v=2610282008';
+import { SITE, waLink } from './config.js?v=2610282008';
+import { layout, icon, esc, toast, $ } from './ui.js?v=2610282008';
 
 layout('');
 const root = $('#cartPage');

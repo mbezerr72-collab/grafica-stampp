@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2610282008">
 </head>
 <body>
   <main id="conteudo" class="wrap" style="padding:72px 0 96px">
@@ -27,9 +27,9 @@
     </div>
   </main>
   <script type="module">
-    import { cart } from './js/cart.js';
-    import { waLink } from './js/config.js';
-    import { layout, icon, $ } from './js/ui.js';
+    import { cart } from './js/cart.js?v=2610282008';
+    import { waLink } from './js/config.js?v=2610282008';
+    import { layout, icon, $ } from './js/ui.js?v=2610282008';
     layout('');
     const q = new URLSearchParams(location.search);
     const status = q.get('collection_status') || q.get('status') || '';
