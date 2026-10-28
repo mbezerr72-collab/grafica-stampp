@@ -94,7 +94,12 @@ function orderText(items, ref) {
 async function finish(how) {
   if (!valid()) return;
   const items = cart.items();
-  if (how === 'wa') { window.open(waLink(orderText(items)), '_blank', 'noopener'); return; }
+  if (how === 'wa') {
+    const url = waLink(orderText(items));
+    // alguns navegadores bloqueiam a janela; o link no aviso serve de reserva
+    if (!window.open(url, '_blank', 'noopener')) toast(`${icon('wa')}<span>Pedido pronto.</span><a href="${url}" target="_blank" rel="noopener">Abrir WhatsApp</a>`);
+    return;
+  }
   const btn = $('#pay');
   btn.disabled = true; btn.textContent = 'Abrindo pagamento…';
   try {
