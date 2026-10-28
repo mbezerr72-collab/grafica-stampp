@@ -25,37 +25,32 @@ $('#cats').innerHTML = CATS.map(([cat, w, ids]) => {
   </div>`;
 }).join('');
 
-// Mais pedidos: uma fileira por linha de produto. Título em cima; a arte (sem o título) abre a fileira
-// como demonstração e os modelos vêm ao lado, cada um com página própria.
+// Mais pedidos: uma fileira por linha de produto, com título em cima e os modelos lado a lado (cada um com página própria)
 const ROWS = [
-  { title: 'Camisas personalizadas', art: 'prod-camisas-body', href: 'produtos.html?cat=camisas', ids: ['camisas-personalizadas', 'uniformes-esportivos', 'camisas-eventos', 'camisas-polo', 'uniformes-profissionais'] },
-  { title: 'Cartões e impressos', art: 'prod-cartoes-body', href: 'produtos.html?cat=impressos', ids: ['cartao-fotografico', 'panfletos', 'cartazes-folders', 'blocos-receituarios', 'adesivos-etiquetas'] },
-  { title: 'Canecas personalizadas', art: 'prod-canecas-body', href: 'produto.html?id=canecas', ids: ['canecas'] },
-  { title: 'Canetas personalizadas', art: 'prod-canetas-body', href: 'produto.html?id=canetas', ids: ['canetas', 'kits-empresas'] },
-  { title: 'Ecobags personalizadas', art: 'prod-ecobags-body', href: 'produto.html?id=ecobags', ids: ['ecobags'] },
-  { title: 'Troféus e medalhas', href: 'produto.html?id=trofeus-medalhas', ids: ['trofeus-medalhas'], checks: ['Acrílico, MDF e metal', 'Com nome e logo do evento', 'Do 1º lugar à participação'] },
-  { title: 'Chaveiros personalizados', href: 'produto.html?id=chaveiros', ids: ['chaveiros'], checks: ['Acrílico, MDF e emborrachado', 'Com foto, nome ou logo', 'Para eventos e empresas'] },
-  { title: 'Comunicação visual', href: 'produtos.html?cat=comunicacao', ids: ['fachadas-letreiros', 'banners-lonas', 'adesivos-vitrine', 'placas-personalizadas'], checks: ['Fachadas e letreiros', 'Banners e wind banners', 'Adesivos e placas'] },
-  { title: 'Design e criação', href: 'produtos.html?cat=design', ids: ['criacao-logotipo', 'arte-divulgacao'], checks: ['Logotipos', 'Artes para divulgação', 'Identidade visual'] },
+  { title: 'Camisas personalizadas', href: 'produtos.html?cat=camisas', ids: ['camisas-personalizadas', 'uniformes-esportivos', 'camisas-eventos', 'camisas-polo', 'uniformes-profissionais'] },
+  { title: 'Cartões e impressos', href: 'produtos.html?cat=impressos', ids: ['cartao-fotografico', 'panfletos', 'cartazes-folders', 'blocos-receituarios', 'adesivos-etiquetas'] },
+  { title: 'Canecas personalizadas', href: 'produto.html?id=canecas', ids: ['canecas'] },
+  { title: 'Canetas personalizadas', href: 'produto.html?id=canetas', ids: ['canetas', 'kits-empresas'] },
+  { title: 'Ecobags personalizadas', href: 'produto.html?id=ecobags', ids: ['ecobags'] },
+  { title: 'Troféus e medalhas', href: 'produto.html?id=trofeus-medalhas', ids: ['trofeus-medalhas'] },
+  { title: 'Chaveiros personalizados', href: 'produto.html?id=chaveiros', ids: ['chaveiros'] },
+  { title: 'Comunicação visual', href: 'produtos.html?cat=comunicacao', ids: ['fachadas-letreiros', 'banners-lonas', 'adesivos-vitrine', 'placas-personalizadas'] },
+  { title: 'Design e criação', href: 'produtos.html?cat=design', ids: ['criacao-logotipo', 'arte-divulgacao'] },
 ];
 $('#featured').innerHTML = ROWS.map((r, k) => {
   const items = r.ids.flatMap((id) => worksOf(id).map((w, m) => ({ ...w, m })));
   if (!items.length) return ''; // fileira sem modelos ainda não aparece
-  const art = r.art
-    ? `<a class="row-art" href="${r.href}"><img src="img/cards/${r.art}.jpg" alt="${r.title}" loading="lazy"></a>`
-    : `<a class="row-art gen-art" href="${r.href}" style="background-image:url(${items[0].src})">
-        <ul>${r.checks.map((c) => `<li>${icon('check')}${c}</li>`).join('')}</ul></a>`;
   const cards = items.map((w, i) => {
     const p = productById(w.id);
     return shopCard({ href: `produto.html?id=${w.id}&m=${w.m}`, img: w.src, fit: w.fit, fav: `${w.id}:${w.m}`,
-      badge: i === 0 ? 'Mais pedido' : (p.flow === 'compra' && i === 1 ? 'Compra direta' : ''),
+      badge: i === 0 ? 'Mais pedido' : '',
       title: w.cap, sub: p.name, price: priceLine(p) });
   }).join('');
   return `<section class="row" aria-labelledby="row-${k}">
     <div class="row-head"><h3 id="row-${k}">${r.title}</h3>
       <div class="row-nav"><a class="link-arrow" href="${r.href}">Ver todos</a>
         <button class="rail-btn" data-prev aria-label="Anterior">${icon('arrow')}</button><button class="rail-btn" data-next aria-label="Próximo">${icon('arrow')}</button></div></div>
-    <div class="rail">${art}${cards}</div>
+    <div class="rail">${cards}</div>
   </section>`;
 }).join('');
 document.querySelectorAll('#featured .row').forEach((row) => rail(row.querySelector('.rail'), row.querySelector('[data-prev]'), row.querySelector('[data-next]')));

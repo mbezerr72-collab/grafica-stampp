@@ -54,6 +54,9 @@ export const catById = (id) => CATEGORIES.find((c) => c.id === id);
 
 // ===== Cabeçalho e rodapé =====
 export function layout(active) {
+  // toda página abre no topo (o navegador às vezes restaura a rolagem da visita anterior)
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) scrollTo(0, 0);
   const nav = [['index.html', 'Início', 'inicio'], ['produtos.html', 'Produtos', 'produtos'], ['index.html#sobre', 'Sobre', 'sobre'], ['index.html#contato', 'Contato', 'contato']];
   document.body.insertAdjacentHTML('afterbegin', `
     <a class="sr" href="#conteudo">Pular para o conteúdo</a>
@@ -132,7 +135,7 @@ export function shopCard({ href, img, fit = 'cover', badge, fav, title, sub, pri
   </article>`;
 }
 export function productCard(p, { showCat = true } = {}) {
-  return shopCard({ href: `produto.html?id=${p.id}`, img: p.img, badge: p.badge, fav: p.id, title: p.name,
+  return shopCard({ href: `produto.html?id=${p.id}`, img: p.img, fit: p.fit, badge: p.badge, fav: p.id, title: p.name,
     sub: showCat ? catById(p.cat)?.label : (p.flow === 'compra' ? 'Compra direta' : 'Sob encomenda'), price: priceLine(p) });
 }
 
