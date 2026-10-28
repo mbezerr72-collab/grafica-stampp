@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seu pedido — Gráfica Estamp</title>
+  <meta name="robots" content="noindex">
+  <meta property="og:title" content="Gráfica Estamp — Sua ideia, nossa impressão">
+  <meta property="og:description" content="Personalize, escolha seus produtos e peça seu orçamento sem sair de casa.">
+  <meta property="og:image" content="img/hero.jpg">
+  <meta name="theme-color" content="#141414">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=2610282008">
+</head>
+<body>
+  <main id="conteudo" class="wrap" style="padding:72px 0 96px">
+    <div class="box done" style="max-width:560px;margin:0 auto">
+      <div class="done-ico" id="ico"></div>
+      <h1 class="h2" id="title"></h1>
+      <span class="proto" id="ref" hidden></span>
+      <p id="text"></p>
+      <a class="btn btn-wa" id="wa" target="_blank" rel="noopener">Enviar arte pelo WhatsApp</a>
+      <a class="link-arrow" href="produtos.html" style="margin-top:6px">Continuar comprando</a>
+    </div>
+  </main>
+  <script type="module">
+    import { cart } from './js/cart.js?v=2610282008';
+    import { waLink } from './js/config.js?v=2610282008';
+    import { layout, icon, $ } from './js/ui.js?v=2610282008';
+    layout('');
+    const q = new URLSearchParams(location.search);
+    const status = q.get('collection_status') || q.get('status') || '';
+    const ref = (q.get('ref') || q.get('external_reference') || '').replace(/[^A-Z0-9-]/gi, '').slice(0, 24);
+    const V = {
+      approved: ['check', 'var(--ok-soft)', 'var(--ok)', 'Pagamento aprovado!', 'Recebemos o seu pedido. Agora envie a sua arte pelo WhatsApp com o número do pedido.'],
+      pending: ['clock', 'var(--warn-soft)', '#b7791f', 'Pagamento em análise', 'Pagamentos por Pix ou boleto podem levar alguns minutos para confirmar. Avisamos pelo WhatsApp.'],
+      in_process: ['clock', 'var(--warn-soft)', '#b7791f', 'Pagamento em análise', 'O Mercado Pago está analisando o pagamento. Avisamos pelo WhatsApp.'],
+      rejected: ['close', '#fdecec', '#b42318', 'Pagamento não aprovado', 'Nada foi cobrado. Tente outro cartão ou finalize o pedido pelo WhatsApp.'],
+    };
+    const [i, bg, fg, title, text] = V[status] || ['question', 'var(--soft)', 'var(--muted)', 'Não encontramos a confirmação', 'Se você pagou, fale com a equipe pelo WhatsApp informando o seu nome.'];
+    const ico = $('#ico'); ico.innerHTML = icon(i); ico.style.background = bg; ico.style.color = fg;
+    $('#title').textContent = title; $('#text').textContent = text;
+    if (ref) { $('#ref').hidden = false; $('#ref').textContent = `Pedido ${ref}`; }
+    let resumo = '';
+    try { resumo = sessionStorage.getItem('estamp-ultimo-pedido') || ''; } catch {}
+    $('#wa').innerHTML = icon('wa') + (status === 'rejected' ? 'Finalizar pelo WhatsApp' : 'Enviar arte pelo WhatsApp');
+    $('#wa').href = waLink(`${resumo || 'Olá! Fiz um pedido pelo site.'}\n\nPedido: ${ref || '-'} · Pagamento: ${title}`);
+    if (['approved', 'pending', 'in_process'].includes(status)) cart.clear();
+  </script>
+</body>
+</html>

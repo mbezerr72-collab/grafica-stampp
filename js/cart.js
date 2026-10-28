@@ -1,47 +1,50 @@
-// Carrinho salvo no navegador (localStorage). Preços exibidos são só visuais: o servidor recalcula.
-import { PRODUCTS, customUnitPrice, FABRICS, brl } from '../data/products.js';
+// Carrinho salvo no navegador (só produtos do Tipo A). Os preços mostrados são calculados a partir
+// do catálogo; o servidor recalcula tudo no pagamento.
+import { productById, unitPrice, selectionLabel } from '../data/products.js?v=2610282008';
 
-const KEY = 'estamp-cart-v1';
+const KEY = 'estamp-cart-v2';
 const listeners = new Set();
+export const MAX_QTY = 50;
 
 function read() {
-  try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+  try {
+    const items = JSON.parse(localStorage.getItem(KEY)) || [];
+    return items.filter((i) => lineInfo(i)); // descarta itens de versões antigas do catálogo
+  } catch { return []; }
 }
 function write(items) {
-  try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { /* armazenamento cheio/bloqueado */ }
+  try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { /* armazenamento bloqueado */ }
   listeners.forEach((fn) => fn(items));
 }
+const same = (a, b) => a.id === b.id && JSON.stringify(a.sel) === JSON.stringify(b.sel);
 
 export const cart = {
   items: read,
   onChange(fn) { listeners.add(fn); fn(read()); },
-  add(item) {
+  add(id, sel, qty = 1, model, note) {
     const items = read();
-    const same = item.id !== 'custom' && items.find((i) => i.id === item.id && i.size === item.size);
-    if (same) same.qty += item.qty;
-    else items.push({ ...item, key: Date.now().toString(36) + Math.random().toString(36).slice(2, 6) });
+    const hit = items.find((i) => same(i, { id, sel }) && i.model === model && (i.note || '') === (note || ''));
+    if (hit) hit.qty = Math.min(MAX_QTY, hit.qty + qty);
+    else items.push({ key: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), id, sel, qty, ...(model ? { model } : {}), ...(note ? { note: note.slice(0, 800) } : {}) });
     write(items);
   },
-  setQty(key, qty) {
-    const items = read().map((i) => (i.key === key ? { ...i, qty: Math.max(1, Math.min(500, qty)) } : i));
-    write(items);
-  },
+  setQty(key, qty) { write(read().map((i) => (i.key === key ? { ...i, qty: Math.max(1, Math.min(MAX_QTY, qty)) } : i))); },
   remove(key) { write(read().filter((i) => i.key !== key)); },
   clear() { write([]); },
 };
 
 export function lineInfo(item) {
-  if (item.id === 'custom') {
-    const c = item.config || {};
-    const unit = customUnitPrice(c.fabric, c.shorts, item.qty);
-    return { title: `Uniforme personalizado 3D`, sub: `${FABRICS[c.fabric]?.label || ''}${c.shorts ? ' + short' : ''} · ${c.name || ''} ${c.number || ''}`.trim(), unit, total: unit * item.qty, thumb: item.thumb };
-  }
-  const p = PRODUCTS.find((x) => x.id === item.id);
-  if (!p) return null;
-  return { title: p.name, sub: [item.size && `Tam. ${item.size}`, p.unit].filter(Boolean).join(' · '), unit: p.price, total: p.price * item.qty, thumb: `img/produtos/${p.id}.png`, cat: p.cat };
+  const p = productById(item?.id);
+  if (!p || p.flow !== 'compra') return null;
+  try {
+    const unit = unitPrice(p, item.sel);
+    return { p, unit, total: unit * item.qty, label: [item.model && `Modelo: ${item.model}`, selectionLabel(p, item.sel), item.note && `Como quero: ${item.note}`].filter(Boolean).join(' · ') };
+  } catch { return null; }
 }
 
 export function totals(items = read()) {
-  const subtotal = items.reduce((s, i) => s + (lineInfo(i)?.total || 0), 0);
-  return { subtotal, count: items.reduce((s, i) => s + i.qty, 0), label: brl(subtotal) };
+  return {
+    subtotal: items.reduce((s, i) => s + (lineInfo(i)?.total || 0), 0),
+    count: items.reduce((s, i) => s + i.qty, 0),
+  };
 }

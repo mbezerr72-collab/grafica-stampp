@@ -1,2 +1,6 @@
 .claude-flow/
 .swarm/
+node_modules/
+.env
+.env.*
+.vercel/

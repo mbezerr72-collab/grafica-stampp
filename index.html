@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gráfica Estamp — Impressos, camisas e comunicação visual em Cruzeiro do Sul</title>
+  <meta name="description" content="Gráfica Estamp, desde 2013 em Cruzeiro do Sul (AC). Cartões, panfletos, camisas personalizadas, uniformes, brindes, banners e fachadas. Peça seu orçamento pelo site.">
+  <meta property="og:title" content="Gráfica Estamp — Sua ideia, nossa impressão">
+  <meta property="og:description" content="Personalize, escolha seus produtos e peça seu orçamento sem sair de casa.">
+  <meta property="og:image" content="img/hero.jpg">
+  <meta name="theme-color" content="#141414">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Michroma&family=Krona+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=2610282008">
+  <link rel="preload" as="image" href="img/hero.jpg">
+</head>
+<body>
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-logo">
+      <div class="intro-g"><span id="introType"></span><i class="caret"></i></div>
+      <svg class="intro-e" viewBox="0 0 1000 170" role="img" aria-label="Estamp">
+        <text x="0" y="150" font-family="Krona One, sans-serif" font-size="156" fill="#fff" textLength="400" lengthAdjust="spacingAndGlyphs">EST</text>
+        <path d="M410 150 L488 0 L566 150 L532 150 L488 64 L444 150 Z" fill="#fff"/>
+        <path class="intro-tri" d="M488 86 L516 140 L460 140 Z" fill="#ff6a00"/>
+        <text x="580" y="150" font-family="Krona One, sans-serif" font-size="156" fill="#fff" textLength="420" lengthAdjust="spacingAndGlyphs">MP</text>
+      </svg>
+    </div>
+    <button class="intro-skip" id="introSkip">Pular</button>
+  </div>
+  <main id="conteudo">
+    <section class="hero">
+      <div class="hero-img" role="img" aria-label="Camisa, sacola, cartões, caneca, garrafa e caixa com a marca Gráfica Estamp"></div>
+      <div class="wrap">
+        <div class="hero-txt">
+          <span class="eyebrow">Sua ideia, nossa impressão.</span>
+          <h1>Sua marca merece aparecer.</h1>
+          <p>Personalize, escolha seus produtos e peça seu orçamento sem sair de casa.</p>
+          <div class="hero-ctas">
+            <a href="produtos.html" class="btn btn-brand">Explorar produtos</a>
+            <a href="#orcamento" class="btn btn-ghost-w">Pedir orçamento</a>
+          </div>
+          <div class="trust" id="trust"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><h2>O que você precisa produzir?</h2><p>Escolha uma categoria para ver os produtos e as opções de personalização.</p></div>
+          <a class="link-arrow" href="produtos.html">Ver todos os produtos <span data-i="arrow"></span></a>
+        </div>
+        <div class="cat-row" id="cats"></div>
+      </div>
+    </section>
+
+    <section class="sec alt">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><h2>Mais pedidos</h2><p>Modelos que fazemos. Escolha um para ver os detalhes e pedir.</p></div>
+          <a class="link-arrow" href="produtos.html">Ver catálogo <span data-i="arrow"></span></a>
+        </div>
+        <div class="rows" id="featured"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="orcamento">
+      <div class="wrap">
+        <div class="cta">
+          <div class="cta-ico" data-i="chat"></div>
+          <div><h3>Precisa de algo diferente?</h3><p>Conte sua ideia e receba um orçamento personalizado.</p></div>
+          <a class="btn btn-wa" id="ctaWa" target="_blank" rel="noopener"><span data-i="wa"></span>Falar com a equipe</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec alt" id="sobre">
+      <div class="wrap about">
+        <div class="about-img" role="img" aria-label="Camisa, sacola, cartões, caneca, garrafa e caixa com a marca Gráfica Estamp"></div>
+        <div>
+          <span class="eyebrow">Sobre a Estamp</span>
+          <h2 class="h2" style="margin-top:10px">Uma gráfica completa em Cruzeiro do Sul.</h2>
+          <p>Desde 2013 a Gráfica Estamp imprime a identidade de empresas, igrejas, escolas, times e famílias do Juruá. Fazemos de cartões de visita a fachadas, com criação de arte pela nossa equipe.</p>
+          <p>Cada pedido personalizado passa por aprovação antes de ir para a produção. Assim você recebe exatamente o que imaginou.</p>
+          <div class="stats">
+            <div><b id="years">+10</b><span>anos de mercado</span></div>
+            <div><b>+1 mil</b><span>seguidores no Instagram</span></div>
+            <div><b>5</b><span>linhas de produto</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="contato">
+      <div class="wrap">
+        <div class="sec-head"><div><h2>Contato</h2><p>Atendimento somente por mensagem no WhatsApp.</p></div></div>
+        <div class="contact">
+          <div class="box" id="contactBox"></div>
+          <div class="map" id="map"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/home.js?v=2610282008"></script>
+</body>
+</html>

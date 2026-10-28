@@ -1,0 +1,12 @@
+{
+  "name": "grafica-estamp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site de vendas da Gráfica Estamp com estúdio 3D de uniformes",
+  "scripts": {
+    "dev": "npx --yes vercel@latest dev",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": { "node": ">=18" }
+}
