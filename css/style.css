@@ -107,28 +107,32 @@ svg.i { width: 20px; height: 20px; flex: none; }
 .cat-body li a:hover { color: var(--brand-ink); }
 .cat-body li a::before { content: '•'; color: var(--brand); margin-right: 8px; }
 
-/* Cartões em imagem (categorias e destaques da página inicial) */
-.pic-row { display: flex; gap: 14px; align-items: flex-start; }
-.pic-card { position: relative; display: block; border-radius: 14px; overflow: hidden; min-width: 0; transition: transform .2s, box-shadow .2s; }
-.pic-card img { width: 100%; height: auto; }
-.pic-card:hover { transform: translateY(-4px); box-shadow: 0 18px 30px -18px rgba(20, 20, 20, .55); }
-.pic-cover { position: absolute; inset: 0; font-size: 0; }
-.pic-card .hot { position: absolute; left: 3%; right: 3%; border-radius: 6px; font-size: 0; transition: background .15s, box-shadow .15s; }
-.pic-card .hot:hover, .pic-card .hot:focus-visible { background: rgba(255, 106, 0, .22); box-shadow: inset 0 -2px 0 var(--brand); }
+/* Categorias da página inicial: arte + lista de produtos em texto */
+.cat-row { display: flex; gap: 14px; align-items: stretch; }
+.cat-card { min-width: 0; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: #151515; transition: transform .2s, box-shadow .2s; }
+.cat-card:hover { transform: translateY(-4px); box-shadow: 0 18px 30px -18px rgba(20, 20, 20, .55); }
+.cat-art { position: relative; display: block; }
+.cat-art img { width: 100%; height: auto; }
+.cat-art::after { content: ''; position: absolute; inset: auto 0 0; height: 22%; background: linear-gradient(transparent, #151515); }
+.cat-list { list-style: none; flex: 1; padding: 4px 12px 16px; display: grid; align-content: start; gap: 2px; }
+.cat-list a { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: 8px; color: #fff; font-size: 14.5px; font-weight: 700; line-height: 1.25; transition: background .15s, color .15s; }
+.cat-list .i { width: 20px; height: 20px; flex: none; padding: 3px; border-radius: 50%; background: var(--brand); color: #fff; stroke-width: 3; }
+.cat-list a:hover, .cat-list a:focus-visible { background: rgba(255, 106, 0, .16); color: var(--brand); }
+.cat-list a:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
-/* Mais pedidos: arte do produto + trabalhos já feitos */
-.feats { display: grid; gap: 22px; }
-.feat { display: grid; grid-template-columns: 260px 1fr; gap: 24px; background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 16px; align-items: start; }
-.feat-art { border-radius: 12px; overflow: hidden; display: block; }
-.feat-art img { width: 100%; height: auto; }
-.feat-body { min-width: 0; display: grid; gap: 16px; padding-top: 6px; }
-.feat-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
-.feat-head h3 { font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
-.works { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.work { aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: var(--soft-2); padding: 0; }
-.work img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
-.work:hover img { transform: scale(1.05); }
-.works-empty { border: 1.5px dashed var(--line); border-radius: 12px; min-height: 220px; display: grid; place-content: center; justify-items: center; gap: 8px; color: var(--muted); font-size: 14px; text-align: center; padding: 20px; }
+/* Mais pedidos: prateleiras (arte do produto + trabalhos feitos) */
+.shelves { display: grid; gap: 18px; }
+.shelf { --h: 380px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 6px; scrollbar-width: thin; }
+.shelf-art, .shelf-item { flex: none; height: var(--h); border-radius: 14px; overflow: hidden; scroll-snap-align: start; }
+.shelf-art img { height: 100%; width: auto; }
+.shelf-art { transition: transform .2s; }
+.shelf-art:hover { transform: translateY(-3px); }
+.shelf-item { width: calc(var(--h) * .78); position: relative; background: var(--soft-2); padding: 0; }
+.shelf-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.shelf-item:hover img { transform: scale(1.04); }
+.shelf-item span { position: absolute; left: 10px; right: 10px; bottom: 10px; background: rgba(20, 20, 20, .75); color: #fff; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 8px; text-align: left; }
+.shelf-ph { border: 1.5px dashed #d8d3cb; background: #fff; display: grid; place-content: center; justify-items: center; gap: 6px; color: var(--muted); }
+.shelf-ph span { position: static; background: none; color: var(--muted); padding: 0; font-weight: 600; }
 .lightbox { margin: auto; border: 0; padding: 0; background: transparent; max-width: min(92vw, 1000px); overflow: visible; }
 .lightbox::backdrop { background: rgba(10, 10, 10, .85); }
 .lightbox img { max-height: 80vh; width: auto; margin: 0 auto; border-radius: 10px; }
@@ -389,13 +393,9 @@ svg.i { width: 20px; height: 20px; flex: none; }
   .shop .grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 860px) {
-  .pic-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; padding-bottom: 8px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
-  .pic-card { flex: none !important; height: min(118vw, 460px); scroll-snap-align: start; }
-  .pic-card img { height: 100%; width: auto; }
-  .feat { grid-template-columns: 1fr; }
-  .feat-art { max-width: 300px; }
-  .works { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .work { flex: 0 0 62%; scroll-snap-align: start; }
+  .cat-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; padding-bottom: 8px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+  .cat-card { flex: 0 0 min(70vw, 280px) !important; scroll-snap-align: start; }
+  .shelf { --h: 320px; margin-inline: -16px; padding-inline: 16px; scroll-padding-inline: 16px; }
   .topbar .hide-m { display: none; }
   .nav { position: fixed; inset: 108px 0 auto 0; flex-direction: column; background: #fff; padding: 12px 16px 20px; border-bottom: 1px solid var(--line); box-shadow: 0 20px 30px -20px rgba(0, 0, 0, .2); margin: 0; display: none; }
   .nav.on { display: flex; }

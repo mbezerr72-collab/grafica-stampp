@@ -9,40 +9,32 @@ document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN
 $('#trust').innerHTML = [['shield', `Desde ${SITE.since}`], ['wa', 'Atendimento pelo WhatsApp'], ['truck', 'Retirada ou entrega']]
   .map(([i, t]) => `<span>${icon(i)}${t}</span>`).join('');
 
-// Categorias: artes prontas; cada nome da lista dentro da arte é um link (posições em % da imagem)
+// Categorias: arte em cima e a lista de produtos em texto, cada nome é um link
 const CATS = [
-  ['impressos', 305, [76.3, 80.6, 84.8, 89.1, 93.3], ['cartao-visita', 'cartao-fotografico', 'panfletos', 'cartazes-folders', 'adesivos-etiquetas']],
-  ['camisas', 296, [79.1, 83.1, 87.2, 91.3, 95.2], ['camisas-personalizadas', 'camisas-polo', 'uniformes-profissionais', 'uniformes-esportivos', 'camisas-eventos']],
-  ['brindes', 271, [81.8, 85.6, 89.5, 93.2, 97.0], ['canecas', 'trofeus-medalhas', 'chaveiros', 'canetas', 'ecobags']],
-  ['comunicacao', 298, [81.2, 85.4, 89.9, 96.6], ['banners-lonas', 'fachadas-letreiros', 'adesivos-vitrine', 'placas-personalizadas']],
-  ['design', 294, [82.3, 86.0, 89.7, 93.4, 97.0], ['criacao-logotipo', 'arte-divulgacao', 'arte-camisas', 'identidade-visual', 'ajustes-arquivos']],
+  ['impressos', 305, ['cartao-visita', 'cartao-fotografico', 'panfletos', 'cartazes-folders', 'adesivos-etiquetas']],
+  ['camisas', 296, ['camisas-personalizadas', 'camisas-polo', 'uniformes-profissionais', 'uniformes-esportivos', 'camisas-eventos']],
+  ['brindes', 271, ['canecas', 'trofeus-medalhas', 'chaveiros', 'canetas', 'ecobags']],
+  ['comunicacao', 298, ['banners-lonas', 'fachadas-letreiros', 'adesivos-vitrine', 'placas-personalizadas']],
+  ['design', 294, ['criacao-logotipo', 'arte-divulgacao', 'arte-camisas', 'identidade-visual', 'ajustes-arquivos']],
 ];
-$('#cats').innerHTML = CATS.map(([cat, w, ys, ids]) => {
+$('#cats').innerHTML = CATS.map(([cat, w, ids]) => {
   const c = CATEGORIES.find((x) => x.id === cat);
-  const gap = (ys[ys.length - 1] - ys[0]) / (ys.length - 1);
-  const links = ids.map((id, i) => {
-    const top = ys[i] - gap / 2, bottom = i < ys.length - 1 ? ys[i + 1] - gap / 2 : Math.min(100, ys[i] + gap / 2);
-    return `<a class="hot" href="produto.html?id=${id}" style="top:${top}%;height:${bottom - top}%">${productById(id).name}</a>`;
-  }).join('');
-  return `<div class="pic-card" style="flex:${w} 1 0">
-    <img src="img/cards/cat-${cat}.jpg" alt="" width="${w * 2}" loading="lazy">
-    <a class="pic-cover" href="produtos.html?cat=${cat}">${c.label}</a>${links}</div>`;
+  return `<div class="cat-card" style="flex:${w} 1 0">
+    <a class="cat-art" href="produtos.html?cat=${cat}"><img src="img/cards/cat-${cat}-top.jpg" alt="${c.label}" loading="lazy"></a>
+    <ul class="cat-list">${ids.map((id) => `<li><a href="produto.html?id=${id}">${icon('check')}<span>${productById(id).name}</span></a></li>`).join('')}</ul>
+  </div>`;
 }).join('');
 
-// Mais pedidos: uma fileira por produto, com a arte e os trabalhos já feitos ao lado
+// Mais pedidos: uma prateleira por produto, com a arte primeiro e os trabalhos feitos ao lado
 const FEATURED = [['camisas-personalizadas', 'prod-camisas'], ['cartao-visita', 'prod-cartoes'], ['canecas', 'prod-canecas'], ['canetas', 'prod-canetas'], ['ecobags', 'prod-ecobags']];
 $('#featured').innerHTML = FEATURED.map(([id, img]) => {
   const p = productById(id);
   const works = WORKS[id] || [];
-  return `<article class="feat">
-    <a class="feat-art" href="produto.html?id=${id}"><img src="img/cards/${img}.jpg" alt="${p.name}" loading="lazy"></a>
-    <div class="feat-body">
-      <div class="feat-head"><div><span class="eyebrow">Feito pela Estamp</span><h3>${p.name}</h3></div>
-        <a class="btn btn-dark btn-sm" href="produto.html?id=${id}">${p.flow === 'compra' ? 'Comprar' : 'Quero um igual'}</a></div>
-      ${works.length
-        ? `<div class="works">${works.map(([f, cap], i) => `<button class="work" data-id="${id}" data-i="${i}" aria-label="Ampliar: ${cap}"><img src="img/trabalhos/${id}/${f}" alt="${cap}" loading="lazy"></button>`).join('')}</div>`
-        : `<div class="works-empty">${icon('image')}<p>Fotos dos trabalhos já entregues entram aqui.</p></div>`}
-    </div></article>`;
+  const tiles = works.length
+    ? works.map(([f, cap], i) => `<button class="shelf-item work" data-id="${id}" data-i="${i}" aria-label="Ampliar: ${cap}"><img src="img/trabalhos/${id}/${f}" alt="${cap}" loading="lazy"><span>${cap}</span></button>`).join('')
+    : Array.from({ length: 4 }, () => `<div class="shelf-item shelf-ph">${icon('image')}<span>Foto em breve</span></div>`).join('');
+  return `<div class="shelf" aria-label="${p.name}">
+    <a class="shelf-art" href="produto.html?id=${id}"><img src="img/cards/${img}.jpg" alt="${p.name}" loading="lazy"></a>${tiles}</div>`;
 }).join('');
 
 // Ampliar foto de trabalho
