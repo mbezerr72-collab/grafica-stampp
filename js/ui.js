@@ -1,7 +1,7 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610282008';
-import { cart, totals } from './cart.js?v=2610282008';
-import { SITE, waLink } from './config.js?v=2610282008';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610282113';
+import { cart, totals } from './cart.js?v=2610282113';
+import { SITE, waLink } from './config.js?v=2610282113';
 
 // Ícones (traço simples, 24×24)
 const P = {
@@ -100,7 +100,7 @@ export function layout(active) {
             <li><a href="carrinho.html">Meu carrinho</a></li></ul></div>
           <div><h4>Endereço</h4><p>${SITE.address}<br>${SITE.city}</p></div>
         </div>
-        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento.</span></div>
+        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento. <a href="painel/">Área da equipe</a></span></div>
       </div>
     </footer>
     <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}</a>
