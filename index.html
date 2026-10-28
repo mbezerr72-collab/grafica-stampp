@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gráfica Estamp — Camisas, uniformes e personalizados em Cruzeiro do Sul</title>
+  <meta name="description" content="Gráfica Estamp, desde 2013 em Cruzeiro do Sul (AC). Camisas, uniformes, canecas, troféus, coletes, cartões e comunicação visual. Monte seu uniforme em 3D.">
+  <meta name="theme-color" content="#070707">
+  <meta property="og:title" content="Gráfica Estamp">
+  <meta property="og:description" content="Monte seu uniforme em 3D e peça pelo site.">
+  <meta property="og:image" content="assets/logo-nav.png">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Michroma&family=Manrope:wght@400;600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
+</head>
+<body class="locked">
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ===== Abertura: GRÁFICA se escreve, ESTAMP entra com impacto, o triângulo carimba o A ===== -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-flash"></div>
+    <div class="intro-logo">
+      <svg viewBox="0 0 1000 330" role="img" aria-label="Gráfica Estamp">
+        <g class="intro-glow">
+          <g class="il-grafica">
+            <text x="502" y="92" text-anchor="middle">GRÁFICA</text>
+          </g>
+          <g class="il-estamp">
+            <text x="60" y="300" font-family="Krona One" font-size="156" fill="#fff" textLength="400" lengthAdjust="spacingAndGlyphs">EST</text>
+            <path d="M470 300 L548 150 L626 300 L592 300 L548 214 L504 300 Z" fill="#fff"/>
+            <text x="640" y="300" font-family="Krona One" font-size="156" fill="#fff" textLength="300" lengthAdjust="spacingAndGlyphs">MP</text>
+          </g>
+        </g>
+        <path class="il-tri" d="M548 236 L576 290 L520 290 Z" fill="#ff6a00"/>
+      </svg>
+    </div>
+    <div class="intro-tag">DESDE 2013 · CRUZEIRO DO SUL</div>
+    <button class="intro-skip" id="introSkip">Pular ›</button>
+  </div>
+
+  <!-- ===== Header ===== -->
+  <header class="hdr">
+    <div class="wrap">
+      <a href="#topo" class="brand" aria-label="Gráfica Estamp — início"><img src="assets/logo-nav.png" alt="Gráfica Estamp" width="170" height="34"></a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#catalogo">Loja</a>
+        <a href="personalizar.html" class="hot">Monte em 3D</a>
+        <a href="#como">Como funciona</a>
+        <a href="#portfolio">Portfólio</a>
+        <a href="#medidas">Medidas</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <div class="hdr-actions">
+        <button class="icon-btn" data-open-cart aria-label="Abrir carrinho"><span data-icon="cart"></span><span class="badge-count">0</span></button>
+        <button class="icon-btn menu-btn" aria-label="Menu"><span data-icon="menu"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="topo">
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <span class="eyebrow">Gráfica · Sublimação · Comunicação visual</span>
+          <h1>
+            <span class="hl"><span>Sua marca</span></span>
+            <span class="hl"><span>estampada</span></span>
+            <span class="hl"><span class="o">do seu jeito.</span></span>
+          </h1>
+          <p class="lead">Camisas, uniformes, canecas, troféus e impressos com acabamento profissional. Agora você monta o uniforme do seu time em 3D e já faz o pedido.</p>
+          <div class="hero-ctas">
+            <a href="personalizar.html" class="btn btn-primary">Montar uniforme em 3D <span data-icon="arrow"></span></a>
+            <a href="#catalogo" class="btn btn-ghost">Ver produtos</a>
+          </div>
+          <div class="hero-stats">
+            <div><b data-count="2013">2013</b><span>Desde</span></div>
+            <div><b>+1 mil</b><span>Seguidores</span></div>
+            <div><b>10%</b><span>Off acima de 10 un.</span></div>
+          </div>
+        </div>
+        <div class="hero-stage">
+          <div class="stage-ring"></div>
+          <canvas id="heroCanvas" aria-label="Uniforme 3D girando — arraste para girar"></canvas>
+          <div class="stage-chip a"><i></i>Arraste para girar</div>
+          <div class="stage-chip b"><i></i><span id="heroChip">Sublimação total</span></div>
+        </div>
+      </div>
+      <div class="scroll-hint">ROLE</div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Camisas</span><span>Uniformes</span><span>Canecas</span><span>Troféus</span><span>Coletes</span><span>Cartões</span><span>Adesivos</span><span>Placas</span>
+        <span>Camisas</span><span>Uniformes</span><span>Canecas</span><span>Troféus</span><span>Coletes</span><span>Cartões</span><span>Adesivos</span><span>Placas</span>
+      </div>
+    </div>
+
+    <!-- ===== Catálogo ===== -->
+    <section class="sec" id="catalogo">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div><span class="eyebrow">Loja</span><h2>Escolha, personalize<br>e peça.</h2></div>
+          <p>Preços por unidade. Pedidos acima de 10 unidades de camisas e uniformes ganham desconto.</p>
+        </div>
+        <div class="chips reveal" id="chips" role="tablist"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== Personalizador (teaser) ===== -->
+    <section class="sec studio">
+      <div class="wrap">
+        <div class="studio-box reveal">
+          <div>
+            <span class="eyebrow">Exclusivo · Estúdio 3D</span>
+            <h2>Monte o uniforme do seu time em 3D.</h2>
+            <p class="lead" style="color:var(--muted)">Você vê a camisa e o short girando enquanto escolhe. O pedido chega para a gente com tudo definido: menos mensagens, menos erros.</p>
+            <ul class="studio-list">
+              <li>Cores de corpo, manga, gola e detalhes</li>
+              <li>Modelos: listras, degradê, diagonal, camuflado…</li>
+              <li>Nome, número, patrocinador e escudo do time</li>
+              <li>Lista de jogadores com tamanho de cada um</li>
+            </ul>
+            <a href="personalizar.html" class="btn btn-primary">Abrir o estúdio 3D <span data-icon="arrow"></span></a>
+          </div>
+          <div class="studio-preview">
+            <canvas id="studioCanvas" aria-label="Prévia do uniforme"></canvas>
+            <div class="swatches" id="swatches"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Como funciona ===== -->
+    <section class="sec" id="como">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div><span class="eyebrow">Como funciona</span><h2>Do clique<br>à entrega.</h2></div>
+          <p>Atendimento pelo WhatsApp. Antes de produzir, mandamos a arte para você aprovar.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><h3>Escolha</h3><p>Escolha o produto na loja ou monte o uniforme no estúdio 3D.</p></div>
+          <div class="step reveal"><h3>Envie</h3><p>Finalize pelo WhatsApp ou pague online com Pix ou cartão.</p></div>
+          <div class="step reveal"><h3>Aprove</h3><p>Enviamos a arte final para você conferir antes de imprimir.</p></div>
+          <div class="step reveal"><h3>Receba</h3><p>Produção na nossa gráfica e retirada em Cruzeiro do Sul.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Portfólio ===== -->
+    <section class="sec" id="portfolio">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div><span class="eyebrow">Portfólio</span><h2>Trabalhos<br>da casa.</h2></div>
+          <p>Mais trabalhos no nosso Instagram <a href="#" data-insta style="color:var(--orange)">@graficaestampczs</a>.</p>
+        </div>
+        <div class="folio" id="folio"></div>
+      </div>
+    </section>
+
+    <!-- ===== Medidas ===== -->
+    <section class="sec" id="medidas">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div><span class="eyebrow">Tabela de medidas</span><h2>Acerte<br>o tamanho.</h2></div>
+          <p>Meça uma camisa que você já usa: largura de axila a axila e altura do ombro até a barra.</p>
+        </div>
+        <div class="sizes" id="sizes"></div>
+      </div>
+    </section>
+
+    <!-- ===== Contato ===== -->
+    <section class="sec" id="contato">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div><span class="eyebrow">Contato</span><h2>Fale com<br>a Estamp.</h2></div>
+          <p>Atendimento somente por mensagem no WhatsApp.</p>
+        </div>
+        <div class="contact">
+          <div class="info-card reveal">
+            <span class="open-dot" id="openDot"></span>
+            <div class="row"><span data-icon="wa"></span><div><b id="cPhone"></b><span>WhatsApp — atendimento por mensagem</span></div></div>
+            <div class="row"><span data-icon="pin"></span><div><b id="cAddr"></b><span id="cCity"></span></div></div>
+            <div class="row"><span data-icon="insta"></span><div><b><a href="#" data-insta>@graficaestampczs</a></b><span>Novidades e trabalhos recentes</span></div></div>
+            <div class="row"><span data-icon="clock"></span><div class="hours" id="hours"></div></div>
+            <a href="#" data-wa class="btn btn-primary" target="_blank" rel="noopener"><span data-icon="wa"></span>Chamar no WhatsApp</a>
+          </div>
+          <div class="map reveal" id="map"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <img src="assets/logo-nav.png" alt="Gráfica Estamp" loading="lazy">
+      <span>© <span id="year"></span> Gráfica Estamp · Cruzeiro do Sul — AC</span>
+      <span>Preços sujeitos a confirmação no atendimento.</span>
+    </div>
+    <div class="big-word" aria-hidden="true">ESTAMP</div>
+  </footer>
+
+  <a href="#" data-wa class="wa" target="_blank" rel="noopener" aria-label="WhatsApp"><span data-icon="wa"></span></a>
+
+  <!-- ===== Camadas ===== -->
+  <div class="overlay" id="overlay"></div>
+  <aside class="drawer" id="drawer" aria-label="Carrinho">
+    <div class="drawer-head"><h3>Carrinho</h3><button class="modal-close" style="position:static" aria-label="Fechar"><span data-icon="close"></span></button></div>
+    <div class="drawer-items"></div>
+    <div class="drawer-foot" hidden>
+      <div class="sum"><span>Subtotal</span><b>R$ 0,00</b></div>
+      <button class="btn btn-primary" data-checkout-pay>Pagar com Pix ou cartão</button>
+      <button class="btn btn-ghost" data-checkout-wa><span data-icon="wa"></span>Pedir pelo WhatsApp</button>
+      <small style="color:var(--muted);text-align:center">Uniformes personalizados: a arte é aprovada com você antes da produção.</small>
+    </div>
+  </aside>
+  <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modal-box"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

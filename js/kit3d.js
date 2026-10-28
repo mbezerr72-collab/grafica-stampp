@@ -33,6 +33,7 @@ export function createKit({ shorts = true } = {}) {
   const group = new THREE.Group();
   const shirt = canvasTex(2048, 1024);
   const shortsTex = canvasTex(1024, 512);
+  const legTex = canvasTex(1024, 512); // perna sem número
 
   // tronco (lathe: u=0.25 frente, u=0.75 costas)
   const pts = [];
@@ -64,12 +65,14 @@ export function createKit({ shorts = true } = {}) {
   if (shorts) {
     shortsGroup = new THREE.Group();
     const sMat = mat(shortsTex.t);
+    const plainMat = mat(legTex.t);
     const wpts = [];
     for (let i = 0; i <= 12; i++) { const y = -1.95 + (i / 12) * 0.75; wpts.push(new THREE.Vector2(0.92 + (y + 1.95) * 0.04, y)); }
-    const waist = new THREE.Mesh(new THREE.LatheGeometry(wpts, 80, -Math.PI / 2), sMat);
+    const waist = new THREE.Mesh(new THREE.LatheGeometry(wpts, 80, -Math.PI / 2), plainMat);
     waist.scale.z = 0.6; shortsGroup.add(waist);
     for (const s of [1, -1]) {
-      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.56, 0.85, 48, 1, true), sMat);
+      // número em uma perna só, como nos uniformes reais
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.53, 0.56, 0.85, 48, 1, true), s === -1 ? sMat : plainMat);
       leg.position.set(0.45 * s, -2.3, 0); leg.rotation.z = -0.07 * s; leg.scale.z = 0.95;
       shortsGroup.add(leg);
     }
@@ -86,7 +89,10 @@ export function createKit({ shorts = true } = {}) {
     sleeveMat.color.set(s.sleeve);
     collarMat.color.set(s.collar);
     cuffMat.color.set(s.detail);
-    if (shorts) { paintShorts(shortsTex.ctx, s); shortsTex.t.needsUpdate = true; }
+    if (shorts) {
+      paintShorts(shortsTex.ctx, s); shortsTex.t.needsUpdate = true;
+      paintShorts(legTex.ctx, { ...s, number: '' }); legTex.t.needsUpdate = true;
+    }
   };
   kit.paint();
   return kit;
@@ -173,7 +179,7 @@ function drawBadge(g, x, y, s) {
   g.beginPath(); g.arc(x, y, 62, 0, Math.PI * 2);
   g.fillStyle = s.detail; g.fill();
   g.lineWidth = 8; g.strokeStyle = s.textColor; g.stroke();
-  g.fillStyle = s.textColor; g.font = '700 70px "Krona One", sans-serif';
+  g.fillStyle = s.body; g.font = '700 70px "Krona One", sans-serif';
   g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('E', x, y + 4);
   g.restore();
 }

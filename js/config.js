@@ -1,15 +1,17 @@
-// Dados da loja. TROQUE os valores marcados com TODO antes de publicar.
+// Dados da loja (tirados do WhatsApp Business e do Instagram @graficaestampczs).
 export const SITE = {
   name: 'Gráfica Estamp',
-  whatsapp: '5500000000000', // TODO: DDI + DDD + número, só dígitos (ex.: 5584999998888)
-  instagram: 'graficaestamp', // TODO: confirmar @
-  address: 'Rua Exemplo, 123 — Centro', // TODO
-  city: 'Sua Cidade — UF', // TODO
-  mapsQuery: 'Gráfica Estamp', // TODO: endereço completo para o mapa
-  // [dia da semana (0=dom), abre, fecha] — horários em 24h. TODO: confirmar
+  whatsapp: '5568999967316',
+  phone: '(68) 99996-7316',
+  instagram: 'graficaestampczs',
+  since: 2013,
+  address: 'R. 17 de Novembro, 1471 — Telégrafo',
+  city: 'Cruzeiro do Sul — AC, 69980-000',
+  mapsQuery: 'R. 17 de Novembro, 1471, Cruzeiro do Sul - AC, 69980-000',
+  // [dia da semana (0=dom), abre, fecha]
   hours: [
-    [1, '08:00', '18:00'], [2, '08:00', '18:00'], [3, '08:00', '18:00'],
-    [4, '08:00', '18:00'], [5, '08:00', '18:00'], [6, '08:00', '12:00'],
+    [1, '07:30', '17:30'], [2, '07:30', '17:30'], [3, '07:30', '17:30'],
+    [4, '07:30', '17:30'], [5, '07:30', '17:30'], [6, '07:30', '11:30'],
   ],
 };
 
@@ -22,10 +24,14 @@ export function hoursTable() {
     return [d, h ? `${h[1]} – ${h[2]}` : 'Fechado'];
   });
 }
+// Usa o horário do Acre (UTC-5), não o do visitante
 export function isOpenNow(now = new Date()) {
-  const h = SITE.hours.find((x) => x[0] === now.getDay());
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Rio_Branco', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' })
+    .formatToParts(now).map((x) => [x.type, x.value]));
+  const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday);
+  const h = SITE.hours.find((x) => x[0] === day);
   if (!h) return false;
-  const m = now.getHours() * 60 + now.getMinutes();
+  const m = Number(p.hour) * 60 + Number(p.minute);
   const toMin = (s) => { const [a, b] = s.split(':').map(Number); return a * 60 + b; };
   return m >= toMin(h[1]) && m < toMin(h[2]);
 }

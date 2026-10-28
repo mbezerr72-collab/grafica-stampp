@@ -1,4 +1,4 @@
-// Catálogo da Gráfica Estamp — preços de DEMONSTRAÇÃO.
+// Catálogo da Gráfica Estamp — preços do catálogo do WhatsApp Business (conferir com a loja antes de vender).
 // Usado no site e no servidor (api/checkout.js), que recalcula tudo: o preço nunca vem do navegador.
 
 export const CATEGORIES = [
@@ -18,7 +18,7 @@ export const PRODUCTS = [
   { id: 'camisa-dryfit', cat: 'camisas', name: 'Camisa Dry-Fit', desc: 'Tecido esportivo que seca rápido. Perfeita para treino.', price: 55, unit: 'un', sizes: true },
   { id: 'camisa-polo', cat: 'camisas', name: 'Camisa Gola Polo', desc: 'Uniforme corporativo com bordado ou sublimação.', price: 65, unit: 'un', sizes: true },
   { id: 'camisa-manga-longa', cat: 'camisas', name: 'Camisa Manga Longa', desc: 'Proteção UV para trabalho externo e trilhas.', price: 60, unit: 'un', sizes: true },
-  { id: 'uniforme-completo', cat: 'uniformes', name: 'Uniforme Completo', desc: 'Camisa + short sublimados com nome e número.', price: 89, unit: 'conjunto', sizes: true, badge: 'Monte em 3D', custom: true },
+  { id: 'uniforme-completo', cat: 'uniformes', name: 'Uniforme Completo', desc: 'Camisa + short sublimados com nome e número.', price: 80, unit: 'conjunto', sizes: true, badge: 'Monte em 3D', custom: true },
   { id: 'uniforme-goleiro', cat: 'uniformes', name: 'Kit Goleiro', desc: 'Manga longa acolchoada + short. Personalizado.', price: 99, unit: 'conjunto', sizes: true },
   { id: 'caneca-ceramica', cat: 'canecas', name: 'Caneca Cerâmica', desc: '325ml, sublimação com sua foto ou arte.', price: 35, unit: 'un', badge: 'Presente' },
   { id: 'caneca-magica', cat: 'canecas', name: 'Caneca Mágica', desc: 'A arte aparece com a bebida quente.', price: 55, unit: 'un' },
@@ -39,8 +39,14 @@ export const FABRICS = {
   poliester: { label: 'Poliéster', price: 55 },
   dryfit: { label: 'Dry-Fit', price: 55 },
 };
-export const SHORTS_PRICE = 25;
-export const SIZES = ['PP', 'P', 'M', 'G', 'GG', 'EXG'];
+export const SHORTS_PRICE = 40; // uniforme cacharrel = R$ 80 o conjunto
+export const SIZES = ['PP', 'P', 'M', 'G', 'GG', 'EXG', 'PPBL', 'PBL', 'MBL', 'GBL', 'GGBL', 'EXGBL'];
+
+// Tabela de medidas do catálogo (largura x altura, em cm)
+export const MEASURES = {
+  Masculino: [['PP', 46, 66], ['P', 50, 70], ['M', 53, 75], ['G', 57, 80], ['GG', 61, 82], ['EXG', 67, 87]],
+  'Baby look': [['PPBL', 41, 56], ['PBL', 43, 59], ['MBL', 47, 64], ['GBL', 50, 67], ['GGBL', 54, 74], ['EXGBL', 58, 76]],
+};
 
 export function customUnitPrice(fabric, withShorts, qty) {
   const f = FABRICS[fabric] || FABRICS.poliester;
