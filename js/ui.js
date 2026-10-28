@@ -1,152 +1,132 @@
-// Partes comuns às páginas: header, gaveta do carrinho, toast e finalização do pedido.
-import { cart, lineInfo, totals } from './cart.js';
-import { brl } from '../data/products.js';
+// Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js';
+import { cart, totals } from './cart.js';
 import { SITE, waLink } from './config.js';
 
-export const ICONS = {
-  cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>',
-  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
-  close: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
-  menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>',
-  wa: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.6 2 2.17 6.43 2.17 11.87c0 1.74.46 3.44 1.32 4.94L2.1 22l5.32-1.4a9.86 9.86 0 0 0 4.62 1.17c5.45 0 9.87-4.43 9.87-9.87a9.8 9.8 0 0 0-2.86-6.99Zm-7.01 15.19a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.16.83.84-3.08-.2-.32a8.2 8.2 0 0 1-1.26-4.33c0-4.53 3.69-8.21 8.22-8.21a8.2 8.2 0 0 1 8.21 8.22c0 4.53-3.69 8.22-8.17 8.22Zm4.5-6.15c-.25-.12-1.46-.72-1.69-.8-.23-.09-.39-.13-.56.12-.16.25-.64.8-.78.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.57.12.16 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.6.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.14-1.18-.06-.1-.22-.16-.47-.29Z"/></svg>',
-  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-  insta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
-  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+// Ícones (traço simples, 24×24)
+const P = {
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  cart: '<path d="M3 4h2l2.2 10.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  wa: '<path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3.5 20.5l1.4-4.2A8.5 8.5 0 1 1 20.5 11.6Z"/><path d="M8.8 8.6c.2-.5.5-.6.8-.6h.5c.2 0 .4 0 .5.4l.7 1.6c.1.2 0 .4-.1.6l-.4.5c-.1.1-.2.3 0 .5.5.9 1.3 1.7 2.2 2.2.2.1.4.1.5 0l.5-.6c.2-.2.4-.2.6-.1l1.6.8c.2.1.3.2.3.4 0 .5-.2 1.2-.7 1.5-.6.4-1.4.5-2.3.2a9 9 0 0 1-4.8-4.6c-.4-.9-.3-1.8.1-2.8Z"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  insta: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  check: '<path d="m5 12 5 5 9-10"/>',
+  bag: '<path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/>',
+  doc: '<path d="M7 3h7l5 5v13H7V3Z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+  inbox: '<path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6l1-8Z"/>',
+  approve: '<path d="M7 3h7l5 5v13H7V3Z"/><path d="m10 15 2 2 4-4"/>',
+  devices: '<rect x="3" y="4" width="13" height="10" rx="1.5"/><path d="M7 18h5"/><rect x="15" y="9" width="6" height="11" rx="1.5"/>',
+  truck: '<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  store: '<path d="M4 9 5.5 4h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+  pen: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4Z"/><path d="M14 6l3 3"/>',
+  shield: '<path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',
+  ruler: '<path d="M3 17 17 3l4 4L7 21l-4-4Z"/><path d="m7 13 2 2M10 10l2 2M13 7l2 2"/>',
+  // camisas
+  tee: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/>',
+  polo: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3-2 3-2-3Z"/><path d="M12 6v4"/>',
+  dryfit: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><path d="M9 14l3-3 3 3"/>',
+  oversized: '<path d="M7 3 1 7l2 5 4-1v10h10V11l4 1 2-5-6-4a5 5 0 0 1-10 0Z"/>',
+  front: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><rect x="10" y="11" width="4" height="4" fill="currentColor" stroke="none"/>',
+  back: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3c-1 1-2.3 1.4-4 1.4S9 4 8 3Z"/><rect x="9.5" y="9" width="5" height="7" fill="currentColor" stroke="none"/>',
+  both: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><rect x="10" y="10" width="4" height="3" fill="currentColor" stroke="none"/><rect x="10" y="15" width="4" height="3" fill="currentColor" stroke="none"/>',
+  sleeves: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><path d="M3.6 7.5l1.5 3.4M20.4 7.5l-1.5 3.4" stroke-width="3"/>',
+  question: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/>',
 };
+export const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name] || ''}</svg>`;
 
-// Ícone genérico por categoria (enquanto não houver foto em img/produtos/<id>.png)
-const PH = {
-  camisas: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/>',
-  uniformes: '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><path d="M10 13h4"/>',
-  canecas: '<path d="M5 6h11v11a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6Z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/>',
-  trofeus: '<path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8l-1-4H9l-1 4Z"/>',
-  coletes: '<path d="M8 3 5 6v15h5v-8h4v8h5V6l-3-3-4 5-4-5Z"/>',
-  impressos: '<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10h6M8 14h4"/>',
-  comunicacao: '<path d="M4 5h16v10H4z"/><path d="M12 15v5M8 20h8"/>',
-};
-export const placeholder = (cat) => `<svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">${PH[cat] || PH.impressos}</svg>`;
-export const productImg = (src, cat, alt = '') =>
-  `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.outerHTML=this.dataset.ph" data-ph='${placeholder(cat)}'>`;
+export const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+export const $ = (s, el = document) => el.querySelector(s);
+export const catById = (id) => CATEGORIES.find((c) => c.id === id);
+
+// ===== Cabeçalho e rodapé =====
+export function layout(active) {
+  const nav = [['index.html', 'Início', 'inicio'], ['produtos.html', 'Produtos', 'produtos'], ['index.html#sobre', 'Sobre', 'sobre'], ['index.html#contato', 'Contato', 'contato']];
+  document.body.insertAdjacentHTML('afterbegin', `
+    <a class="sr" href="#conteudo">Pular para o conteúdo</a>
+    <div class="topbar"><div class="wrap">
+      <span>${icon('wa')}Atendimento pelo WhatsApp <a href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener">${SITE.phone}</a></span>
+      <span class="hide-m">${icon('clock')}Seg a sex 7h30–17h30 · Sáb 7h30–11h30</span>
+    </div></div>
+    <header class="hdr">
+      <div class="wrap">
+        <a href="index.html" class="brand"><img src="assets/logo-dark.png" alt="Gráfica Estamp" width="150" height="30"></a>
+        <nav class="nav" id="nav" aria-label="Principal">
+          ${nav.map(([h, l, k]) => `<a href="${h}"${k === active ? ' aria-current="page"' : ''}>${l}</a>`).join('')}
+        </nav>
+        <div class="hdr-actions">
+          <button class="icon-btn" id="searchBtn" aria-label="Buscar produtos" aria-expanded="false">${icon('search')}</button>
+          <a class="icon-btn" href="carrinho.html" aria-label="Carrinho">${icon('cart')}<span class="count" id="cartCount" hidden>0</span></a>
+          <a class="btn btn-dark btn-sm btn-quote" href="${waLink('Olá! Quero um orçamento.')}" target="_blank" rel="noopener">Pedir orçamento</a>
+          <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">${icon('menu')}</button>
+        </div>
+      </div>
+      <div class="search" id="search" hidden><div class="wrap">
+        <form action="produtos.html" role="search"><input name="q" type="search" placeholder="O que você precisa? Ex.: cartão, caneca, banner" aria-label="Buscar produtos"><button class="btn btn-dark">Buscar</button></form>
+      </div></div>
+    </header>`);
+
+  const cats = CATEGORIES.map((c) => `<li><a href="produtos.html?cat=${c.id}">${c.label}</a></li>`).join('');
+  document.body.insertAdjacentHTML('beforeend', `
+    <footer class="ftr">
+      <div class="wrap">
+        <div class="ftr-grid">
+          <div><img src="assets/logo-nav.png" alt="Gráfica Estamp" width="150" height="30">
+            <p>Gráfica, comunicação visual e personalizados em Cruzeiro do Sul desde ${SITE.since}.</p></div>
+          <div><h4>Produtos</h4><ul>${cats}</ul></div>
+          <div><h4>Atendimento</h4><ul>
+            <li><a href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener">WhatsApp ${SITE.phone}</a></li>
+            <li><a href="https://instagram.com/${SITE.instagram}" target="_blank" rel="noopener">@${SITE.instagram}</a></li>
+            <li><a href="carrinho.html">Meu carrinho</a></li></ul></div>
+          <div><h4>Endereço</h4><p>${SITE.address}<br>${SITE.city}</p></div>
+        </div>
+        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento.</span></div>
+      </div>
+    </footer>
+    <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}</a>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
+
+  const menuBtn = $('#menuBtn'), navEl = $('#nav');
+  menuBtn.addEventListener('click', () => { const on = navEl.classList.toggle('on'); menuBtn.setAttribute('aria-expanded', on); });
+  navEl.addEventListener('click', (e) => { if (e.target.closest('a')) { navEl.classList.remove('on'); menuBtn.setAttribute('aria-expanded', 'false'); } });
+  const sBtn = $('#searchBtn'), sBox = $('#search');
+  sBtn.addEventListener('click', () => { sBox.hidden = !sBox.hidden; sBtn.setAttribute('aria-expanded', !sBox.hidden); if (!sBox.hidden) $('input', sBox).focus(); });
+  cart.onChange((items) => { const n = totals(items).count; const c = $('#cartCount'); c.textContent = n; c.hidden = !n; });
+}
+
+// ===== Card de produto =====
+export function priceTag(p) {
+  if (p.flow === 'compra') {
+    const min = Math.min(...p.options.flatMap((o) => o.choices.map((c) => c.price).filter((x) => x != null)));
+    return `<span class="price-sm">a partir de<b>${brl(min)}</b></span>`;
+  }
+  return p.from ? `<span class="price-sm">a partir de<b>${brl(p.from)}<small style="font-size:12px;color:var(--muted)">/${p.unit}</small></b></span>` : '<span class="price-sm">Preço<b>Sob orçamento</b></span>';
+}
+export function productCard(p, { showCat = true } = {}) {
+  return `<a class="pcard" href="produto.html?id=${p.id}">
+    <div class="pcard-img"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" width="600" height="600">${p.badge ? `<span class="tag hot">${p.badge}</span>` : ''}</div>
+    <div class="pcard-body">
+      ${showCat ? `<span class="pcard-cat">${catById(p.cat)?.label}</span>` : ''}
+      <h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+      <div class="pcard-foot">${priceTag(p)}<span class="pill ${p.flow === 'compra' ? 'a">Compra direta' : 'b">Orçamento'}</span></div>
+    </div></a>`;
+}
+export const productsIn = (cat) => PRODUCTS.filter((p) => p.cat === cat);
 
 let toastTimer;
-export function toast(msg) {
-  const el = document.getElementById('toast');
-  el.innerHTML = `<i>✓</i>${msg}`;
+export function toast(html) {
+  const el = $('#toast');
+  el.innerHTML = html;
   el.classList.add('on');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('on'), 2600);
-}
-
-const overlay = () => document.getElementById('overlay');
-const openLayers = new Set();
-export function openLayer(el) {
-  el.classList.add('on'); openLayers.add(el);
-  overlay().classList.add('on'); document.body.classList.add('locked');
-}
-export function closeLayers() {
-  openLayers.forEach((el) => el.classList.remove('on')); openLayers.clear();
-  overlay().classList.remove('on'); document.body.classList.remove('locked');
-}
-
-export function initHeader() {
-  const hdr = document.querySelector('.hdr');
-  const onScroll = () => hdr.classList.toggle('solid', scrollY > 30);
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
-
-  const nav = document.querySelector('.nav');
-  document.querySelector('.menu-btn')?.addEventListener('click', () => nav.classList.toggle('on'));
-  nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => nav.classList.remove('on')));
-
-  document.querySelectorAll('[data-wa]').forEach((a) => { a.href = waLink('Olá! Vim pelo site da Gráfica Estamp e quero fazer um orçamento.'); });
-  document.getElementById('overlay').addEventListener('click', closeLayers);
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLayers(); });
-}
-
-export function initDrawer() {
-  const drawer = document.getElementById('drawer');
-  const list = drawer.querySelector('.drawer-items');
-  const foot = drawer.querySelector('.drawer-foot');
-  const badge = document.querySelector('.badge-count');
-
-  document.querySelectorAll('[data-open-cart]').forEach((b) => b.addEventListener('click', () => openLayer(drawer)));
-  drawer.querySelector('.modal-close').addEventListener('click', closeLayers);
-
-  cart.onChange((items) => {
-    const t = totals(items);
-    badge.textContent = t.count;
-    badge.classList.toggle('on', t.count > 0);
-    if (!items.length) {
-      list.innerHTML = `<div class="empty">${ICONS.cart}<p>Seu carrinho está vazio.</p><a href="index.html#catalogo" class="btn btn-ghost" data-close>Ver produtos</a></div>`;
-      list.querySelector('[data-close]').addEventListener('click', closeLayers);
-      foot.hidden = true;
-      return;
-    }
-    foot.hidden = false;
-    list.innerHTML = items.map((i) => {
-      const l = lineInfo(i);
-      if (!l) return '';
-      const thumb = l.thumb?.startsWith('data:') ? `<img src="${l.thumb}" alt="">` : productImg(l.thumb, l.cat || 'uniformes');
-      return `<div class="line" data-key="${i.key}">
-        <div class="line-thumb">${thumb}</div>
-        <div><h4>${l.title}</h4><small>${escapeHtml(l.sub)}</small>
-          <div class="qty"><button data-q="-1" aria-label="Diminuir">−</button><span>${i.qty}</span><button data-q="1" aria-label="Aumentar">+</button></div></div>
-        <div class="line-right"><b>${brl(l.total)}</b><button class="rm">remover</button></div>
-      </div>`;
-    }).join('');
-    foot.querySelector('.sum b').textContent = t.label;
-  });
-
-  list.addEventListener('click', (e) => {
-    const line = e.target.closest('.line');
-    if (!line) return;
-    const key = line.dataset.key;
-    const item = cart.items().find((i) => i.key === key);
-    if (e.target.closest('.rm')) cart.remove(key);
-    const q = e.target.closest('[data-q]');
-    if (q && item) {
-      if (item.id === 'custom' && item.config?.roster?.length) return toast('Ajuste a quantidade na lista de jogadores');
-      cart.setQty(key, item.qty + Number(q.dataset.q));
-    }
-  });
-
-  foot.querySelector('[data-checkout-wa]').addEventListener('click', () => {
-    window.open(waLink(orderMessage()), '_blank', 'noopener');
-  });
-  foot.querySelector('[data-checkout-pay]').addEventListener('click', payOnline);
-}
-
-export const escapeHtml = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-export function orderMessage(items = cart.items()) {
-  const lines = items.map((i) => {
-    const l = lineInfo(i);
-    if (!l) return '';
-    let s = `• ${i.qty}x ${l.title} (${l.sub}) — ${brl(l.total)}`;
-    const c = i.config;
-    if (c) {
-      s += `\n   Cores: corpo ${c.body}, manga ${c.sleeve}, gola ${c.collar}, detalhe ${c.detail}, estampa ${c.pattern} ${c.patternColor}`;
-      if (c.shorts) s += `, short ${c.shortsColor}/${c.shortsDetail}`;
-      if (c.sponsor) s += `\n   Patrocinador: ${c.sponsor}`;
-      if (c.hasLogo) s += `\n   (vou enviar o escudo/logo aqui na conversa)`;
-      if (c.roster?.length) s += '\n   Jogadores:\n' + c.roster.map((r) => `     - ${r.name || '(sem nome)'} #${r.number || '-'} ${r.size}`).join('\n');
-    }
-    return s;
-  }).join('\n');
-  return `Olá, ${SITE.name}! Quero fazer este pedido:\n\n${lines}\n\nTotal estimado: ${totals(items).label}\n(valores do site, sujeitos a confirmação)`;
-}
-
-async function payOnline(e) {
-  const btn = e.currentTarget;
-  btn.disabled = true;
-  try {
-    const items = cart.items().map(({ id, qty, size, config }) => ({ id, qty, size, config: config && { ...config, logo: undefined } }));
-    const r = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items }) });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok || !data.url) throw new Error(data.error || 'indisponível');
-    location.href = data.url;
-  } catch {
-    toast('Pagamento online indisponível — finalize pelo WhatsApp');
-    btn.disabled = false;
-  }
+  toastTimer = setTimeout(() => el.classList.remove('on'), 3500);
 }

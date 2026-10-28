@@ -3,63 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seu pedido · Gráfica Estamp</title>
+  <title>Seu pedido — Gráfica Estamp</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#070707">
+  <meta property="og:title" content="Gráfica Estamp — Sua ideia, nossa impressão">
+  <meta property="og:description" content="Personalize, escolha seus produtos e peça seu orçamento sem sair de casa.">
+  <meta property="og:image" content="img/hero.jpg">
+  <meta name="theme-color" content="#141414">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Michroma&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .result { min-height: 100svh; display: grid; place-items: center; padding: 40px 16px; text-align: center; }
-    .result-box { max-width: 520px; display: grid; gap: 18px; justify-items: center; }
-    .result-icon { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; font-size: 42px; font-weight: 800; color: #000; animation: slam .6s cubic-bezier(.5, 0, .2, 1.4) both; }
-    .result h1 { font-family: var(--display); font-size: clamp(26px, 6vw, 40px); text-transform: uppercase; line-height: 1.05; }
-    .result p { color: var(--muted); }
-    .result .ref { font-family: var(--wide); font-size: 12px; letter-spacing: .2em; color: var(--orange); }
-    .result .btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-    @keyframes slam { from { transform: scale(1.8); opacity: 0; } }
-  </style>
 </head>
 <body>
-  <main class="result">
-    <div class="result-box">
-      <a href="index.html"><img src="assets/logo-nav.png" alt="Gráfica Estamp" style="height:36px;width:auto;margin-bottom:20px"></a>
-      <div class="result-icon" id="icon"></div>
-      <h1 id="title"></h1>
+  <main id="conteudo" class="wrap" style="padding:72px 0 96px">
+    <div class="box done" style="max-width:560px;margin:0 auto">
+      <div class="done-ico" id="ico"></div>
+      <h1 class="h2" id="title"></h1>
+      <span class="proto" id="ref" hidden></span>
       <p id="text"></p>
-      <span class="ref" id="ref"></span>
-      <div class="btns">
-        <a class="btn btn-primary" id="wa" target="_blank" rel="noopener">Enviar arte pelo WhatsApp</a>
-        <a class="btn btn-ghost" href="index.html">Voltar à loja</a>
-      </div>
+      <a class="btn btn-wa" id="wa" target="_blank" rel="noopener">Enviar arte pelo WhatsApp</a>
+      <a class="link-arrow" href="produtos.html" style="margin-top:6px">Continuar comprando</a>
     </div>
   </main>
   <script type="module">
     import { cart } from './js/cart.js';
     import { waLink } from './js/config.js';
-    import { orderMessage } from './js/ui.js';
-
+    import { layout, icon, $ } from './js/ui.js';
+    layout('');
     const q = new URLSearchParams(location.search);
-    const status = q.get('collection_status') || q.get('status') || 'unknown';
+    const status = q.get('collection_status') || q.get('status') || '';
     const ref = (q.get('ref') || q.get('external_reference') || '').replace(/[^A-Z0-9-]/gi, '').slice(0, 24);
-    const VIEWS = {
-      approved: ['✓', '#3ddc84', 'Pagamento aprovado!', 'Recebemos seu pedido. Agora mande sua arte, escudo ou ideia pelo WhatsApp com o código abaixo.'],
-      pending: ['…', '#ffd400', 'Pagamento em análise', 'Se você pagou com Pix ou boleto, a confirmação pode levar alguns minutos. Avisamos pelo WhatsApp.'],
-      in_process: ['…', '#ffd400', 'Pagamento em análise', 'O Mercado Pago está analisando o pagamento. Avisamos pelo WhatsApp.'],
-      rejected: ['!', '#ff5a4f', 'Pagamento não aprovado', 'Nada foi cobrado. Tente outro cartão ou finalize o pedido pelo WhatsApp.'],
+    const V = {
+      approved: ['check', 'var(--ok-soft)', 'var(--ok)', 'Pagamento aprovado!', 'Recebemos o seu pedido. Agora envie a sua arte pelo WhatsApp com o número do pedido.'],
+      pending: ['clock', 'var(--warn-soft)', '#b7791f', 'Pagamento em análise', 'Pagamentos por Pix ou boleto podem levar alguns minutos para confirmar. Avisamos pelo WhatsApp.'],
+      in_process: ['clock', 'var(--warn-soft)', '#b7791f', 'Pagamento em análise', 'O Mercado Pago está analisando o pagamento. Avisamos pelo WhatsApp.'],
+      rejected: ['close', '#fdecec', '#b42318', 'Pagamento não aprovado', 'Nada foi cobrado. Tente outro cartão ou finalize o pedido pelo WhatsApp.'],
     };
-    const [icon, color, title, text] = VIEWS[status] || ['?', '#9b968f', 'Pedido não encontrado', 'Não recebemos a confirmação do pagamento. Fale com a gente pelo WhatsApp.'];
-    document.getElementById('icon').textContent = icon;
-    document.getElementById('icon').style.background = color;
-    document.getElementById('title').textContent = title;
-    document.getElementById('text').textContent = text;
-    document.getElementById('ref').textContent = ref ? `PEDIDO ${ref}` : '';
-
-    // monta a mensagem antes de limpar o carrinho
-    const items = cart.items();
-    const msg = items.length ? orderMessage(items) : 'Olá! Fiz um pedido pelo site.';
-    document.getElementById('wa').href = waLink(`${msg}\n\nCódigo do pedido: ${ref || '-'} · Pagamento: ${title}`);
-    if (status === 'approved' || status === 'pending' || status === 'in_process') cart.clear();
+    const [i, bg, fg, title, text] = V[status] || ['question', 'var(--soft)', 'var(--muted)', 'Não encontramos a confirmação', 'Se você pagou, fale com a equipe pelo WhatsApp informando o seu nome.'];
+    const ico = $('#ico'); ico.innerHTML = icon(i); ico.style.background = bg; ico.style.color = fg;
+    $('#title').textContent = title; $('#text').textContent = text;
+    if (ref) { $('#ref').hidden = false; $('#ref').textContent = `Pedido ${ref}`; }
+    let resumo = '';
+    try { resumo = sessionStorage.getItem('estamp-ultimo-pedido') || ''; } catch {}
+    $('#wa').innerHTML = icon('wa') + (status === 'rejected' ? 'Finalizar pelo WhatsApp' : 'Enviar arte pelo WhatsApp');
+    $('#wa').href = waLink(`${resumo || 'Olá! Fiz um pedido pelo site.'}\n\nPedido: ${ref || '-'} · Pagamento: ${title}`);
+    if (['approved', 'pending', 'in_process'].includes(status)) cart.clear();
   </script>
 </body>
 </html>
