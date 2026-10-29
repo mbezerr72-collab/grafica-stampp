@@ -1,11 +1,10 @@
 // Página de um produto: compra direta (Tipo A) ou formulário de orçamento em etapas (Tipo B).
-import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610282113';
-import { cart, MAX_QTY } from './cart.js?v=2610282113';
-import { SITE, waLink } from './config.js?v=2610282113';
-import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610282113';
-import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610282113';
-import { worksOf } from './works.js?v=2610282113';
-import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610282113';
+import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610282008';
+import { cart, MAX_QTY } from './cart.js?v=2610282008';
+import { SITE, waLink } from './config.js?v=2610282008';
+import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610282008';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610282008';
+import { worksOf } from './works.js?v=2610282008';
 
 layout('produtos');
 const root = $('#prod');
@@ -409,9 +408,7 @@ function renderQuote() {
   const review = () => `<dl class="review">${entries().map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
 
   function send() {
-    const proto = protocolo();
-    const respostas = entries().filter(([k]) => !/^(Nome completo|WhatsApp|E-mail)$/.test(k));
-    registrarNoPainel({ numero: proto, produtoId: p.id, nome: (data.nome || '').trim(), telefone: data.whatsapp || '', qtd: sizeTotal(data.tamanhos || {}) || Number(data.quantidade) || 1, respostas, tipo: 'orcamento' });
+    const proto = `EST-${new Date().toISOString().slice(2, 10).replace(/-/g, '')}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
     const msg = `*Solicitação de orçamento — ${p.name}*\nPedido: ${proto}\n\n`
       + entries().map(([k, v]) => `*${k}:* ${v}`).join('\n')
       + (fileCount(files) ? `\n\n📎 Vou anexar ${fileCount(files)} imagem(ns) nesta conversa.` : '');
