@@ -637,9 +637,6 @@ export function gerarExemplo(produtos: PProduto[], hojeIso: string): Exemplo {
   const proximo = somaDias(hojeIso.slice(0, 7) + '-01', 32).slice(0, 7)
   for (const [desc, cat, valor, dia] of FIXAS)
     contas.push({ id: id('ct', nc++), tipo: 'pagar', descricao: desc, valor, vencimento: `${proximo}-${doisDig(dia)}`, categoria: cat, recorrencia: 'mensal', exemplo: true })
-  // A receber: o resto dos pedidos prontos (o cliente paga na retirada).
-  for (const o of pedidos.filter((x) => x.status === 'pronto'))
-    contas.push({ id: id('ct', nc++), tipo: 'receber', descricao: `Pedido nº ${o.numero}, resto na retirada`, valor: Math.round((totalPedido(o) - o.sinal) * 100) / 100, vencimento: somaDias(hojeIso, 1), categoria: 'outros', recorrencia: 'nenhuma', exemplo: true })
 
   // Caixa de cada dia aberto (com algumas diferenças pequenas na conferência).
   const caixas: Caixa[] = dias
