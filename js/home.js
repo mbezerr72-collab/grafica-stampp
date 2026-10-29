@@ -1,7 +1,7 @@
-import { CATEGORIES, productById } from '../data/products.js?v=2610282008';
-import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610282008';
-import { worksOf } from './works.js?v=2610282008';
-import { layout, icon, shopCard, priceLine, rail, $ } from './ui.js?v=2610282008';
+import { CATEGORIES, productById } from '../data/products.js?v=2610291430';
+import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610291430';
+import { worksOf } from './works.js?v=2610291430';
+import { layout, icon, shopCard, priceLine, rail, $ } from './ui.js?v=2610291430';
 
 layout('inicio');
 document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN') el.outerHTML = icon(el.dataset.i); else el.innerHTML = icon(el.dataset.i); });
@@ -48,9 +48,12 @@ $('#featured').innerHTML = ROWS.map((r, k) => {
   }).join('');
   return `<section class="row" aria-labelledby="row-${k}">
     <div class="row-head"><h3 id="row-${k}">${r.title}</h3>
-      <div class="row-nav"><a class="link-arrow" href="${r.href}">Ver todos</a>
-        <button class="rail-btn" data-prev aria-label="Anterior">${icon('arrow')}</button><button class="rail-btn" data-next aria-label="Próximo">${icon('arrow')}</button></div></div>
-    <div class="rail">${cards}</div>
+      <div class="row-nav"><a class="link-arrow" href="${r.href}">Ver todos</a></div></div>
+    <div class="rail-wrap">
+      <button class="rail-btn rail-side" data-prev aria-label="Ver os anteriores">${icon('arrow')}</button>
+      <div class="rail">${cards}</div>
+      <button class="rail-btn rail-side" data-next aria-label="Ver os próximos">${icon('arrow')}</button>
+    </div>
   </section>`;
 }).join('');
 document.querySelectorAll('#featured .row').forEach((row) => rail(row.querySelector('.rail'), row.querySelector('[data-prev]'), row.querySelector('[data-next]')));

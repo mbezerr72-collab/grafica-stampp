@@ -1,7 +1,7 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610282008';
-import { cart, totals } from './cart.js?v=2610282008';
-import { SITE, waLink } from './config.js?v=2610282008';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610291430';
+import { cart, totals } from './cart.js?v=2610291430';
+import { SITE, waLink } from './config.js?v=2610291430';
 
 // Ícones (traço simples, 24×24)
 const P = {
@@ -100,7 +100,7 @@ export function layout(active) {
             <li><a href="carrinho.html">Meu carrinho</a></li></ul></div>
           <div><h4>Endereço</h4><p>${SITE.address}<br>${SITE.city}</p></div>
         </div>
-        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento.</span></div>
+        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento. <a href="painel/">Área da equipe</a></span></div>
       </div>
     </footer>
     <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}</a>
@@ -159,28 +159,55 @@ document.addEventListener('click', (e) => {
 
 // Trilho horizontal: setas com deslize suave e arrastar com o mouse
 export function rail(track, prev, next) {
-  const stepW = () => track.clientWidth * 0.8;
+  const card = () => (track.firstElementChild?.getBoundingClientRect().width || 260) + 16;
+  // Anda de cartão em cartão, quantos couberem na tela (sem cortar um pela metade).
+  const stepW = () => Math.max(1, Math.floor(track.clientWidth / card())) * card();
   const sync = () => {
-    prev.disabled = track.scrollLeft < 4;
-    next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    const ini = track.scrollLeft < 4;
+    const fim = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    prev.disabled = ini; next.disabled = fim;
   };
-  prev.addEventListener('click', () => track.scrollBy({ left: -stepW(), behavior: 'smooth' }));
-  next.addEventListener('click', () => track.scrollBy({ left: stepW(), behavior: 'smooth' }));
+  // O destino cai sempre no começo de um cartão (nada cortado na borda).
+  const ir = (dir) => track.scrollTo({ left: Math.round((track.scrollLeft + dir * stepW()) / card()) * card(), behavior: 'smooth' });
+  prev.addEventListener('click', () => ir(-1));
+  next.addEventListener('click', () => ir(1));
   track.addEventListener('scroll', sync, { passive: true });
   addEventListener('resize', sync);
-  // arrastar com o mouse (no toque o navegador já desliza sozinho)
-  let down = null, moved = false;
+  // Teclado: setas quando a fileira está em foco.
+  track.tabIndex = 0;
+  track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); ir(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); ir(-1); } });
+
+  // Arrastar com o mouse, com embalo ao soltar (no toque o navegador já desliza sozinho).
+  let down = null, moved = false, vel = 0, ultimo = 0, ultimoX = 0, anim = 0;
+  const parar = () => cancelAnimationFrame(anim);
   track.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'mouse' || e.button !== 0) return;
-    down = { x: e.clientX, left: track.scrollLeft }; moved = false;
+    parar();
+    down = { x: e.clientX, left: track.scrollLeft }; moved = false; vel = 0;
+    ultimo = performance.now(); ultimoX = e.clientX;
   });
   addEventListener('pointermove', (e) => {
     if (!down) return;
     const dx = e.clientX - down.x;
-    if (Math.abs(dx) > 5) { moved = true; track.classList.add('dragging'); }
-    if (moved) track.scrollLeft = down.left - dx;
+    if (!moved && Math.abs(dx) > 5) { moved = true; track.classList.add('dragging'); }
+    if (!moved) return;
+    track.scrollLeft = down.left - dx;
+    const agora = performance.now();
+    if (agora > ultimo) vel = 0.8 * ((ultimoX - e.clientX) / (agora - ultimo)) + 0.2 * vel;
+    ultimo = agora; ultimoX = e.clientX;
   });
-  addEventListener('pointerup', () => { down = null; setTimeout(() => track.classList.remove('dragging'), 0); });
+  addEventListener('pointerup', () => {
+    if (!down) return;
+    down = null;
+    if (!moved) return;
+    // Embalo: continua deslizando e vai freando; no fim, encaixa no cartão mais perto.
+    let v = performance.now() - ultimo > 80 ? 0 : vel * 16;
+    const passo = () => {
+      if (Math.abs(v) > 0.5) { track.scrollLeft += v; v *= 0.93; anim = requestAnimationFrame(passo); return; }
+      track.classList.remove('dragging');
+    };
+    anim = requestAnimationFrame(passo);
+  });
   track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
   track.addEventListener('dragstart', (e) => e.preventDefault());
   sync();

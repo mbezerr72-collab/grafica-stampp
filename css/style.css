@@ -251,9 +251,17 @@ svg.i { width: 20px; height: 20px; flex: none; }
 .rail-btn:hover { border-color: var(--ink); }
 .rail-btn:disabled { opacity: .35; pointer-events: none; }
 .rail-btn[data-prev] .i { transform: rotate(180deg); }
-.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 270px; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 4px 2px 10px; scrollbar-width: none; cursor: grab; }
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 270px; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 4px 2px 10px; scrollbar-width: none; cursor: grab; }
+.rail:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; border-radius: 12px; }
+.rail-wrap { position: relative; }
+/* Setas grandes nas laterais da fileira, por cima dos cartões. */
+.rail-side { position: absolute; top: 38%; z-index: 2; width: 48px; height: 48px; box-shadow: 0 6px 20px rgba(0,0,0,.18); border-color: transparent; }
+.rail-side[data-prev] { left: -18px; }
+.rail-side[data-next] { right: -18px; }
+.rail-side:disabled { opacity: 0; }
+
 .rail::-webkit-scrollbar { display: none; }
-.rail.dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+.rail.dragging { cursor: grabbing; scroll-snap-type: none; }
 .rail.dragging * { pointer-events: none; }
 .rail > * { scroll-snap-align: start; }
 .row-art { display: block; border-radius: 16px; overflow: hidden; background: #151515; }
@@ -498,7 +506,9 @@ body.intro-on { overflow: hidden; }
   .cat-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; padding-bottom: 8px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
   .cat-card { flex: 0 0 min(70vw, 280px) !important; scroll-snap-align: start; }
   .rail { grid-auto-columns: min(72vw, 260px); margin-inline: -16px; padding-inline: 16px; scroll-padding-inline: 16px; }
-  .row-nav .rail-btn { display: none; }
+  .rail-side { width: 40px; height: 40px; top: 34%; }
+  .rail-side[data-prev] { left: 4px; }
+  .rail-side[data-next] { right: 4px; }
   .row-head h3 { font-size: 19px; }
   .topbar .hide-m { display: none; }
   .nav { position: fixed; inset: 108px 0 auto 0; flex-direction: column; background: #fff; padding: 12px 16px 20px; border-bottom: 1px solid var(--line); box-shadow: 0 20px 30px -20px rgba(0, 0, 0, .2); margin: 0; display: none; }

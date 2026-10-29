@@ -8,5 +8,5 @@
     "dev": "npx --yes vercel@latest dev",
     "test": "node --test tests/*.test.js"
   },
-  "engines": { "node": ">=18" }
+  "engines": { "node": "22.x" }
 }
