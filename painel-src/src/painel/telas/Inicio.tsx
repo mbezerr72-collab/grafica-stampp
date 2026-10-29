@@ -107,7 +107,6 @@ function InicioDono({ s }: { s: Sessao }) {
       <section className="kpis" aria-label="Números do período">
         <Kpi tipo="destaque" rotulo="Total vendido" valor={a.faturamento} antes={b.faturamento} comparacao={comp} frase={`${a.vendas} ${a.vendas === 1 ? 'venda' : 'vendas'}. Tudo que entrou de venda.`} />
         {dono && <Kpi tipo="lucro" rotulo="Lucro" valor={a.lucro} antes={b.lucro} comparacao={comp} frase="O que sobrou: o que vendeu, menos o custo do que foi vendido e as contas da gráfica." />}
-        {dono && <Kpi rotulo="Saldo" soReais valor={a.caixa} antes={b.caixa} comparacao={comp} frase="O dinheiro que entrou menos o que saiu (contando a compra de material)." />}
         {dono && <Kpi rotulo="Gastos da gráfica" cor="var(--sai)" inverso valor={a.despesasLoja} antes={b.despesasLoja} comparacao={comp} frase="Aluguel, salários, energia e outras contas. Compra de material fica fora." />}
         {!dono && minha && <Kpi tipo="lucro" rotulo={`Sua comissão em ${nomeMes(mes)}`} valor={minha.comissao} frase={`${minha.vendas} vendas suas, R$ ${brl(minha.fat)} vendidos. Atualiza a cada venda.`} />}
       </section>

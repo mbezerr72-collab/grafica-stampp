@@ -202,7 +202,7 @@ export const motorLocal: Motor = async (pergunta, s) => {
     const iv = ontem ? { de: somaDias(h, -1), ate: somaDias(h, -1) } : intervalo({ tipo: per.tipo })
     const r = resumo(vendas, despesas, iv.de, iv.ate)
     const itens = [`${r.vendas} vendas, ticket médio de ${brl(r.ticket)}`]
-    if (dono) itens.push(`Lucro: ${brl(r.lucro)} (vendido − custo − contas da gráfica)`, `Saldo: ${brl(r.caixa)} (entrou − saiu, com compra de material)`)
+    if (dono) itens.push(`Lucro: ${brl(r.lucro)} (vendido − custo − contas da gráfica)`)
     return { texto: `Vendido ${per.nome}: ${brl(r.faturamento)}.`, itens, link: { rotulo: 'Ver no Início', rota: 'inicio' } }
   }
 
