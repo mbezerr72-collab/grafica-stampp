@@ -1,6 +1,6 @@
 // Carrinho salvo no navegador (só produtos do Tipo A). Os preços mostrados são calculados a partir
 // do catálogo; o servidor recalcula tudo no pagamento.
-import { productById, unitPrice, selectionLabel } from '../data/products.js?v=2610282113';
+import { productById, unitPrice, selectionLabel } from '../data/products.js?v=2610291430';
 
 const KEY = 'estamp-cart-v2';
 const listeners = new Set();

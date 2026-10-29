@@ -1,8 +1,8 @@
-import { brl } from '../data/products.js?v=2610282113';
-import { cart, lineInfo, totals, MAX_QTY } from './cart.js?v=2610282113';
-import { SITE, waLink } from './config.js?v=2610282113';
-import { layout, icon, esc, toast, $ } from './ui.js?v=2610282113';
-import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610282113';
+import { brl } from '../data/products.js?v=2610291430';
+import { cart, lineInfo, totals, MAX_QTY } from './cart.js?v=2610291430';
+import { SITE, waLink } from './config.js?v=2610291430';
+import { layout, icon, esc, toast, $ } from './ui.js?v=2610291430';
+import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610291430';
 
 layout('');
 const root = $('#cartPage');
