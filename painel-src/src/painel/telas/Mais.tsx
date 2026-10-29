@@ -36,7 +36,7 @@ export function Mais({ s }: { s: Sessao }) {
   const zerar = async () => {
     const ok = await confirmar({
       titulo: 'Começar do zero?',
-      texto: 'Apaga só os dados de exemplo (vendas, clientes, pedidos, orçamentos, caixa, contas e compras). Os produtos, a equipe e o que você cadastrou ficam.',
+      texto: 'Apaga só os dados de exemplo (vendas, clientes, pedidos, orçamentos, contas e compras). Os produtos, a equipe e o que você cadastrou ficam.',
       botao: 'Apagar exemplos',
       perigo: true,
     })

@@ -163,7 +163,7 @@ export default function Relatorios(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Relatórios" sub={`${iv.rotulo}. Equipe, despesas, insumos, pedidos e caixa têm o próprio “Baixar para imprimir” e “Baixar planilha” na aba deles.`} />
+      <Topo titulo="Relatórios" sub={`${iv.rotulo}. Equipe, despesas, insumos e pedidos têm o próprio “Baixar para imprimir” e “Baixar planilha” na aba deles.`} />
       <div className="rel">
         <nav className="rel-lista" aria-label="Escolher relatório">
           {LISTA.map((x) => (

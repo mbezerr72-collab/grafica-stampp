@@ -54,7 +54,6 @@ export default function Pdv({ s }: { s: Sessao }) {
   const equipe = useDados('equipe')
   const vendas = useDados('vendas')
   const config = useDados('config')
-  const caixa = negocio.caixaDeHoje()
   const dono = pode(s, 'financeiro')
   const vendedores = equipe.filter((e) => e.ativo && (e.papel === 'dono' || e.papel === 'atendimento'))
   const eu = vendedores.find((e) => e.nome === s.nome)
@@ -352,14 +351,7 @@ export default function Pdv({ s }: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Balcão" sub={`Venda nº ${proximo}. ${caixa ? (caixa.fechamento ? 'Caixa de hoje já fechado.' : `Caixa aberto às ${caixa.abertura.hora} por ${caixa.abertura.quem}.`) : 'Caixa de hoje ainda não foi aberto.'} Atendente: ${vendedor?.nome ?? '—'}.`} />
-      {!caixa && (
-        <p className="aviso-linha">
-          <Icone nome="info" tamanho={18} />
-          <span>Abra o caixa antes da primeira venda do dia, para o fechamento bater.</span>
-          <a href={link('caixa')}>Abrir caixa</a>
-        </p>
-      )}
+      <Topo titulo="Balcão" sub={`Venda nº ${proximo}. Atendente: ${vendedor?.nome ?? '—'}.`} />
       <div className="pdv">
         <div className="pdv-esq">
           <section className="painel busca-grande">
@@ -666,7 +658,7 @@ function VendaFeita({ v, vendedor, novaVenda }: { v: Venda; vendedor: string; no
   const formas = v.pagamentos.map((p) => (p.forma === 'credito' ? `crédito ${p.parcelas ?? 1}x` : { pix: 'Pix', debito: 'débito', dinheiro: 'dinheiro', credito: '' }[p.forma])).join(' + ')
   return (
     <>
-      <Topo titulo="Venda feita!" sub={`Venda nº ${v.numero}. Já entrou no caixa de hoje.`} />
+      <Topo titulo="Venda feita!" sub={`Venda nº ${v.numero}. Já entrou nas vendas de hoje.`} />
       <section className="painel venda-ok">
         <span className="vazio-ic ok">
           <Icone nome="check" tamanho={30} />

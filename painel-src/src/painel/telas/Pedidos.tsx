@@ -303,7 +303,7 @@ function Entregar({ o, fechar }: { o: Pedido; fechar: (ok?: boolean) => void }) 
           )}
         </div>
       )}
-      <p className="mut pequeno">O pedido vira venda (entra no faturamento, no caixa de hoje e nos relatórios).</p>
+      <p className="mut pequeno">O pedido vira venda (entra no faturamento e nos relatórios).</p>
     </Gaveta>
   )
 }

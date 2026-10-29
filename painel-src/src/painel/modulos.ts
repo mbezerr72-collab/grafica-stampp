@@ -48,7 +48,6 @@ export const MODULOS: Modulo[] = [
   },
   { id: 'pdv', nome: 'Balcão', frase: 'Venda rápida: cópia, impressão, plastificação e produtos prontos.', ajuda: ['Busque o produto, toque nele e escolha a opção. Mude a quantidade no carrinho.', "Para dividir o pagamento (parte no Pix, parte no cartão), toque em 'Dividir em duas formas'.", 'Pedido que precisa de arte ou produção não é feito aqui: abra em Pedidos.', 'Depois de finalizar, baixe o recibo em PDF e mande a mensagem pelo WhatsApp.'], icone: 'pdv', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
   { id: 'vendas', nome: 'Vendas', frase: 'Vendas do balcão e pedidos entregues, com recibo.', ajuda: ['Busque pelo número, nome do cliente ou produto.', 'Toque na venda para baixar o recibo de novo, mandar no WhatsApp, cancelar ou registrar devolução.'], icone: 'vendas', permissao: 'vendas', grupo: 'operacao', etapa: 1, periodo: true },
-  { id: 'caixa', nome: 'Caixa do dia', frase: 'Abrir, tirar ou pôr dinheiro e fechar o caixa.', ajuda: ['Abra o caixa com o troco da gaveta antes da primeira venda.', '“Tirar dinheiro do caixa” é quando sai dinheiro da gaveta (depósito, pagamento). “Pôr dinheiro no caixa” é pôr troco.', 'O sinal dos pedidos recebido hoje também entra na conferência.', 'No fechamento, conte a gaveta e confira o Pix e os cartões. A diferença fica registrada.'], icone: 'caixa', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
   {
     id: 'calendario',
     nome: 'Calendário',

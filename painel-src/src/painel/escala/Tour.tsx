@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'reac
 
 const CHAVE = 'estamp:tour-visto'
 const PASSOS = [
-  { alvo: 'menu', titulo: 'Tudo da gráfica num lugar', texto: 'Pedidos, orçamentos, fila de produção, insumos, balcão, caixa e clientes ficam aqui, separados por assunto.' },
+  { alvo: 'menu', titulo: 'Tudo da gráfica num lugar', texto: 'Pedidos, orçamentos, fila de produção, insumos, balcão e clientes ficam aqui, separados por assunto.' },
   { alvo: 'periodo', titulo: 'Escolha o período', texto: 'Hoje, 7 dias, este mês ou as datas que quiser. Os números e a curva mudam juntos e comparam com o período anterior.' },
   { alvo: 'mais', titulo: 'O botão de fazer', texto: 'Novo pedido, venda no balcão, orçamento ou despesa em um toque.' },
   { alvo: 'busca', titulo: 'Busque qualquer coisa', texto: 'Ctrl + K no computador ou a lupa no celular: telas, produtos e ações.' },

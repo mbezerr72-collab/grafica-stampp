@@ -97,17 +97,6 @@ export const GUIAS: Record<string, GuiaTela> = {
       { p: 'Como mando o recibo de novo?', passos: [{ alvo: 'input[aria-label="Buscar venda"]', texto: 'Ache a venda e toque nela.' }, { alvo: 'texto:WhatsApp', texto: 'Toque no WhatsApp para mandar o recibo de novo.' }] },
     ],
   },
-  caixa: {
-    passos: [
-      { alvo: 'texto:Abrir caixa, texto:Fechar caixa', texto: '1. Abra o caixa com o troco da gaveta antes da primeira venda.' },
-      { alvo: 'texto:Tirar dinheiro do caixa, texto:Pôr dinheiro no caixa', texto: '2. Tirou ou pôs dinheiro na gaveta? Anote aqui.' },
-      { alvo: 'texto:Fechar caixa', texto: '3. No fim do dia, conte as notas e toque em Fechar caixa.' },
-    ],
-    perguntas: [
-      { p: 'Como fecho o caixa?', passos: [{ alvo: '.ced-bt, .cedulas', texto: 'Conte as notas e moedas tocando em cada uma.' }, { alvo: 'texto:Fechar caixa', texto: 'Toque em Fechar caixa e confirme.' }] },
-      { p: 'Como tiro dinheiro do caixa?', passos: [{ alvo: 'texto:Tirar dinheiro do caixa', texto: 'Escolha “Tirar dinheiro do caixa”, escreva o valor e o motivo e salve.' }] },
-    ],
-  },
   produtos: {
     passos: [
       { alvo: 'input[aria-label="Buscar produto"]', texto: '1. Ache o produto pelo nome.' },

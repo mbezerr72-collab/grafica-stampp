@@ -5,7 +5,7 @@ import { link } from '../rota'
 
 const ENTREGAS: Record<number, string> = {
   2: 'Início completo e Calendário',
-  3: 'Vender, Vendas e Caixa',
+  3: 'Balcão e Vendas',
   4: 'Aparelhos no estoque, Compras, Usado na troca e Etiquetas',
   5: 'Assistência e Clientes',
   6: 'Equipe, Financeiro e Relatórios',

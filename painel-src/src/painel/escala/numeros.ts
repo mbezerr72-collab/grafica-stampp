@@ -35,7 +35,7 @@ export function resumo(vendas: Venda[], despesas: Despesa[], de: string, ate: st
     if (d < de || d > ate || !valida(v)) continue
     faturamento += faturamentoVenda(v)
     custo += custoVenda(v)
-    // O sinal do pedido também é dinheiro que entrou (aqui conta no dia da entrega; o Caixa do dia conta no dia em que foi pago).
+    // O sinal do pedido também é dinheiro que entrou (conta no dia da entrega).
     entrou += totalVenda(v) + (v.troca || 0)
     n++
   }

@@ -27,12 +27,12 @@ export function Login() {
         </div>
         <div className="lg-frase">
           <h2>A gráfica inteira na palma da mão.</h2>
-          <p>Pedidos do orçamento à entrega, fila de produção, insumos, balcão, caixa e clientes. No celular ou no computador.</p>
+          <p>Pedidos do orçamento à entrega, fila de produção, insumos, balcão e clientes. No celular ou no computador.</p>
         </div>
         <ul className="lg-lista" aria-label="O que tem no sistema">
           <li>Pedidos e orçamentos</li>
           <li>Fila de produção</li>
-          <li>Fechamento de caixa</li>
+          <li>Insumos e compras</li>
           <li>Metas e comissões</li>
         </ul>
       </section>

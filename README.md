@@ -25,7 +25,7 @@ O painel é o **Escala Business** (o mesmo visual e o mesmo layout do painel mod
 
 | Grupo | Abas |
 |---|---|
-| Operação | Início, Balcão (xerox, impressão, pronta entrega), Vendas, Caixa do dia, Calendário |
+| Operação | Início, Balcão (xerox, impressão, pronta entrega), Vendas, Calendário |
 | Produção | **Pedidos** (quadro: novo → arte → aprovação → produção → pronto → entregue, com grade de tamanhos, sinal e ficha de produção em PDF), **Orçamentos** (o que chega do site e do WhatsApp; vira pedido em 1 toque), **Fila de produção** (por setor: arte, sublimação, DTF, silk, impressão…) |
 | Produtos e insumos | Produtos e preços (opções, setor, prazo, pronta entrega ou sob encomenda), **Insumos** (camisas lisas, papel, tinta, lona, brindes em branco, com mínimo e pedido ao fornecedor), Compras |
 | Financeiro | Contas e despesas, Metas, Relatórios |

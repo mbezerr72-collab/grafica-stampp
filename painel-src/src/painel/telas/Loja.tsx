@@ -307,7 +307,7 @@ function Config() {
         <div className="painel-t">
           <h3>Cópia de segurança</h3>
         </div>
-        <p className="mut">Baixe um arquivo com produtos, preços, pedidos, orçamentos, vendas, clientes, insumos, caixa e contas. Guarde no Google Drive ou no e-mail.</p>
+        <p className="mut">Baixe um arquivo com produtos, preços, pedidos, orçamentos, vendas, clientes, insumos e contas. Guarde no Google Drive ou no e-mail.</p>
         <button type="button" className="btn btn-p" onClick={baixar}>
           <Icone nome="relatorio" tamanho={18} />
           Baixar cópia de segurança
