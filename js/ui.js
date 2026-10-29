@@ -1,7 +1,7 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610291430';
-import { cart, totals } from './cart.js?v=2610291430';
-import { SITE, waLink } from './config.js?v=2610291430';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610291901';
+import { cart, totals } from './cart.js?v=2610291901';
+import { SITE, waLink } from './config.js?v=2610291901';
 
 // Ícones (traço simples, 24×24)
 const P = {

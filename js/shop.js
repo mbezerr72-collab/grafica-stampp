@@ -1,5 +1,5 @@
-import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610291430';
-import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610291430';
+import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610291901';
+import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610291901';
 
 layout('produtos');
 
