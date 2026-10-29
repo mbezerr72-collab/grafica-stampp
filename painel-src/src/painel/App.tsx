@@ -26,6 +26,7 @@ const Pdv = lazy(() => import('./telas/Pdv'))
 const Vendas = lazy(() => import('./telas/Vendas'))
 const Insumos = lazy(() => import('./telas/Insumos'))
 const Compras = lazy(() => import('./telas/Compras'))
+const Anuncios = lazy(() => import('./telas/Anuncios'))
 const Pedidos = lazy(() => import('./telas/Pedidos'))
 const Orcamentos = lazy(() => import('./telas/Orcamentos'))
 const Producao = lazy(() => import('./telas/Producao'))
@@ -122,6 +123,7 @@ function Tela({ s }: { s: Sessao }) {
   if (id === 'pedidos') return <Pedidos s={s} id={resto[0]} />
   if (id === 'orcamentos') return <Orcamentos s={s} id={resto[0]} />
   if (id === 'producao') return <Producao s={s} />
+  if (id === 'anuncios') return <Anuncios s={s} />
   if (id === 'clientes') return <Clientes s={s} id={resto[0]} />
   if (id === 'despesas') return <Despesas s={s} />
   if (id === 'metas') return <Metas s={s} />

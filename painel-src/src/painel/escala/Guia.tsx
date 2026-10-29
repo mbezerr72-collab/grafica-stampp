@@ -113,6 +113,14 @@ export const GUIAS: Record<string, GuiaTela> = {
     ],
     perguntas: [],
   },
+  anuncios: {
+    passos: [
+      { alvo: '.anuncio-mini-lista', texto: '1. Escolha o modelo olhando as prévias.' },
+      { alvo: '.anuncio-fotos, select', texto: '2. Escolha o produto e a foto (ou use uma sua).' },
+      { alvo: 'texto:Baixar imagem', texto: '3. Baixe a imagem e copie a legenda. É só postar.' },
+    ],
+    perguntas: [{ p: 'Como faço uma promoção?', passos: [{ alvo: 'texto:Promoção', texto: 'Toque no modelo Promoção, escolha o produto e o desconto.' }, { alvo: 'texto:Baixar imagem', texto: 'Baixe a imagem e poste.' }] }],
+  },
   clientes: {
     passos: [
       { alvo: 'input[aria-label="Buscar cliente"]', texto: '1. Ache o cliente pelo nome ou telefone.' },

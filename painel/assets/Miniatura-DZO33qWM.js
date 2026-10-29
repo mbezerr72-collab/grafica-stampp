@@ -1,1 +1,0 @@
-import{Gt as e}from"./ui-DDu7098t.js";import{t}from"./fotos-DCBeGq9o.js";var n=e();function r({p:e}){return(0,n.jsx)(`span`,{className:`mini mini--escura`,children:(0,n.jsx)(`img`,{src:t(e),alt:``,loading:`lazy`,decoding:`async`})})}export{r as t};

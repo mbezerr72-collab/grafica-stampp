@@ -85,6 +85,7 @@ export const MODULOS: Modulo[] = [
   { id: 'metas', ajuda: ["A projeção é o ritmo do mês até hoje levado até o último dia.","A barrinha escura mostra quanto do mês já passou: se a barra colorida está à frente, a meta está no ritmo.","A meta de cada atendente fica em Equipe e comissões."], nome: 'Metas', frase: 'Meta do mês e projeção de fechamento.', icone: 'meta', permissao: 'financeiro', grupo: 'financeiro', etapa: 1 },
   { id: 'relatorios', ajuda: ["Escolha o relatório à esquerda (no celular, em cima) e o período no cabeçalho.","“Baixar para imprimir” serve para guardar e imprimir; “Baixar planilha”, para o contador.","Toque no título de uma coluna para ordenar."], nome: 'Relatórios', frase: 'Vendas dia a dia, lucro por produto, pedidos, formas e resumo.', icone: 'relatorio', permissao: 'financeiro', grupo: 'financeiro', etapa: 1, periodo: true },
 
+  { id: 'anuncios', ajuda: ['Escolha o modelo olhando as prévias: oferta, promoção, feito aqui, tabela de preços, pronto rápido, data comemorativa ou aviso.', 'Troque a foto pelas fotos dos trabalhos ou use uma sua do celular.', 'Baixe a imagem e copie a legenda: é só postar no Instagram ou no status do WhatsApp.', 'O preço da arte é o preço de agora em Produtos.'], nome: 'Criar anúncio', curto: 'Anúncios', frase: 'Artes prontas para Instagram e WhatsApp, em vários modelos.', icone: 'anuncio', permissao: 'anuncios', grupo: 'relacionamento', etapa: 1 },
   { id: 'clientes', ajuda: ["Toque numa lista (empresas e times, aniversário, sumidos) para ver quem está nela.","O botão do WhatsApp ao lado de cada pessoa abre a mensagem pronta daquela lista.","Toque no cliente para ver a ficha com tudo o que ele comprou e os pedidos."], nome: 'Clientes', frase: 'Ficha do cliente, pedidos e listas inteligentes.', icone: 'cliente', permissao: 'vendas', grupo: 'relacionamento', etapa: 1 },
   { id: 'equipe', ajuda: ["A comissão é a % do valor vendido em cada linha (impressos, camisas, brindes, comunicação visual e design).","A meta do período é a meta do mês proporcional aos dias escolhidos.","Toque no lápis para mudar a meta ou a comissão de alguém."], nome: 'Equipe e comissões', frase: 'Pessoas, acesso, meta, comissão e ranking.', icone: 'equipe', permissao: 'financeiro', grupo: 'relacionamento', etapa: 1, periodo: true },
 
@@ -93,7 +94,7 @@ export const MODULOS: Modulo[] = [
 ]
 
 /** O que o funcionário vê, nesta ordem. O resto (financeiro, site, configurações) nem aparece. */
-export const DO_VENDEDOR = ['inicio', 'pdv', 'pedidos', 'orcamentos', 'producao', 'insumos', 'produtos', 'comissao']
+export const DO_VENDEDOR = ['inicio', 'pdv', 'pedidos', 'orcamentos', 'producao', 'insumos', 'produtos', 'anuncios', 'comissao']
 export const ehVendedor = (s: Sessao) => s.papel !== 'dono'
 
 /** Aparece no menu (lateral, "Mais" e busca) para esta pessoa? */

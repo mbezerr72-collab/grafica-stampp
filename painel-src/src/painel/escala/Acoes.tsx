@@ -19,6 +19,7 @@ const ACOES = [
   { nome: 'Responder orçamento', frase: 'Os que chegaram do site e do WhatsApp', icone: 'mensagem', rota: ['orcamentos'], permissao: 'vendas' as const },
   { nome: 'Dar baixa em insumo', frase: 'Camisa lisa, papel, tinta, lona', icone: 'estoque', rota: ['insumos'], permissao: 'vendas' as const },
   { nome: 'Cadastrar produto', frase: 'Produto ou serviço com opções e preços', icone: 'produtos', rota: ['produtos', 'novo'], permissao: 'produtos' as const },
+  { nome: 'Criar anúncio', frase: 'Arte pronta para Instagram e WhatsApp', icone: 'anuncio', rota: ['anuncios'], permissao: 'anuncios' as const },
   { nome: 'Lançar despesa', frase: 'O mesmo formulário de Contas e despesas', icone: 'carteira', rota: ['despesas'], pedido: { tela: 'despesas', modo: 'pago' } as Pedido, permissao: 'despesas' as const },
 ]
 
