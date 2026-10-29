@@ -1,6 +1,6 @@
 // Formulários de orçamento (produtos do Tipo B). Cada formulário é uma lista de etapas com campos.
 // Tipos de campo: cards, radios, colors, multi, sizes, uploads, text, number, tel, email, date, textarea.
-import { SITE } from './config.js?v=2610282113';
+import { SITE } from './config.js?v=2610282008';
 
 // Descrição + imagens de referência, presente em todos os formulários
 const REF_SLOTS_CAMISA = [
