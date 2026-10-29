@@ -185,7 +185,7 @@ export function GraficoBarras({ pontos, rotulo }: { pontos: { rot: string; fat: 
           const h = A - y(p.fat)
           return (
             <rect key={i} className={'barra' + (p.destaque ? ' fds' : '')} x={i * larg + (larg - w) / 2} y={y(p.fat)} width={w} height={Math.max(0, h)} rx={Math.min(3, w / 3)}>
-              <title>{`${p.rot}: R$ ${brl(p.fat)} de faturamento, R$ ${brl(p.lucro)} de lucro bruto`}</title>
+              <title>{`${p.rot}: R$ ${brl(p.fat)} vendidos, R$ ${brl(p.lucro)} de lucro`}</title>
             </rect>
           )
         })}

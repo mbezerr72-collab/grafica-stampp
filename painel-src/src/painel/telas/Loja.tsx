@@ -11,16 +11,16 @@ import { NOME_CATEGORIA, type Categoria } from '../../data/negocio'
 type Aba = 'info' | 'pagamento' | 'usuarios' | 'config' | 'historico'
 const ABAS: [Aba, string][] = [
   ['info', 'Dados da gráfica'],
-  ['pagamento', 'Pagamento e sinal'],
+  ['pagamento', 'Pagamento e entrada'],
   ['config', 'Cópia de segurança'],
   ['historico', 'O que foi mudado'],
 ]
 const PODE: [string, boolean, boolean][] = [
   ['Vender no balcão, abrir pedido, ver clientes', true, true],
-  ['Fila de produção, insumos e orçamentos', true, true],
+  ['O que produzir, material e orçamentos', true, true],
   ['Produtos (sem ver o custo)', true, true],
-  ['Custo, lucro, caixa e relatórios', true, false],
-  ['Contas, despesas e metas', true, false],
+  ['Custo, lucro e relatórios', true, false],
+  ['Contas a pagar e metas', true, false],
   ['Preços, promoções, compras e configurações', true, false],
   ['Usuários e histórico', true, false],
 ]
@@ -30,7 +30,7 @@ export default function Loja({ s }: { s: Sessao }) {
   const [aba, setAba] = useState<Aba>('info')
   return (
     <>
-      <Topo titulo="Configurações da gráfica" sub="Dados da gráfica, pagamento, sinal, quem entra no painel e cópia de segurança." />
+      <Topo titulo="Configurações" sub="Dados da gráfica, pagamento, entrada dos pedidos, quem entra no painel e cópia de segurança." />
       <div className="fichas abas" role="tablist" aria-label="Parte">
         {ABAS.map(([id, nome]) => (
           <button key={id} type="button" role="tab" className="ficha" aria-selected={aba === id} onClick={() => setAba(id)}>
@@ -276,7 +276,7 @@ export function Usuarios({ s }: { s: Sessao }) {
             </tbody>
           </table>
         </div>
-        <p className="mut pequeno">O funcionário não vê custo, lucro nem as contas da gráfica. Ele atende, abre pedidos, cuida da produção e dos insumos.</p>
+        <p className="mut pequeno">O funcionário não vê custo, lucro nem as contas da gráfica. Ele atende, abre pedidos, cuida da produção e do material.</p>
       </section>
     </div>
   )
@@ -394,7 +394,7 @@ function Automatico() {
   return (
     <section className="painel">
       <div className="painel-t">
-        <h3>Sinal, desconto, Pix e margens</h3>
+        <h3>Entrada, desconto, Pix e lucro padrão</h3>
       </div>
       <div className="form-g form-g--3">
         <label className="campo">
@@ -406,11 +406,11 @@ function Automatico() {
           <input type="password" autoComplete="new-password" value={x.senhaDono} onChange={(e) => setX({ ...x, senhaDono: e.target.value })} />
         </label>
         <label className="campo">
-          Sinal para começar o pedido (%)
+          Entrada para começar o pedido (%)
           <input type="number" min={0} max={100} step={5} value={x.sinalPct} onChange={(e) => setX({ ...x, sinalPct: Number(e.target.value) })} />
         </label>
         <label className="campo">
-          Chave Pix (QR do balcão e do sinal)
+          Chave Pix (QR do balcão e da entrada)
           <input value={x.chavePix} onChange={(e) => setX({ ...x, chavePix: e.target.value })} />
         </label>
       </div>

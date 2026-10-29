@@ -37,7 +37,7 @@ export function useAvisos(s: Sessao): Aviso[] {
       l.push({ id: 'orc', tipo: 'inf', titulo: `${novos.length} ${novos.length === 1 ? 'orçamento para responder' : 'orçamentos para responder'}`, texto: 'Quem responde primeiro fecha.', link: 'orcamentos' })
     const faltando = insumos.filter((x) => x.estoque < x.minimo)
     if (faltando.length)
-      l.push({ id: 'ins', tipo: 'ate', titulo: `${faltando.length} ${faltando.length === 1 ? 'insumo abaixo' : 'insumos abaixo'} do mínimo`, texto: faltando.slice(0, 3).map((x) => x.nome).join(', ') + '.', link: 'insumos' })
+      l.push({ id: 'ins', tipo: 'ate', titulo: `${faltando.length} ${faltando.length === 1 ? 'material acabando' : 'materiais acabando'}`, texto: faltando.slice(0, 3).map((x) => x.nome).join(', ') + '.', link: 'insumos' })
     const mmdd = new Set(Array.from({ length: 7 }, (_, i) => somaDias(h, i).slice(5)))
     const aniv = clientes.filter((c) => c.aniversario && mmdd.has(c.aniversario))
     if (aniv.length)

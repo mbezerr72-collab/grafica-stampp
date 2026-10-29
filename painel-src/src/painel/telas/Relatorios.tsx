@@ -49,9 +49,9 @@ export default function Relatorios(_: { s: Sessao }) {
           colunas: [
             { nome: 'Dia', tipo: 'texto' },
             { nome: 'Vendas', tipo: 'numero' },
-            { nome: 'Faturamento', tipo: 'dinheiro' },
+            { nome: 'Vendido', tipo: 'dinheiro' },
             { nome: 'Custo', tipo: 'dinheiro', opcional: true },
-            { nome: 'Lucro bruto', tipo: 'dinheiro' },
+            { nome: 'Lucro', tipo: 'dinheiro' },
             { nome: 'Valor médio por venda', tipo: 'dinheiro', opcional: true },
           ],
           linhas,
@@ -66,10 +66,10 @@ export default function Relatorios(_: { s: Sessao }) {
           colunas: [
             { nome: 'Produto', tipo: 'texto' },
             { nome: 'Vendidos', tipo: 'numero', opcional: true },
-            { nome: 'Faturamento', tipo: 'dinheiro' },
+            { nome: 'Vendido', tipo: 'dinheiro' },
             { nome: 'Custo', tipo: 'dinheiro', opcional: true },
             { nome: 'Lucro', tipo: 'dinheiro' },
-            { nome: 'Margem', tipo: 'pct', opcional: true },
+            { nome: 'Lucro %', tipo: 'pct', opcional: true },
           ],
           linhas: l.sort((a, b) => (b[4] as number) - (a[4] as number)),
           total: ['Total', l.reduce((t, x) => t + (x[1] as number), 0), r.faturamento, r.custo, r.faturamento - r.custo, r.margem],
@@ -77,9 +77,9 @@ export default function Relatorios(_: { s: Sessao }) {
             {
               titulo: 'Fechamento do período',
               linhas: [
-                { t: 'Faturamento', v: 'R$ ' + brl(r.faturamento) },
+                { t: 'Vendido', v: 'R$ ' + brl(r.faturamento) },
                 { t: 'Custo do que foi vendido', v: '− R$ ' + brl(r.custo) },
-                { t: 'Lucro bruto', v: 'R$ ' + brl(r.faturamento - r.custo), forte: true },
+                { t: 'Lucro antes das contas', v: 'R$ ' + brl(r.faturamento - r.custo), forte: true },
                 { t: 'Despesas da gráfica', v: '− R$ ' + brl(r.despesasLoja) },
                 { t: 'Lucro', v: 'R$ ' + brl(r.lucro), forte: true },
               ],
@@ -97,7 +97,7 @@ export default function Relatorios(_: { s: Sessao }) {
           colunas: [
             { nome: 'Forma', tipo: 'texto' },
             { nome: 'Vendas', tipo: 'numero' },
-            { nome: 'Faturamento', tipo: 'dinheiro' },
+            { nome: 'Vendido', tipo: 'dinheiro' },
             { nome: 'Do total', tipo: 'pct' },
           ],
           linhas: (Object.keys(f) as FormaResumo[]).map((k) => [NOME_FORMA_RESUMO[k], n(k), f[k], f[k] / tot]),
@@ -113,9 +113,9 @@ export default function Relatorios(_: { s: Sessao }) {
             { nome: 'Valor', tipo: 'dinheiro' },
           ],
           linhas: [
-            ['Faturamento', r.faturamento],
+            ['Vendido', r.faturamento],
             ['Custo do que foi vendido', -r.custo],
-            ['Lucro bruto', r.faturamento - r.custo],
+            ['Lucro antes das contas', r.faturamento - r.custo],
             ['Despesas da gráfica', -r.despesasLoja],
             ['Lucro', r.lucro],
             ['Caixa (entrou − saiu, com estoque)', r.caixa],
@@ -163,7 +163,7 @@ export default function Relatorios(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Relatórios" sub={`${iv.rotulo}. Equipe, despesas, insumos e pedidos têm o próprio “Baixar para imprimir” e “Baixar planilha” na aba deles.`} />
+      <Topo titulo="Relatórios" sub={`${iv.rotulo}. Funcionários, contas, material e pedidos têm o próprio “Baixar para imprimir” e “Baixar planilha” na aba deles.`} />
       <div className="rel">
         <nav className="rel-lista" aria-label="Escolher relatório">
           {LISTA.map((x) => (
@@ -193,7 +193,7 @@ export default function Relatorios(_: { s: Sessao }) {
               <section className="painel">
                 <div className="painel-t">
                   <h3>Quem deixou mais lucro</h3>
-                  <span className="mut">lucro bruto</span>
+                  <span className="mut">lucro</span>
                 </div>
                 <ul className="hbar">
                   {top.map((l) => (
@@ -206,7 +206,7 @@ export default function Relatorios(_: { s: Sessao }) {
                     </li>
                   ))}
                 </ul>
-                {fA > 0 && <p className="mut pequeno">{NOME_CATEGORIA[catTop as keyof typeof NOME_CATEGORIA]}: R$ {brl(fA)} de faturamento e {pct((fA - cA) / fA, 0)} de margem, a maior da gráfica.</p>}
+                {fA > 0 && <p className="mut pequeno">{NOME_CATEGORIA[catTop as keyof typeof NOME_CATEGORIA]}: R$ {brl(fA)} vendidos e lucro de {pct((fA - cA) / fA, 0)}, o maior da gráfica.</p>}
               </section>
             </div>
           )}

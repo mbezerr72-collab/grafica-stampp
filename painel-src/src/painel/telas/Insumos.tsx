@@ -14,7 +14,7 @@ import { LOJA } from '../../lib/config'
 type Aba = 'todos' | 'comprar'
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 const num = (n: number) => n.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
-const situacao = (x: Insumo): [string, string] => (x.estoque <= 0 ? ['acabou', 'sai'] : x.estoque < x.minimo ? ['comprar', 'ate'] : ['ok', 'ent'])
+const situacao = (x: Insumo): [string, string] => (x.estoque <= 0 ? ['acabou', 'sai'] : x.estoque < x.minimo ? ['comprar', 'ate'] : ['tem', 'ent'])
 /** Quanto pedir: o dobro do mínimo, menos o que já tem. */
 const sugerido = (x: Insumo) => Math.max(1, Math.ceil(x.minimo * 2 - x.estoque))
 
@@ -44,24 +44,24 @@ export default function Insumos({ s }: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Insumos" sub="O material que vira produto: camisas lisas, papéis, tintas, lona e brindes em branco. O painel avisa antes de acabar.">
+      <Topo titulo="Material em estoque" sub="Camisa lisa, papel, tinta, lona e brindes em branco: o que tem e o que precisa comprar. O painel avisa antes de acabar.">
         <Baixar rel={() => relInsumos(insumos, fornecedores, dono)} />
         {dono && (
           <button type="button" className="bt bt-forte acao-principal" onClick={() => setAberto('novo')}>
             <Icone nome="somar" tamanho={18} />
-            <span>Novo insumo</span>
+            <span>Novo material</span>
           </button>
         )}
       </Topo>
-      <section className="saude" aria-label="Saúde dos insumos">
+      <section className="saude" aria-label="Situação do material">
         <button type="button" className="saude-c" style={{ '--c': 'var(--ate)', '--f': 'var(--ate-fundo)' } as CSSProperties} onClick={() => setAba('comprar')}>
           <span className="saude-ic">
             <Icone nome="alerta" tamanho={18} />
           </span>
           <span>
-            <small>Abaixo do mínimo</small>
+            <small>Acabando</small>
             <b>
-              {comprar.length} {comprar.length === 1 ? 'insumo' : 'insumos'}
+              {comprar.length} {comprar.length === 1 ? 'item' : 'itens'}
             </b>
             <small>hora de comprar</small>
           </span>
@@ -101,7 +101,7 @@ export default function Insumos({ s }: { s: Sessao }) {
       <div className="fichas abas" role="tablist" aria-label="Ver">
         {(
           [
-            ['todos', 'Todos os insumos'],
+            ['todos', 'Todo o material'],
             ['comprar', `Comprar (${comprar.length})`],
           ] as const
         ).map(([id, nome]) => (
@@ -126,16 +126,16 @@ export default function Insumos({ s }: { s: Sessao }) {
             </div>
             <label className="entrada entrada--p">
               <Icone nome="busca" tamanho={18} />
-              <input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar insumo" aria-label="Buscar insumo" />
+              <input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar material" aria-label="Buscar material" />
             </label>
           </div>
           <div className="tabela-caixa" tabIndex={0} role="region" aria-label="Tabela">
             <table className="tabela est-tab">
               <thead>
                 <tr>
-                  <th>Insumo</th>
+                  <th>Material</th>
                   <th className="dir">Tem</th>
-                  <th className="dir">Mínimo</th>
+                  <th className="dir">Avisar com</th>
                   <th>Situação</th>
                 </tr>
               </thead>
@@ -168,7 +168,7 @@ export default function Insumos({ s }: { s: Sessao }) {
               </tbody>
             </table>
           </div>
-          <p className="mut pequeno nota-tab">Toque no insumo para dar baixa do que foi usado ou somar o que chegou. Compras registradas em “Compras” já somam sozinhas.</p>
+          <p className="mut pequeno nota-tab">Toque no material para tirar o que foi usado ou somar o que chegou. O que você registra em “Compras” já soma sozinho.</p>
         </section>
       )}
 
@@ -176,7 +176,7 @@ export default function Insumos({ s }: { s: Sessao }) {
         <section className="painel">
           <div className="painel-t">
             <h3>O que comprar</h3>
-            <span className="mut">abaixo do mínimo; o pedido leva ao dobro do mínimo</span>
+            <span className="mut">o que está acabando; a sugestão compra o dobro do aviso</span>
           </div>
           {comprar.length ? (
             fornecedores
@@ -221,7 +221,7 @@ export default function Insumos({ s }: { s: Sessao }) {
                 )
               })
           ) : (
-            <p className="mut">Nada para comprar agora: todos os insumos estão acima do mínimo.</p>
+            <p className="mut">Nada para comprar agora: nenhum material está acabando.</p>
           )}
         </section>
       )}
@@ -232,7 +232,7 @@ export default function Insumos({ s }: { s: Sessao }) {
   )
 }
 
-/** Dar baixa do que a produção usou ou somar o que chegou. */
+/** Usei (tirar) do que a produção usou ou somar o que chegou. */
 function MexerInsumo({ x, dono, fornecedor, editar, fechar }: { x: Insumo; dono: boolean; fornecedor: string; editar: () => void; fechar: () => void }) {
   const [qtd, setQtd] = useState('')
   const n = Number(qtd.replace(',', '.')) || 0
@@ -246,16 +246,16 @@ function MexerInsumo({ x, dono, fornecedor, editar, fechar }: { x: Insumo; dono:
   return (
     <Gaveta
       titulo={x.nome}
-      sub={`${NOME_GRUPO_INSUMO[x.grupo]}. Tem ${num(x.estoque)} ${x.unidade}; mínimo ${num(x.minimo)}.`}
+      sub={`${NOME_GRUPO_INSUMO[x.grupo]}. Tem ${num(x.estoque)} ${x.unidade}; avisa quando tiver menos de ${num(x.minimo)}.`}
       fechar={fechar}
       pe={
         <>
           <button type="button" className="btn btn-o" disabled={!n} onClick={() => mexer(-1)}>
-            Dar baixa
+            Usei (tirar)
           </button>
           <button type="button" className="btn btn-p" disabled={!n} onClick={() => mexer(1)}>
             <Icone nome="somar" tamanho={18} />
-            Somar ao estoque
+            Chegou (somar)
           </button>
         </>
       }
@@ -288,10 +288,10 @@ function MexerInsumo({ x, dono, fornecedor, editar, fechar }: { x: Insumo; dono:
         Quantidade ({x.unidade})
         <input inputMode="decimal" value={qtd} onChange={(e) => setQtd(e.target.value.replace(/[^\d,.]/g, ''))} placeholder="Ex.: 12" autoFocus />
       </label>
-      <p className="mut pequeno">Baixa: o que a produção usou ou perdeu. Somar: o que chegou sem passar por “Compras”.</p>
+      <p className="mut pequeno">“Usei”: tira do estoque o que a produção gastou ou perdeu. “Chegou”: soma o que chegou sem passar por “Compras”.</p>
       {dono && (
         <button type="button" className="link-bt" onClick={editar}>
-          Editar nome, mínimo e custo
+          Editar nome, aviso e custo
         </button>
       )}
     </Gaveta>
@@ -306,8 +306,8 @@ function EditarInsumo({ x, fechar }: { x?: Insumo; fechar: () => void }) {
   const ok = f.nome.trim().length > 1 && f.unidade.trim()
   return (
     <Gaveta
-      titulo={x ? 'Editar insumo' : 'Novo insumo'}
-      sub="O mínimo é o ponto em que o painel avisa para comprar."
+      titulo={x ? 'Editar material' : 'Novo material'}
+      sub="Quando tiver menos que o número de “Avisar com”, o painel avisa para comprar."
       fechar={fechar}
       pe={
         <button
@@ -361,7 +361,7 @@ function EditarInsumo({ x, fechar }: { x?: Insumo; fechar: () => void }) {
           <input inputMode="decimal" value={f.estoque} onChange={(e) => setF({ ...f, estoque: Number(e.target.value.replace(',', '.')) || 0 })} />
         </label>
         <label className="campo">
-          Mínimo
+          Avisar quando tiver menos de
           <input inputMode="decimal" value={f.minimo} onChange={(e) => setF({ ...f, minimo: Number(e.target.value.replace(',', '.')) || 0 })} />
         </label>
         <CampoDinheiro rotulo="Custo por unidade" valor={f.custo} mudar={(v) => setF({ ...f, custo: v })} />

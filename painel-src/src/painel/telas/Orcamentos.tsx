@@ -46,7 +46,7 @@ export default function Orcamentos({ id }: { s: Sessao; id?: string }) {
 
   return (
     <>
-      <Topo titulo="Orçamentos" sub="Pedidos de orçamento do site e do WhatsApp. Responda com valor e prazo; quando o cliente fechar, vira pedido.">
+      <Topo titulo="Orçamentos" sub="Clientes pedindo preço, pelo site e pelo WhatsApp. Responda com valor e prazo; quando o cliente topar, vira pedido.">
         <button type="button" className="bt bt-forte acao-principal" onClick={() => setNovo(true)}>
           <Icone nome="somar" tamanho={18} />
           <span>Novo orçamento</span>
@@ -54,9 +54,9 @@ export default function Orcamentos({ id }: { s: Sessao; id?: string }) {
       </Topo>
       <section className="kpis-menores">
         <MiniKpi rotulo="Para responder" valor={orcamentos.filter((x) => x.status === 'novo').length} nota="o cliente está esperando" classe={orcamentos.some((x) => x.status === 'novo') ? 'desce' : undefined} />
-        <MiniKpi rotulo="Esperando o cliente" valor={esperando.length} nota={`R$ ${brl(esperando.reduce((t, x) => t + (x.valor ?? 0), 0))} em jogo`} />
+        <MiniKpi rotulo="Esperando o cliente" valor={esperando.length} nota={`R$ ${brl(esperando.reduce((t, x) => t + (x.valor ?? 0), 0))} esperando resposta`} />
         <MiniKpi rotulo="Fechados no mês" valor={fechados.length} nota={`R$ ${brl(fechados.reduce((t, x) => t + (x.valor ?? 0), 0))}`} />
-        <MiniKpi rotulo="Taxa de fechamento" valor={decididos.length ? `${Math.round((fechados.length / decididos.length) * 100)}%` : '—'} nota="dos que já decidiram no mês" />
+        <MiniKpi rotulo="Quantos fecharam" valor={decididos.length ? `${Math.round((fechados.length / decididos.length) * 100)}%` : '—'} nota="dos que já decidiram no mês" />
       </section>
 
       <div className="os-barra">

@@ -39,7 +39,7 @@ export default function Equipe({ s }: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Equipe e comissões" sub={`${iv.rotulo}. Pessoas, acesso ao painel, meta e comissão de cada um, e o ranking.`}>
+      <Topo titulo="Funcionários e comissões" sub={`${iv.rotulo}. Quem trabalha na gráfica, quanto vendeu, meta, comissão e quem entra no painel.`}>
         <Baixar rel={() => relVendedores(doPer, equipe, iv.dias, `${iv.rotulo}. Gráfica Estamp.`)} />
         <button type="button" className="bt bt-forte" onClick={() => setEdit('novo')}>
           <Icone nome="somar" tamanho={18} />
@@ -76,7 +76,7 @@ export default function Equipe({ s }: { s: Sessao }) {
                 {brl(x.fat)}
               </p>
               <p className="mut pequeno">
-                {x.vendas} vendas, ticket de R$ {brl(x.vendas ? x.fat / x.vendas : 0)}
+                {x.vendas} vendas, média de R$ {brl(x.vendas ? x.fat / x.vendas : 0)} por venda
               </p>
               {meta > 0 ? (
                 <>

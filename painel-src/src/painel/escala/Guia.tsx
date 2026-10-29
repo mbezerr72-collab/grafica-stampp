@@ -47,7 +47,7 @@ export const GUIAS: Record<string, GuiaTela> = {
     ],
     perguntas: [
       { p: 'Como abro um pedido?', passos: [{ alvo: 'texto:Novo pedido', texto: 'Toque em Novo pedido, escolha o cliente, o produto e a quantidade.' }] },
-      { p: 'Como recebo o sinal?', passos: [{ alvo: '.os-abrir', texto: 'Toque no pedido. Em “Pagamento”, escreva o valor e toque em Receber sinal.' }] },
+      { p: 'Como recebo o sinal?', passos: [{ alvo: '.os-abrir', texto: 'Toque no pedido. Em “Pagamento”, escreva o valor e toque em Receber entrada.' }] },
       { p: 'Como aviso que ficou pronto?', passos: [{ alvo: '.os-prox', texto: 'Toque no botão do cartão até “Pronto”. A mensagem do WhatsApp abre sozinha.' }] },
     ],
   },
@@ -69,11 +69,11 @@ export const GUIAS: Record<string, GuiaTela> = {
   },
   insumos: {
     passos: [
-      { alvo: '[aria-label="Saúde dos insumos"]', texto: '1. O que está abaixo do mínimo aparece aqui.' },
+      { alvo: '[aria-label="Situação do material"]', texto: '1. O que está acabando aparece aqui.' },
       { alvo: 'texto:Comprar', texto: '2. Em “Comprar”, o pedido de cada fornecedor já vem pronto para o WhatsApp.' },
       { alvo: '.tabela', texto: '3. Toque no insumo para dar baixa do que a produção usou.' },
     ],
-    perguntas: [{ p: 'Como dou baixa de camisa usada?', passos: [{ alvo: 'input[aria-label="Buscar insumo"]', texto: 'Ache a camisa (cor e tamanho), toque nela, escreva a quantidade e toque em Dar baixa.' }] }],
+    perguntas: [{ p: 'Como dou baixa de camisa usada?', passos: [{ alvo: 'input[aria-label="Buscar material"]', texto: 'Ache a camisa (cor e tamanho), toque nela, escreva a quantidade e toque em Usei (tirar).' }] }],
   },
   pdv: {
     passos: [
@@ -93,7 +93,7 @@ export const GUIAS: Record<string, GuiaTela> = {
       { alvo: '[data-tour="mais"], texto:Venda no balcão', texto: '3. Para vender de novo, use o botão de fazer.' },
     ],
     perguntas: [
-      { p: 'Como devolvo uma venda?', passos: [{ alvo: 'input[aria-label="Buscar venda"]', texto: 'Ache a venda e toque nela.' }, { alvo: 'texto:Registrar devolução', texto: 'Toque em “Registrar devolução”. A venda sai do faturamento.' }] },
+      { p: 'Como devolvo uma venda?', passos: [{ alvo: 'input[aria-label="Buscar venda"]', texto: 'Ache a venda e toque nela.' }, { alvo: 'texto:Registrar devolução', texto: 'Toque em “Registrar devolução”. A venda sai do total vendido.' }] },
       { p: 'Como mando o recibo de novo?', passos: [{ alvo: 'input[aria-label="Buscar venda"]', texto: 'Ache a venda e toque nela.' }, { alvo: 'texto:WhatsApp', texto: 'Toque no WhatsApp para mandar o recibo de novo.' }] },
     ],
   },
@@ -124,10 +124,10 @@ export const GUIAS: Record<string, GuiaTela> = {
   clientes: {
     passos: [
       { alvo: 'input[aria-label="Buscar cliente"]', texto: '1. Ache o cliente pelo nome ou telefone.' },
-      { alvo: '[aria-label="Listas inteligentes"]', texto: '2. As listas mostram aniversário, empresas, pedido do ano passado e pedido pronto.' },
+      { alvo: '[aria-label="Listas prontas"]', texto: '2. As listas mostram aniversário, empresas, pedido do ano passado e pedido pronto.' },
       { alvo: '.btn-p', texto: '3. Cliente novo? Cadastre aqui.' },
     ],
-    perguntas: [{ p: 'Como mando mensagem para vários clientes?', passos: [{ alvo: '[aria-label="Listas inteligentes"]', texto: 'Escolha a lista e toque no WhatsApp ao lado de cada pessoa.' }] }],
+    perguntas: [{ p: 'Como mando mensagem para vários clientes?', passos: [{ alvo: '[aria-label="Listas prontas"]', texto: 'Escolha a lista e toque no WhatsApp ao lado de cada pessoa.' }] }],
   },
   despesas: {
     passos: [

@@ -166,7 +166,7 @@ function useContadores(s: Sessao) {
     return {
       pedidos: atrasados ? { n: String(atrasados), t: `${atrasados} ${atrasados === 1 ? 'pedido atrasado' : 'pedidos atrasados'}`, ok: false } : null,
       orcamentos: novos ? { n: String(novos), t: `${novos} para responder`, ok: true } : null,
-      insumos: faltando ? { n: String(faltando), t: `${faltando} abaixo do mínimo`, ok: false } : null,
+      insumos: faltando ? { n: String(faltando), t: `${faltando} acabando`, ok: false } : null,
       despesas: atrasadas ? { n: String(atrasadas), t: `${atrasadas} ${atrasadas === 1 ? 'conta atrasada' : 'contas atrasadas'}`, ok: false } : null,
     } as Record<string, { n: string; t: string; ok: boolean } | null>
   }, [pedidos, orcamentos, insumos, contas, s])

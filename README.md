@@ -25,12 +25,14 @@ O painel é o **Escala Business** (o mesmo visual e o mesmo layout do painel mod
 
 | Grupo | Abas |
 |---|---|
-| Operação | Início, Balcão (xerox, impressão, pronta entrega), Vendas, Calendário |
+| Dia a dia | Início, Vender no balcão (xerox, impressão, pronta entrega), Vendas feitas, Calendário |
 | Produção | **Pedidos** (quadro: novo → arte → aprovação → produção → pronto → entregue, com grade de tamanhos, sinal e ficha de produção em PDF), **Orçamentos** (o que chega do site e do WhatsApp; vira pedido em 1 toque), **Fila de produção** (por setor: arte, sublimação, DTF, silk, impressão…) |
 | Produtos e insumos | Produtos e preços (opções, setor, prazo, pronta entrega ou sob encomenda), **Insumos** (camisas lisas, papel, tinta, lona, brindes em branco, com mínimo e pedido ao fornecedor), Compras |
 | Financeiro | Contas e despesas, Metas, Relatórios |
 | Relacionamento | **Criar anúncio** (7 modelos de arte: oferta, promoção, feito aqui, tabela de preços, pronto rápido, data comemorativa e aviso; formatos de publicação, story e quadrado; fotos dos trabalhos ou do celular; legenda pronta), Clientes (empresas e grupos, pedido do ano passado, pedido pronto), Equipe e comissões (atendimento, designer, produção) |
 | Gráfica | Configurações (dados, pagamento, % do sinal, cópia de segurança, histórico) |
+
+Os nomes do painel são de uso do dia a dia (ex.: "Material em estoque" em vez de insumos, "Entrada" em vez de sinal, "Total vendido" em vez de faturamento, "Saldo" em vez de caixa). Cada tela tem o "?" com a explicação e um guia na primeira vez.
 
 Login da demonstração: `dono@graficaestamp.demo`, senha `demonstracao` (ou "Entrar como funcionário"). Os dados de exemplo (6 meses) são gerados no primeiro acesso e ficam no navegador.
 

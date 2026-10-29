@@ -1,7 +1,7 @@
 /**
  * Os números do painel, sempre pelas mesmas regras:
  *  - Faturamento: o valor dos produtos vendidos (a troca conta como pagamento).
- *  - Lucro: faturamento − custo dos vendidos − despesas da gráfica. Compra de insumos não entra.
+ *  - Lucro: faturamento − custo dos vendidos − despesas da gráfica. Compra de material não entra.
  *  - Caixa: tudo o que entrou − tudo o que saiu, contando a compra de estoque.
  */
 import type { Despesa, Membro, Venda } from '../../data/store'
@@ -127,7 +127,7 @@ export function porVendedor(vendas: Venda[], equipe: Membro[]) {
 }
 
 export type FormaResumo = 'pix' | 'credito' | 'debito' | 'dinheiro' | 'misto'
-export const NOME_FORMA_RESUMO: Record<FormaResumo, string> = { pix: 'Pix', credito: 'Cartão de crédito', debito: 'Débito', dinheiro: 'Dinheiro', misto: 'Misto ou troca' }
+export const NOME_FORMA_RESUMO: Record<FormaResumo, string> = { pix: 'Pix', credito: 'Cartão de crédito', debito: 'Débito', dinheiro: 'Dinheiro', misto: 'Mais de uma forma' }
 export const formaDaVenda = (v: Venda): FormaResumo => (v.pagamentos.length > 1 || v.troca > 0 ? 'misto' : (v.pagamentos[0]?.forma ?? 'pix'))
 
 /** Faturamento por forma de pagamento (venda com troca ou duas formas conta como "misto"). */

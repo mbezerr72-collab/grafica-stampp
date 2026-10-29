@@ -9,7 +9,7 @@ import { MiniKpi, brl, pct } from '../escala/componentes'
 import { Gaveta } from '../escala/Gaveta'
 import { intervalo, usePeriodo, diasEntre, somaDias } from '../escala/periodo'
 
-const CAT: Record<CategoriaDespesa, string> = { estoque: 'Compra de estoque', aluguel: 'Aluguel', anuncios: 'Anúncios', salarios: 'Salários', contas: 'Contas', outros: 'Outros' }
+const CAT: Record<CategoriaDespesa, string> = { estoque: 'Compra de material', aluguel: 'Aluguel', anuncios: 'Anúncios', salarios: 'Salários', contas: 'Contas', outros: 'Outros' }
 const COR: Record<CategoriaDespesa, string> = { estoque: 'var(--mut)', aluguel: 'var(--roxo)', anuncios: 'var(--inf)', salarios: 'var(--teal)', contas: 'var(--ate)', outros: 'var(--sai)' }
 type Aba = 'pagar' | 'receber' | 'pagas'
 const dataBr = (d: string) => d.split('-').reverse().join('/')
@@ -79,7 +79,7 @@ export default function Despesas(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Contas e despesas" sub="O que vence, o que entra e o que já saiu. Aluguel, energia, internet e salários entram sozinhos todo mês.">
+      <Topo titulo="Contas a pagar" sub="O que vence, o que entra e o que já saiu. Aluguel, energia, internet e salários entram sozinhos todo mês.">
         <Baixar rel={() => relDespesas(despesas, iv.de, iv.ate, `${iv.rotulo}. SmartCZS.`)} />
         <button type="button" className="bt bt-forte acao-principal" onClick={() => setForm({ modo: 'pago', categoria: 'outros', valor: 0, descricao: '', vencimento: h, recorrencia: 'nenhuma' })}>
           <Icone nome="somar" tamanho={18} />
@@ -90,7 +90,7 @@ export default function Despesas(_: { s: Sessao }) {
         <MiniKpi rotulo="Atrasadas" valor={'R$ ' + brl(atrasadas.reduce((t, c) => t + c.valor, 0))} nota={`${atrasadas.length} ${atrasadas.length === 1 ? 'conta' : 'contas'}`} classe={atrasadas.length ? 'desce' : undefined} />
         <MiniKpi rotulo="A pagar em 30 dias" valor={'R$ ' + brl(prox30.reduce((t, c) => t + c.valor, 0))} nota={`${prox30.length} contas`} />
         <MiniKpi rotulo="A receber" valor={'R$ ' + brl(receber.reduce((t, c) => t + c.valor, 0))} nota="repasses e fiado" />
-        <MiniKpi rotulo="Despesas da loja" valor={'R$ ' + brl(loja.reduce((t, d) => t + d.valor, 0))} nota={`${iv.rotulo.toLowerCase()}, sem estoque`} />
+        <MiniKpi rotulo="Gastos da gráfica" valor={'R$ ' + brl(loja.reduce((t, d) => t + d.valor, 0))} nota={`${iv.rotulo.toLowerCase()}, sem compra de material`} />
       </section>
       <div className="grade-2">
         <section className="painel">
@@ -144,7 +144,7 @@ export default function Despesas(_: { s: Sessao }) {
               </li>
             ))}
           </ul>
-          {porCat.length > 0 && <p className="mut pequeno">Compra de estoque foi {pct((porCat.find((x) => x.c === 'estoque')?.v ?? 0) / totCat, 0)} do que saiu. Ela volta como faturamento quando o aparelho é vendido.</p>}
+          {porCat.length > 0 && <p className="mut pequeno">Compra de material foi {pct((porCat.find((x) => x.c === 'estoque')?.v ?? 0) / totCat, 0)} do que saiu. Esse dinheiro volta quando o produto feito com o material é vendido.</p>}
         </section>
       </div>
       {form && <FormConta f={form} fechar={() => setForm(null)} />}

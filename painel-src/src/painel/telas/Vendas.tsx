@@ -45,17 +45,17 @@ export default function Vendas({ s }: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Vendas" sub={`${iv.rotulo}. Balcão e pedidos entregues. Toque numa venda para ver o recibo.`}>
+      <Topo titulo="Vendas feitas" sub={`${iv.rotulo}. Balcão e pedidos entregues. Toque numa venda para ver o recibo.`}>
         <a className="bt bt-forte acao-principal" href={link('pdv')}>
           <Icone nome="somar" tamanho={18} />
           <span>Venda no balcão</span>
         </a>
       </Topo>
       <section className="kpis-menores" aria-label="Resumo">
-        <MiniKpi rotulo="Faturamento" valor={'R$ ' + brl(r.faturamento)} nota={`${r.vendas} vendas concluídas`} />
+        <MiniKpi rotulo="Total vendido" valor={'R$ ' + brl(r.faturamento)} nota={`${r.vendas} vendas concluídas`} />
         <MiniKpi rotulo="Valor médio por venda" valor={'R$ ' + brl(r.ticket)} nota="Por venda" />
-        {dono ? <MiniKpi rotulo="Lucro bruto" valor={'R$ ' + brl(r.faturamento - r.custo)} nota={`Margem de ${pct(r.margem)}`} /> : <MiniKpi rotulo="Itens" valor={doPeriodo.reduce((t, v) => t + v.itens.length, 0)} nota="Vendidos no período" />}
-        <MiniKpi rotulo="Canceladas e devolvidas" valor={desfeitas} nota={desfeitas ? 'Já saíram do faturamento' : 'Nenhuma no período'} />
+        {dono ? <MiniKpi rotulo="Lucro nas vendas" valor={'R$ ' + brl(r.faturamento - r.custo)} nota={`${pct(r.margem)} do que vendeu`} /> : <MiniKpi rotulo="Itens" valor={doPeriodo.reduce((t, v) => t + v.itens.length, 0)} nota="Vendidos no período" />}
+        <MiniKpi rotulo="Canceladas e devolvidas" valor={desfeitas} nota={desfeitas ? 'Já saíram das vendas' : 'Nenhuma no período'} />
       </section>
 
       <section className="painel">
@@ -138,7 +138,7 @@ function DetalheVenda({ v, fechar, dono }: { v: Venda; fechar: () => void; dono:
   const desfazer = async (status: 'cancelada' | 'devolvida') => {
     const ok = await confirmar({
       titulo: status === 'cancelada' ? `Cancelar a venda nº ${v.numero}?` : `Registrar a devolução da venda nº ${v.numero}?`,
-      texto: status === 'cancelada' ? 'O que era de pronta entrega volta ao estoque. A venda sai do faturamento.' : 'O dinheiro volta para o cliente e a venda sai do faturamento.',
+      texto: status === 'cancelada' ? 'O que era de pronta entrega volta ao estoque. A venda sai do total vendido.' : 'O dinheiro volta para o cliente e a venda sai do faturamento.',
       botao: status === 'cancelada' ? 'Cancelar venda' : 'Registrar devolução',
       perigo: true,
     })
@@ -164,7 +164,7 @@ function DetalheVenda({ v, fechar, dono }: { v: Venda; fechar: () => void; dono:
         </>
       }
     >
-      {v.status !== 'concluida' && <p className="pag-falta sai">Esta venda foi {v.status}. Já saiu do faturamento.</p>}
+      {v.status !== 'concluida' && <p className="pag-falta sai">Esta venda foi {v.status}. Já saiu do total vendido.</p>}
       <div className="det-bloco">
         <p className="det-rot">Cliente</p>
         <p>{cli ? `${cli.nome}, ${cli.telefone}` : 'Sem cadastro'}</p>
@@ -201,7 +201,7 @@ function DetalheVenda({ v, fechar, dono }: { v: Venda; fechar: () => void; dono:
           {v.troca > 0 && (
             <li>
               <span>
-                Sinal pago antes
+                Entrada paga antes
               </span>
               <span className="num">R$ {brl(v.troca)}</span>
             </li>
@@ -212,7 +212,7 @@ function DetalheVenda({ v, fechar, dono }: { v: Venda; fechar: () => void; dono:
           </li>
           {dono && (
             <li>
-              <span className="mut">Lucro bruto</span>
+              <span className="mut">Lucro</span>
               <span className="num mut">R$ {brl(faturamentoVenda(v) - custoVenda(v))}</span>
             </li>
           )}

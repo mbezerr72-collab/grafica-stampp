@@ -312,7 +312,7 @@ function Curva() {
       <p className="topo-legenda so-pc-flex" aria-hidden="true">
         <span>
           <i />
-          Faturamento do período
+          Vendas do período
         </span>
         {anterior && (
           <span>

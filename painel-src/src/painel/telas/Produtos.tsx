@@ -154,7 +154,7 @@ function Linha({ p, s }: { p: PProduto; s: Sessao }) {
         <span className="produto-texto">
           <strong>{p.nome}</strong>
           <small>
-            {cond}, {cores}, prazo {p.prazoDias} {p.prazoDias === 1 ? 'dia' : 'dias'}
+            {cond}, {cores}, {p.prazoDias ? `pronto em ${p.prazoDias} ${p.prazoDias === 1 ? 'dia' : 'dias'}` : 'pronto na hora'}
           </small>
           <span className="produto-numeros">
             {menor > 0 && <span>a partir de {brl0(menor)}</span>}
