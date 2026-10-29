@@ -99,7 +99,7 @@ export type Venda = {
   desconto: number
   /** Pedido de produção que gerou a venda (na entrega). */
   pedidoId?: string
-  /** Sinal pago antes no pedido (já entrou no caixa no dia em que foi pago). */
+  /** Entrada paga antes no pedido (já entrou no caixa no dia em que foi pago). */
   troca: number
   pagamentos: { forma: FormaPag; valor: number; parcelas?: number }[]
   garantiaAte: string
@@ -114,8 +114,8 @@ export const ETAPAS_PEDIDO: StatusPedido[] = ['novo', 'arte', 'aprovacao', 'prod
 export const NOMES_STATUS_PEDIDO: Record<StatusPedido, string> = {
   novo: 'Novo pedido',
   arte: 'Fazendo a arte',
-  aprovacao: 'Aguardando aprovação',
-  producao: 'Em produção',
+  aprovacao: 'Cliente aprovando',
+  producao: 'Produzindo',
   pronto: 'Pronto',
   entregue: 'Entregue',
 }
@@ -605,8 +605,8 @@ export function gerarExemplo(produtos: PProduto[], hojeIso: string): Exemplo {
       const contaId = id('ct', nc)
       compras.push({ id: id('cp', nc++), fornecedorId: f.id, data: d, itens, total, contaId, exemplo: true })
       const paga = venc <= hojeIso
-      contas.push({ id: contaId, tipo: 'pagar', descricao: `${f.nome}, compra de insumos`, valor: total, vencimento: venc, categoria: 'estoque', recorrencia: 'nenhuma', ...(paga ? { pagaEm: venc } : {}), exemplo: true })
-      if (paga) despesas.push({ id: id('dp', despesas.length), data: venc, valor: total, categoria: 'estoque', descricao: `${f.nome}, compra de insumos`, contaId, exemplo: true })
+      contas.push({ id: contaId, tipo: 'pagar', descricao: `${f.nome}, compra de material`, valor: total, vencimento: venc, categoria: 'estoque', recorrencia: 'nenhuma', ...(paga ? { pagaEm: venc } : {}), exemplo: true })
+      if (paga) despesas.push({ id: id('dp', despesas.length), data: venc, valor: total, categoria: 'estoque', descricao: `${f.nome}, compra de material`, contaId, exemplo: true })
     }
   }
 

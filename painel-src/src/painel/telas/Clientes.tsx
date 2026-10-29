@@ -132,7 +132,7 @@ export default function Clientes({ s, id }: { s: Sessao; id?: string }) {
         <MiniKpi rotulo="Empresas e grupos" valor={clientes.filter((c) => c.empresa).length} nota={`R$ ${brl(resumos.filter((r) => r.c.empresa).reduce((t, r) => t + r.total, 0))} comprados`} />
       </section>
 
-      <section className="listas" aria-label="Listas inteligentes">
+      <section className="listas" aria-label="Listas prontas">
         {ls.slice(1).map((x) => {
           const n = resumos.filter(x.filtro).length
           return (

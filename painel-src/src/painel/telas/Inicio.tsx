@@ -81,7 +81,7 @@ function InicioDono({ s }: { s: Sessao }) {
     const novos = orcamentos.filter((o) => o.status === 'novo')
     if (novos.length) l.push({ id: 'orc', tipo: 'inf', icone: 'mensagem', t: `${novos.length} ${novos.length === 1 ? 'orçamento para responder' : 'orçamentos para responder'}`, s: novos.slice(0, 3).map((o) => o.nome.split(' ')[0]).join(', ') + '. Quem responde primeiro fecha.', link: 'orcamentos' })
     const baixo = insumos.filter((x) => x.estoque < x.minimo)
-    if (baixo.length) l.push({ id: 'ins', tipo: 'ate', icone: 'estoque', t: `${baixo.length} ${baixo.length === 1 ? 'insumo abaixo' : 'insumos abaixo'} do mínimo`, s: baixo.slice(0, 3).map((x) => `${x.nome} (${x.estoque.toLocaleString('pt-BR')} ${x.unidade})`).join(', '), link: 'insumos' })
+    if (baixo.length) l.push({ id: 'ins', tipo: 'ate', icone: 'estoque', t: `${baixo.length} ${baixo.length === 1 ? 'material acabando' : 'materiais acabando'}`, s: baixo.slice(0, 3).map((x) => `${x.nome} (${x.estoque.toLocaleString('pt-BR')} ${x.unidade})`).join(', '), link: 'insumos' })
     return l
   }, [contas, pedidos, orcamentos, insumos, h, s])
 
@@ -105,29 +105,29 @@ function InicioDono({ s }: { s: Sessao }) {
         </button>
       </Topo>
       <section className="kpis" aria-label="Números do período">
-        <Kpi tipo="destaque" rotulo="Faturamento" valor={a.faturamento} antes={b.faturamento} comparacao={comp} frase={`${a.vendas} ${a.vendas === 1 ? 'venda' : 'vendas'}. Tudo que entrou de venda.`} />
-        {dono && <Kpi tipo="lucro" rotulo="Lucro" valor={a.lucro} antes={b.lucro} comparacao={comp} frase="Faturamento menos o custo do que foi vendido e as despesas da gráfica." />}
-        {dono && <Kpi rotulo="Caixa" soReais valor={a.caixa} antes={b.caixa} comparacao={comp} frase="Tudo que entrou menos tudo que saiu, contando compra de insumos." />}
-        {dono && <Kpi rotulo="Despesas da gráfica" cor="var(--sai)" inverso valor={a.despesasLoja} antes={b.despesasLoja} comparacao={comp} frase="Aluguel, salários, energia e contas. Compra de insumos fica fora." />}
+        <Kpi tipo="destaque" rotulo="Total vendido" valor={a.faturamento} antes={b.faturamento} comparacao={comp} frase={`${a.vendas} ${a.vendas === 1 ? 'venda' : 'vendas'}. Tudo que entrou de venda.`} />
+        {dono && <Kpi tipo="lucro" rotulo="Lucro" valor={a.lucro} antes={b.lucro} comparacao={comp} frase="O que sobrou: o que vendeu, menos o custo do que foi vendido e as contas da gráfica." />}
+        {dono && <Kpi rotulo="Saldo" soReais valor={a.caixa} antes={b.caixa} comparacao={comp} frase="O dinheiro que entrou menos o que saiu (contando a compra de material)." />}
+        {dono && <Kpi rotulo="Gastos da gráfica" cor="var(--sai)" inverso valor={a.despesasLoja} antes={b.despesasLoja} comparacao={comp} frase="Aluguel, salários, energia e outras contas. Compra de material fica fora." />}
         {!dono && minha && <Kpi tipo="lucro" rotulo={`Sua comissão em ${nomeMes(mes)}`} valor={minha.comissao} frase={`${minha.vendas} vendas suas, R$ ${brl(minha.fat)} vendidos. Atualiza a cada venda.`} />}
       </section>
 
       <section className="painel">
         <div className="painel-t">
-          <h3>Faturamento e lucro {passo === 1 ? 'por dia' : passo === 7 ? 'por semana' : 'por mês'}</h3>
+          <h3>Vendas e lucro {passo === 1 ? 'por dia' : passo === 7 ? 'por semana' : 'por mês'}</h3>
           <span className="mut">
             {dataCurta(iv.dias < 7 ? somaDias(iv.ate, -6) : iv.de)} a {dataCurta(iv.ate)}
           </span>
         </div>
-        <GraficoBarras pontos={grafico} rotulo="Faturamento em barras e lucro bruto em linha" />
+        <GraficoBarras pontos={grafico} rotulo="Vendas em barras e lucro em linha" />
         <p className="legenda">
           <span>
             <i style={{ '--c': 'var(--teal)' } as CSSProperties} />
-            Faturamento
+            Vendas
           </span>
           <span>
             <i style={{ '--c': 'var(--ent)' } as CSSProperties} />
-            Lucro bruto
+            Lucro
           </span>
           {maior.fat > 0 && passo === 1 && (
             <span>

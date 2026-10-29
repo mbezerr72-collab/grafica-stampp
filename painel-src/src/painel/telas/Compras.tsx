@@ -47,7 +47,7 @@ export default function Compras(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Compras e fornecedores" sub="Camisas lisas, papel, tinta, lona: o que chegou, de quem, por quanto e quando vence.">
+      <Topo titulo="Compras de material" sub="Camisa lisa, papel, tinta, lona: o que chegou, de quem, por quanto e quando vence a conta.">
         <button type="button" className="bt bt-forte" onClick={() => setEntrada(true)}>
           <Icone nome="somar" tamanho={18} />
           <span>Chegou material</span>
@@ -56,7 +56,7 @@ export default function Compras(_: { s: Sessao }) {
       <section className="kpis-menores">
         <MiniKpi rotulo="Comprado em 90 dias" valor={'R$ ' + brl(total90)} nota={`${compras.filter((c) => c.data >= d90).length} compras`} />
         <MiniKpi rotulo="A pagar aos fornecedores" valor={'R$ ' + brl(aPagar.reduce((t, c) => t + c.valor, 0))} nota={`${aPagar.length} contas em aberto`} />
-        <MiniKpi rotulo="Próximo vencimento" valor={aPagar.length ? dataBr([...aPagar].sort((a, b) => a.vencimento.localeCompare(b.vencimento))[0].vencimento).slice(0, 5) : '—'} nota={aPagar.length ? 'compra de insumos' : 'Nada em aberto'} />
+        <MiniKpi rotulo="Próximo vencimento" valor={aPagar.length ? dataBr([...aPagar].sort((a, b) => a.vencimento.localeCompare(b.vencimento))[0].vencimento).slice(0, 5) : '—'} nota={aPagar.length ? 'compra de material' : 'Nada em aberto'} />
         <MiniKpi rotulo="Fornecedores" valor={fornecedores.length} nota="cadastrados" />
       </section>
 
@@ -105,7 +105,7 @@ export default function Compras(_: { s: Sessao }) {
                   <span className="lv-txt">
                     <b>{nomeF(c.fornecedorId)}</b>
                     <small>
-                      {c.itens.length} {c.itens.length === 1 ? 'insumo' : 'insumos'}: {c.itens.slice(0, 2).map((i) => ins(i.insumoId)?.nome ?? 'insumo').join(', ')}{c.itens.length > 2 ? '…' : ''}
+                      {c.itens.length} {c.itens.length === 1 ? 'item' : 'itens'}: {c.itens.slice(0, 2).map((i) => ins(i.insumoId)?.nome ?? 'material').join(', ')}{c.itens.length > 2 ? '…' : ''}
                     </small>
                   </span>
                   <span className="lv-pag">{conta && <span className={'pill ' + (conta.pagaEm ? 'ent' : conta.vencimento < h ? 'sai' : 'ate')}>{conta.pagaEm ? 'paga' : `vence ${dataBr(conta.vencimento).slice(0, 5)}`}</span>}</span>
@@ -216,12 +216,12 @@ function Entrada({ fechar }: { fechar: () => void }) {
   const chave = () => Math.random().toString(36).slice(2)
   const usarXml = (xml: string, origem: string) => {
     const r = lerXml(xml, insumos)
-    if (!r.itens.length) return avisar('Não achei insumos cadastrados nessa nota.')
+    if (!r.itens.length) return avisar('Não achei material cadastrado nessa nota.')
     const forn = fornecedores.find((x) => r.emitente && x.nome.toLowerCase().startsWith(r.emitente.toLowerCase().split(' ')[0]))
     if (forn) setFid(forn.id)
     setItens(r.itens.map(({ x, qtd, custo }) => ({ chave: chave(), insumoId: x.id, qtd, custo })))
     setNota(origem)
-    avisar(`${r.itens.length} insumos da nota preenchidos. Confira as quantidades.`)
+    avisar(`${r.itens.length} itens da nota preenchidos. Confira as quantidades.`)
   }
   const total = itens.reduce((t, i) => t + i.qtd * i.custo, 0)
   const ok = !!fid && itens.length > 0 && itens.every((i) => i.qtd > 0 && i.custo > 0)
@@ -232,7 +232,7 @@ function Entrada({ fechar }: { fechar: () => void }) {
       itens.map((i) => ({ insumoId: i.insumoId, qtd: i.qtd, custo: i.custo })),
       venc,
     )
-    avisar(`Entrada registrada: ${itens.length} ${itens.length === 1 ? 'insumo' : 'insumos'}. Conta a pagar criada.`)
+    avisar(`Entrada registrada: ${itens.length} ${itens.length === 1 ? 'item' : 'itens'}. Conta a pagar criada.`)
     fechar()
     ir('insumos')
   }
@@ -240,7 +240,7 @@ function Entrada({ fechar }: { fechar: () => void }) {
   return (
     <Gaveta
       titulo="Chegou material"
-      sub="O estoque dos insumos soma, o custo médio se ajusta e a conta a pagar é criada."
+      sub="O material soma no estoque e a conta a pagar já fica marcada."
       fechar={fechar}
       pe={
         <button type="button" className="btn btn-p" disabled={!ok} onClick={salvar}>
@@ -274,7 +274,7 @@ function Entrada({ fechar }: { fechar: () => void }) {
         {abaixo.length > 0 && (
           <button type="button" className="btn btn-o" onClick={() => setItens([...itens, ...abaixo.map((x) => ({ chave: chave(), insumoId: x.id, qtd: falta(x), custo: x.custo }))])}>
             <Icone nome="alerta" tamanho={18} />
-            Trazer os {abaixo.length} abaixo do mínimo
+            Trazer os {abaixo.length} que estão acabando
           </button>
         )}
         <label className="btn btn-o">
@@ -318,8 +318,8 @@ function Entrada({ fechar }: { fechar: () => void }) {
         )
       })}
       <div className="ent-add">
-        <select value={iid} onChange={(e) => setIid(e.target.value)} aria-label="Insumo para adicionar">
-          <option value="">Escolha um insumo…</option>
+        <select value={iid} onChange={(e) => setIid(e.target.value)} aria-label="Material para adicionar">
+          <option value="">Escolha um material…</option>
           {ordenados.map((x) => (
             <option key={x.id} value={x.id}>
               {x.nome}

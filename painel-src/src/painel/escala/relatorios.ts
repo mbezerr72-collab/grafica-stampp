@@ -9,7 +9,7 @@ import { porVendedor } from './numeros'
 import { diasEntre } from './periodo'
 import type { Relatorio } from './exportar'
 
-const CAT: Record<string, string> = { estoque: 'Compra de insumos', aluguel: 'Aluguel', anuncios: 'Anúncios', salarios: 'Salários', contas: 'Contas (luz, internet, sistema)', outros: 'Outros' }
+const CAT: Record<string, string> = { estoque: 'Compra de material', aluguel: 'Aluguel', anuncios: 'Anúncios', salarios: 'Salários', contas: 'Contas (luz, internet, sistema)', outros: 'Outros' }
 
 export function relVendedores(doPer: Venda[], equipe: Membro[], dias: number, sub: string): Relatorio {
   const l = porVendedor(doPer, equipe).map((x) => {
@@ -22,7 +22,7 @@ export function relVendedores(doPer: Venda[], equipe: Membro[], dias: number, su
     colunas: [
       { nome: 'Vendedor', tipo: 'texto' },
       { nome: 'Vendas', tipo: 'numero' },
-      { nome: 'Faturamento', tipo: 'dinheiro' },
+      { nome: 'Vendido', tipo: 'dinheiro' },
       { nome: 'Valor médio por venda', tipo: 'dinheiro' },
       { nome: 'Meta do período', tipo: 'dinheiro' },
       { nome: 'Da meta', tipo: 'pct' },
@@ -39,7 +39,7 @@ export function relDespesas(despesas: Despesa[], de: string, ate: string, sub: s
   const tot = dp.reduce((t, d) => t + d.valor, 0)
   return {
     titulo: 'Despesas por categoria',
-    sub: sub + ' Compra de insumos aparece separada: ela não entra no lucro.',
+    sub: sub + ' Compra de material aparece separada: ela não entra no lucro.',
     colunas: [
       { nome: 'Categoria', tipo: 'texto' },
       { nome: 'Lançamentos', tipo: 'numero' },
@@ -58,13 +58,13 @@ export function relDespesas(despesas: Despesa[], de: string, ate: string, sub: s
 export function relInsumos(insumos: Insumo[], fornecedores: Fornecedor[], dono: boolean): Relatorio {
   const l = [...insumos].sort((a, b) => a.grupo.localeCompare(b.grupo) || a.nome.localeCompare(b.nome))
   return {
-    titulo: 'Insumos',
+    titulo: 'Material em estoque',
     sub: `Posição de hoje, ${hoje().split('-').reverse().join('/')}.`,
     colunas: [
-      { nome: 'Insumo', tipo: 'texto' },
+      { nome: 'Material', tipo: 'texto' },
       { nome: 'Grupo', tipo: 'texto' },
       { nome: 'Estoque', tipo: 'numero' },
-      { nome: 'Mínimo', tipo: 'numero' },
+      { nome: 'Avisar com', tipo: 'numero' },
       ...(dono ? [{ nome: 'Valor em estoque', tipo: 'dinheiro' as const }] : []),
       { nome: 'Fornecedor', tipo: 'texto' },
       { nome: 'Situação', tipo: 'texto' },

@@ -36,7 +36,7 @@ export default function Producao(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Fila de produção" sub="O que cada setor tem para fazer, do prazo mais curto para o mais longo. Imprima a ficha e marque quando terminar." />
+      <Topo titulo="O que produzir" sub="O que tem para fazer, do mais urgente para o menos urgente. Imprima a ficha e marque quando terminar." />
       <section className="kpis-menores">
         <MiniKpi rotulo="Arte para fazer" valor={daqui.filter((o) => o.status !== 'producao').length} nota="antes de ir para aprovação" />
         <MiniKpi rotulo="Na máquina" valor={daqui.filter((o) => o.status === 'producao').length} nota={`${pecas} peças/unidades`} />

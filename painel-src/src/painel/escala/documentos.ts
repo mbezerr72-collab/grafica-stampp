@@ -144,7 +144,7 @@ export function descreverItens(v: Venda) {
 
 export function pagamentosTexto(v: Venda) {
   const l = v.pagamentos.map((p) => `${NOMES_FORMA[p.forma]}${p.parcelas && p.parcelas > 1 ? ` ${p.parcelas}x` : ''}: ${brl(p.valor)}`)
-  if (v.troca) l.push(`Sinal pago antes: ${brl(v.troca)}`)
+  if (v.troca) l.push(`Entrada paga antes: ${brl(v.troca)}`)
   return l
 }
 
@@ -187,7 +187,7 @@ export function mensagemVenda(v: Venda, cliente: Cliente | undefined) {
     '',
     `Venda nº ${v.numero}, ${dataBr(v.data)}:`,
     ...descreverItens(v).map((t) => `• ${t}`),
-    `Pago: ${brl(totalVenda(v))}${v.troca ? ` (+ sinal de ${brl(v.troca)})` : ''}`,
+    `Pago: ${brl(totalVenda(v))}${v.troca ? ` (+ entrada de ${brl(v.troca)})` : ''}`,
     '',
     `Recibo para imprimir: ${linkRecibo(v)}`,
     '',
@@ -218,7 +218,7 @@ export function mensagemPedido(o: Pedido, cliente: Cliente | undefined): string 
     case 'arte':
       return `${oi}\nA arte do pedido nº ${o.numero} está sendo feita. Assim que ficar pronta, mandamos aqui para você aprovar.`
     case 'aprovacao':
-      return [`${oi}`, `A arte do pedido nº ${o.numero} está pronta para você conferir:`, linkAprovacao(o), '', 'Confira nomes, números, cores e posição.', 'Se estiver tudo certo, responda APROVADO aqui.', o.sinal || !sinalPct() ? '' : `Para começar a produção pedimos ${brl(Math.round((total * sinalPct()) / 100))} de sinal (${sinalPct()}%). Pix copia e cola:\n${pixPedido(o, Math.round((total * sinalPct()) / 100))}`].filter(Boolean).join('\n')
+      return [`${oi}`, `A arte do pedido nº ${o.numero} está pronta para você conferir:`, linkAprovacao(o), '', 'Confira nomes, números, cores e posição.', 'Se estiver tudo certo, responda APROVADO aqui.', o.sinal || !sinalPct() ? '' : `Para começar a produção pedimos ${brl(Math.round((total * sinalPct()) / 100))} de entrada (${sinalPct()}%). Pix copia e cola:\n${pixPedido(o, Math.round((total * sinalPct()) / 100))}`].filter(Boolean).join('\n')
     case 'producao':
       return `${oi}\nArte aprovada! O pedido nº ${o.numero} já está em produção. Previsão: ${prazoBr(o.prazo)}.`
     case 'pronto':
@@ -258,7 +258,7 @@ export function mensagemOrcamento(o: Orcamento, nomeProduto: string): string {
   if (o.valor) {
     linhas.push(`Valor: ${brl(o.valor)}${o.qtd > 1 ? ` (${o.qtd} un., ${brl(o.valor / o.qtd)} cada)` : ''}.`)
     if (o.prazoDias) linhas.push(`Prazo: ${o.prazoDias} dias úteis depois da aprovação da arte.`)
-    linhas.push('', `Para fechar, respondemos com a arte para você aprovar e pedimos ${sinalPct()}% de sinal para começar.`, 'Podemos seguir?')
+    linhas.push('', `Para fechar, respondemos com a arte para você aprovar e pedimos ${sinalPct()}% de entrada para começar.`, 'Podemos seguir?')
   } else linhas.push('Já estamos vendo os detalhes e mandamos o valor em seguida.')
   return linhas.join('\n')
 }

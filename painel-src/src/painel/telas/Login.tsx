@@ -32,7 +32,7 @@ export function Login() {
         <ul className="lg-lista" aria-label="O que tem no sistema">
           <li>Pedidos e orçamentos</li>
           <li>Fila de produção</li>
-          <li>Insumos e compras</li>
+          <li>Material e compras</li>
           <li>Metas e comissões</li>
         </ul>
       </section>

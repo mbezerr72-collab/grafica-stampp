@@ -17,10 +17,10 @@ const ACOES = [
   { nome: 'Novo pedido', frase: 'Camisa, banner, cartão… com prazo e arte', icone: 'os', rota: ['pedidos'], pedido: { tela: 'pedidos', nova: true } as Pedido, permissao: 'vendas' as const },
   { nome: 'Venda no balcão', frase: 'Xerox, impressão, pronta entrega', icone: 'pdv', rota: ['pdv'], permissao: 'vendas' as const },
   { nome: 'Responder orçamento', frase: 'Os que chegaram do site e do WhatsApp', icone: 'mensagem', rota: ['orcamentos'], permissao: 'vendas' as const },
-  { nome: 'Dar baixa em insumo', frase: 'Camisa lisa, papel, tinta, lona', icone: 'estoque', rota: ['insumos'], permissao: 'vendas' as const },
+  { nome: 'Usei (tirar) em insumo', frase: 'Camisa lisa, papel, tinta, lona', icone: 'estoque', rota: ['insumos'], permissao: 'vendas' as const },
   { nome: 'Cadastrar produto', frase: 'Produto ou serviço com opções e preços', icone: 'produtos', rota: ['produtos', 'novo'], permissao: 'produtos' as const },
   { nome: 'Criar anúncio', frase: 'Arte pronta para Instagram e WhatsApp', icone: 'anuncio', rota: ['anuncios'], permissao: 'anuncios' as const },
-  { nome: 'Lançar despesa', frase: 'O mesmo formulário de Contas e despesas', icone: 'carteira', rota: ['despesas'], pedido: { tela: 'despesas', modo: 'pago' } as Pedido, permissao: 'despesas' as const },
+  { nome: 'Lançar despesa', frase: 'Aluguel, energia, compra: o que pagou ou vai pagar', icone: 'carteira', rota: ['despesas'], pedido: { tela: 'despesas', modo: 'pago' } as Pedido, permissao: 'despesas' as const },
 ]
 
 export function FolhaAcoes({ s }: { s: Sessao }) {

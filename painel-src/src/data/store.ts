@@ -426,7 +426,7 @@ export const negocio = {
     gravar('compras', [...ler('compras'), compra])
     gravar('contas', [
       ...ler('contas'),
-      { id: contaId, tipo: 'pagar', descricao: `${f?.nome ?? 'Fornecedor'}, compra de insumos`, valor: total, vencimento, categoria: 'estoque', recorrencia: 'nenhuma' },
+      { id: contaId, tipo: 'pagar', descricao: `${f?.nome ?? 'Fornecedor'}, compra de material`, valor: total, vencimento, categoria: 'estoque', recorrencia: 'nenhuma' },
     ])
     gravar(
       'insumos',

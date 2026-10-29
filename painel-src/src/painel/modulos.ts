@@ -22,23 +22,23 @@ export type Modulo = {
 export type Grupo = 'operacao' | 'producao' | 'produtos' | 'financeiro' | 'relacionamento' | 'loja'
 
 export const GRUPOS: Record<Grupo, string> = {
-  operacao: 'Operação',
-  producao: 'Produção',
-  produtos: 'Produtos e insumos',
-  financeiro: 'Financeiro',
-  relacionamento: 'Relacionamento',
-  loja: 'Gráfica',
+  operacao: 'Dia a dia',
+  producao: 'Encomendas',
+  produtos: 'Produtos e material',
+  financeiro: 'Dinheiro',
+  relacionamento: 'Clientes e equipe',
+  loja: 'Ajustes',
 }
 
 export const MODULOS: Modulo[] = [
   {
     id: 'inicio',
     nome: 'Início',
-    frase: 'Faturamento, lucro, pedidos e o que pede atenção hoje.',
+    frase: 'Resumo: quanto vendeu, quanto sobrou e o que precisa de atenção hoje.',
     ajuda: [
-      'Troque o período no cabeçalho: Hoje, 7 dias, 30 dias, Este mês, Este ano, Desde o início ou datas suas.',
-      'A setinha verde ou vermelha compara com o período anterior do mesmo tamanho.',
-      'Lucro é o faturamento menos o custo dos produtos e as despesas da gráfica. Compra de insumo não entra no lucro, entra no Caixa.',
+      'Escolha de quando quer ver os números, no alto da tela: Hoje, 7 dias, Este mês…',
+      'A setinha verde ou vermelha mostra se melhorou ou piorou em relação ao período anterior.',
+      '“Lucro” é o que sobrou: o que vendeu, menos o que custou fazer, menos as contas da gráfica (aluguel, salários, energia).',
     ],
     icone: 'inicio',
     permissao: 'produtos',
@@ -46,51 +46,51 @@ export const MODULOS: Modulo[] = [
     etapa: 1,
     periodo: true,
   },
-  { id: 'pdv', nome: 'Balcão', frase: 'Venda rápida: cópia, impressão, plastificação e produtos prontos.', ajuda: ['Busque o produto, toque nele e escolha a opção. Mude a quantidade no carrinho.', "Para dividir o pagamento (parte no Pix, parte no cartão), toque em 'Dividir em duas formas'.", 'Pedido que precisa de arte ou produção não é feito aqui: abra em Pedidos.', 'Depois de finalizar, baixe o recibo em PDF e mande a mensagem pelo WhatsApp.'], icone: 'pdv', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
-  { id: 'vendas', nome: 'Vendas', frase: 'Vendas do balcão e pedidos entregues, com recibo.', ajuda: ['Busque pelo número, nome do cliente ou produto.', 'Toque na venda para baixar o recibo de novo, mandar no WhatsApp, cancelar ou registrar devolução.'], icone: 'vendas', permissao: 'vendas', grupo: 'operacao', etapa: 1, periodo: true },
+  { id: 'pdv', nome: 'Vender no balcão', curto: 'Vender', frase: 'Venda na hora: cópia, impressão, plastificação e produtos prontos.', ajuda: ['Digite o nome do produto (ex.: cópia), toque nele, escolha a opção e a quantidade.', 'O cliente vai pagar parte no Pix e parte no cartão? Toque em “Dividir em duas formas”.', 'O que precisa de arte ou de produção (camisa, banner, caneca) não é vendido aqui: abra em Pedidos.', 'Depois de finalizar, mande o recibo pelo WhatsApp ou baixe para imprimir.'], icone: 'pdv', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
+  { id: 'vendas', nome: 'Vendas feitas', curto: 'Vendas', frase: 'Tudo o que foi vendido, com o recibo de cada venda.', ajuda: ['Procure pelo número da venda, pelo nome do cliente ou pelo produto.', 'Toque na venda para mandar o recibo de novo, cancelar ou registrar que o cliente devolveu.'], icone: 'vendas', permissao: 'vendas', grupo: 'operacao', etapa: 1, periodo: true },
   {
     id: 'calendario',
     nome: 'Calendário',
-    frase: 'Entregas do mês e o que entrou e saiu em cada dia.',
-    ajuda: ['A cor do dia mostra o resultado: verde deu lucro, vermelho deu prejuízo. Quanto mais forte, maior o valor.', 'Os pontinhos marcam venda, despesa paga, conta a vencer e conta atrasada.', 'Use as setas do cabeçalho para ver outros meses.'],
+    frase: 'O mês num calendário: o que entrou e saiu de dinheiro em cada dia.',
+    ajuda: ['Verde: o dia deu lucro. Vermelho: deu prejuízo. Quanto mais forte a cor, maior o valor.', 'Os pontinhos mostram venda, conta paga, conta para vencer e conta atrasada.', 'Use as setas no alto para ver outros meses.'],
     icone: 'calendario',
     permissao: 'financeiro',
     grupo: 'operacao',
     etapa: 1,
   },
 
-  { id: 'pedidos', nome: 'Pedidos', frase: 'Quadro da produção, do pedido novo à entrega.', ajuda: ['Cada pedido anda no quadro: Novo pedido, Fazendo a arte, Aguardando aprovação, Em produção, Pronto e Entregue.', 'O botão do cartão leva para a próxima etapa e já abre a mensagem do WhatsApp para o cliente (arte para aprovar, pedido pronto).', 'Toque no pedido para ver a grade de tamanhos, as cores, as imagens que o cliente mandou e receber o sinal.', 'Na entrega, o resto é cobrado e o pedido vira venda.'], icone: 'os', permissao: 'vendas', grupo: 'producao', etapa: 1 },
-  { id: 'orcamentos', nome: 'Orçamentos', frase: 'Pedidos de orçamento do site e do WhatsApp, até virar pedido.', ajuda: ['Os pedidos feitos no site chegam aqui sozinhos, com tudo o que o cliente preencheu.', 'Responda com o valor e o prazo: o WhatsApp abre com a mensagem pronta.', 'Quando o cliente aprovar, toque em “Virou pedido”: ele entra no quadro de Pedidos.'], icone: 'mensagem', permissao: 'vendas', grupo: 'producao', etapa: 1 },
-  { id: 'producao', nome: 'Fila de produção', curto: 'Produção', frase: 'O que cada máquina tem para fazer, pelo prazo.', ajuda: ['Cada setor (sublimação, DTF, silk, impressão, plotter…) mostra os pedidos em produção, do prazo mais curto ao mais longo.', 'Vermelho é atrasado; amarelo vence hoje ou amanhã.', 'Toque em “Pronto” quando terminar: o pedido anda no quadro e o cliente pode ser avisado.'], icone: 'pincel', permissao: 'vendas', grupo: 'producao', etapa: 1 },
+  { id: 'pedidos', nome: 'Pedidos', frase: 'Encomendas, do pedido novo até a entrega ao cliente.', ajuda: ['Cada pedido passa pelas colunas, da esquerda para a direita: Novo, Fazendo a arte, Esperando o cliente aprovar, Produzindo, Pronto e Entregue.', 'O botão embaixo de cada pedido leva para a próxima etapa e já prepara a mensagem do WhatsApp para o cliente.', 'Toque no pedido para ver os tamanhos, as cores, as imagens do cliente e receber a entrada (sinal).', 'Na entrega, você recebe o que falta e o pedido entra nas Vendas.'], icone: 'os', permissao: 'vendas', grupo: 'producao', etapa: 1 },
+  { id: 'orcamentos', nome: 'Orçamentos', frase: 'Clientes pedindo preço, pelo site e pelo WhatsApp.', ajuda: ['Quem pede preço pelo site aparece aqui sozinho, com tudo o que preencheu.', 'Toque em “Responder”, ponha o valor e o prazo: o WhatsApp abre com a mensagem pronta.', 'O cliente topou? Toque em “Cliente fechou” e ele vira um pedido.'], icone: 'mensagem', permissao: 'vendas', grupo: 'producao', etapa: 1 },
+  { id: 'producao', nome: 'O que produzir', curto: 'Produzir', frase: 'O que tem para fazer, do mais urgente para o menos urgente.', ajuda: ['Escolha a parte da gráfica (impressão, estampa, recorte…) para ver só o que é dela.', 'Vermelho é atrasado. O que vence primeiro fica em cima.', 'Terminou? Toque em “Terminei: pronto”. O pedido anda e o cliente pode ser avisado.'], icone: 'pincel', permissao: 'vendas', grupo: 'producao', etapa: 1 },
 
   {
     id: 'produtos',
     nome: 'Produtos e preços',
     curto: 'Produtos',
-    frase: 'Tabela de preços, opções, custo e prazo de cada produto.',
+    frase: 'O que a gráfica vende, com preço, opções e prazo.',
     ajuda: [
-      'Toque num produto para mudar preço, custo e opções.',
-      'Desligar um produto tira ele do balcão sem apagar.',
-      'Reajuste vários de uma vez marcando e escolhendo a %.',
+      'Toque num produto para mudar o preço, o custo e as opções.',
+      'Não quer vender um produto por um tempo? Desative em “…”: ele some do balcão sem ser apagado.',
+      'Para aumentar o preço de vários de uma vez, use “Preços em lista”, marque os produtos e escolha a %.',
     ],
     icone: 'produtos',
     permissao: 'produtos',
     grupo: 'produtos',
     etapa: 1,
   },
-  { id: 'insumos', nome: 'Insumos', frase: 'Camisas lisas, papel, tinta, canecas, lona: o que tem e o que comprar.', ajuda: ['Vermelho é o que está abaixo do mínimo: precisa comprar.', 'Toque no + ou no − para dar entrada ou baixa rápida.', 'Para comprar com nota e conta a pagar, use Compras e fornecedores.'], icone: 'estoque', permissao: 'produtos', grupo: 'produtos', etapa: 1 },
-  { id: 'compras', ajuda: ['Escolha o fornecedor, os insumos e as quantidades.', 'O custo médio do insumo se ajusta sozinho e a conta a pagar é criada no prazo do fornecedor.'], nome: 'Compras e fornecedores', curto: 'Compras', frase: 'Entrada de insumos com custo médio e conta a pagar.', icone: 'compras', permissao: 'custo', grupo: 'produtos', etapa: 1 },
+  { id: 'insumos', nome: 'Material em estoque', curto: 'Material', frase: 'Camisa lisa, papel, tinta, caneca, lona: o que tem e o que precisa comprar.', ajuda: ['“Comprar” aparece no que está acabando.', 'Toque no material para tirar o que foi usado ou somar o que chegou.', 'Comprou do fornecedor? Registre em “Compras”: o estoque soma e a conta a pagar já fica marcada.'], icone: 'estoque', permissao: 'produtos', grupo: 'produtos', etapa: 1 },
+  { id: 'compras', ajuda: ['Chegou material? Toque em “Chegou material”, escolha o fornecedor, o material e a quantidade.', 'O estoque soma sozinho e a conta a pagar é marcada para o dia que o fornecedor dá.'], nome: 'Compras de material', curto: 'Compras', frase: 'O que chegou dos fornecedores e quanto ainda falta pagar.', icone: 'compras', permissao: 'custo', grupo: 'produtos', etapa: 1 },
 
-  { id: 'despesas', ajuda: ["“Já paguei” lança a despesa na hora. “Conta a pagar” agenda e avisa no sino quando vence.","Ao marcar uma conta como paga, ela vira despesa. Conta que repete todo mês já agenda a próxima.","Compra de insumo fica fora do lucro: ela vira custo quando o produto é vendido."], nome: 'Contas e despesas', frase: 'A pagar, a receber e o que já saiu.', icone: 'carteira', permissao: 'despesas', grupo: 'financeiro', etapa: 1, periodo: true },
-  { id: 'metas', ajuda: ["A projeção é o ritmo do mês até hoje levado até o último dia.","A barrinha escura mostra quanto do mês já passou: se a barra colorida está à frente, a meta está no ritmo.","A meta de cada atendente fica em Equipe e comissões."], nome: 'Metas', frase: 'Meta do mês e projeção de fechamento.', icone: 'meta', permissao: 'financeiro', grupo: 'financeiro', etapa: 1 },
-  { id: 'relatorios', ajuda: ["Escolha o relatório à esquerda (no celular, em cima) e o período no cabeçalho.","“Baixar para imprimir” serve para guardar e imprimir; “Baixar planilha”, para o contador.","Toque no título de uma coluna para ordenar."], nome: 'Relatórios', frase: 'Vendas dia a dia, lucro por produto, pedidos, formas e resumo.', icone: 'relatorio', permissao: 'financeiro', grupo: 'financeiro', etapa: 1, periodo: true },
+  { id: 'despesas', ajuda: ["“Já paguei” registra o gasto na hora. “Conta a pagar” guarda para depois e avisa no sino quando estiver vencendo.","Conta que se repete todo mês (aluguel, energia) já deixa a do mês seguinte marcada.","Compra de material não diminui o lucro na hora: ela conta quando o produto feito com ele é vendido."], nome: 'Contas a pagar', curto: 'Contas', frase: 'Aluguel, energia, salários: o que já pagou e o que vai vencer.', icone: 'carteira', permissao: 'despesas', grupo: 'financeiro', etapa: 1, periodo: true },
+  { id: 'metas', ajuda: ["A previsão é quanto o mês vai fechar se continuar vendendo no ritmo de hoje.","A barrinha escura mostra quanto do mês já passou. Se a barra colorida estiver na frente, está no caminho certo.","A meta de cada funcionário fica em Funcionários."], nome: 'Metas do mês', curto: 'Metas', frase: 'Quanto quer vender no mês e se vai chegar lá.', icone: 'meta', permissao: 'financeiro', grupo: 'financeiro', etapa: 1 },
+  { id: 'relatorios', ajuda: ["Escolha o relatório na lista e o período no alto da tela.","“Baixar para imprimir” gera um PDF. “Baixar planilha” gera um arquivo para o contador.","Toque no nome de uma coluna para colocar em ordem."], nome: 'Relatórios', frase: 'Os números do período para imprimir ou mandar para o contador.', icone: 'relatorio', permissao: 'financeiro', grupo: 'financeiro', etapa: 1, periodo: true },
 
   { id: 'anuncios', ajuda: ['Escolha o modelo olhando as prévias: oferta, promoção, feito aqui, tabela de preços, pronto rápido, data comemorativa ou aviso.', 'Troque a foto pelas fotos dos trabalhos ou use uma sua do celular.', 'Baixe a imagem e copie a legenda: é só postar no Instagram ou no status do WhatsApp.', 'O preço da arte é o preço de agora em Produtos.'], nome: 'Criar anúncio', curto: 'Anúncios', frase: 'Artes prontas para Instagram e WhatsApp, em vários modelos.', icone: 'anuncio', permissao: 'anuncios', grupo: 'relacionamento', etapa: 1 },
-  { id: 'clientes', ajuda: ["Toque numa lista (empresas e times, aniversário, sumidos) para ver quem está nela.","O botão do WhatsApp ao lado de cada pessoa abre a mensagem pronta daquela lista.","Toque no cliente para ver a ficha com tudo o que ele comprou e os pedidos."], nome: 'Clientes', frase: 'Ficha do cliente, pedidos e listas inteligentes.', icone: 'cliente', permissao: 'vendas', grupo: 'relacionamento', etapa: 1 },
-  { id: 'equipe', ajuda: ["A comissão é a % do valor vendido em cada linha (impressos, camisas, brindes, comunicação visual e design).","A meta do período é a meta do mês proporcional aos dias escolhidos.","Toque no lápis para mudar a meta ou a comissão de alguém."], nome: 'Equipe e comissões', frase: 'Pessoas, acesso, meta, comissão e ranking.', icone: 'equipe', permissao: 'financeiro', grupo: 'relacionamento', etapa: 1, periodo: true },
+  { id: 'clientes', ajuda: ["Toque numa lista (empresas e times, aniversário, sumidos) para ver quem está nela.","O botão do WhatsApp ao lado de cada pessoa abre a mensagem pronta daquela lista.","Toque no cliente para ver a ficha com tudo o que ele comprou e os pedidos."], nome: 'Clientes', frase: 'Cada cliente, o que comprou e listas para chamar no WhatsApp.', icone: 'cliente', permissao: 'vendas', grupo: 'relacionamento', etapa: 1 },
+  { id: 'equipe', ajuda: ["A comissão é uma % do que cada um vendeu, separada por tipo de produto (impressos, camisas, brindes…).","Toque no lápis para mudar a meta ou a comissão de alguém.","Lá embaixo você escolhe quem pode entrar no painel."], nome: 'Funcionários e comissões', curto: 'Funcionários', frase: 'Quem trabalha na gráfica, quanto vendeu, meta, comissão e acesso ao painel.', icone: 'equipe', permissao: 'financeiro', grupo: 'relacionamento', etapa: 1, periodo: true },
 
-  { id: 'loja', ajuda: ["Informações e horário da gráfica aparecem no recibo e nas mensagens.","Pagamento muda o parcelamento no balcão.","Baixe a cópia de segurança de vez em quando e guarde no Drive.","Toda mudança em produto fica no Histórico e pode ser desfeita."], nome: 'Configurações da gráfica', curto: 'Configurações', frase: 'Pagamento, sinal, histórico e cópia de segurança.', icone: 'engrenagem', permissao: 'configuracoes', grupo: 'loja', etapa: 1 },
-  { id: 'comissao', nome: 'Minha comissão', frase: 'Quanto você vendeu e quanto ganhou de comissão no mês.', ajuda: ['A comissão conta as vendas em que você é o atendente, no mês de agora.', 'A barra mostra quanto falta para a sua meta do mês.'], icone: 'carteira', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
+  { id: 'loja', ajuda: ["Endereço, WhatsApp e horário da gráfica aparecem no recibo e nas mensagens.","Em “Pagamento” você muda o parcelamento e a % de entrada dos pedidos.","Baixe a cópia de segurança de vez em quando e guarde no Google Drive.","Mudou um produto e se arrependeu? Em “O que foi mudado” dá para voltar como estava."], nome: 'Configurações', frase: 'Dados da gráfica, formas de pagamento, entrada dos pedidos e cópia de segurança.', icone: 'engrenagem', permissao: 'configuracoes', grupo: 'loja', etapa: 1 },
+  { id: 'comissao', nome: 'Minha comissão', frase: 'Quanto você vendeu e quanto ganhou de comissão no mês.', ajuda: ['A comissão conta as vendas em que você atendeu, no mês de agora.', 'A barra mostra quanto falta para a sua meta do mês.'], icone: 'carteira', permissao: 'vendas', grupo: 'operacao', etapa: 1 },
 ]
 
 /** O que o funcionário vê, nesta ordem. O resto (financeiro, site, configurações) nem aparece. */

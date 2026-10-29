@@ -351,7 +351,7 @@ export default function Pdv({ s }: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Balcão" sub={`Venda nº ${proximo}. Atendente: ${vendedor?.nome ?? '—'}.`} />
+      <Topo titulo="Vender no balcão" sub={`Venda nº ${proximo}. Atendente: ${vendedor?.nome ?? '—'}.`} />
       <div className="pdv">
         <div className="pdv-esq">
           <section className="painel busca-grande">

@@ -176,7 +176,7 @@ function Formulario({ inicial, novo, s }: { inicial: PProduto; novo: boolean; s:
               </div>
             </div>
             <label className="campo">
-              <span>Grupo no catálogo</span>
+              <span>Grupo (para organizar a lista)</span>
               <select value={p.linha} onChange={(e) => mudar({ linha: e.target.value })}>
                 {linhasMarca.map((l) => (
                   <option key={l.id} value={l.id}>
@@ -226,7 +226,7 @@ function Formulario({ inicial, novo, s }: { inicial: PProduto; novo: boolean; s:
             <Interruptor ligado={p.controlaEstoque} mudar={(controlaEstoque) => mudar({ controlaEstoque })}>
               <span>
                 <strong>Pronta entrega (conta estoque)</strong>
-                <small>Desligado: é feito sob encomenda, por pedido. A matéria-prima fica em Insumos.</small>
+                <small>Desligado: é feito sob encomenda, por pedido. O material usado fica em “Material em estoque”.</small>
               </span>
             </Interruptor>
           </section>
@@ -260,7 +260,7 @@ function Formulario({ inicial, novo, s }: { inicial: PProduto; novo: boolean; s:
                         <span className="grade-preco">
                           <em className="grade-mini">Custo</em>
                           <CampoDinheiro valor={v.custo} mudar={(custo) => mudarVar(c.nome, { custo })} rotulo={`Custo, ${c.nome}`} compacto />
-                          {lucro !== null && <small className={lucro < 0 ? 'neg' : ''}>margem {Math.round(lucro * 100)}%</small>}
+                          {lucro !== null && <small className={lucro < 0 ? 'neg' : ''}>lucro de {Math.round(lucro * 100)}%</small>}
                         </span>
                       )}
                       <span className="grade-estoque">
@@ -288,7 +288,7 @@ function Formulario({ inicial, novo, s }: { inicial: PProduto; novo: boolean; s:
           </section>
 
           <section className="bloco">
-            <h2>Selos no cartão</h2>
+            <h2>Etiqueta de destaque</h2>
             <div className="chips">
               {SELOS.map((x) => {
                 const tem = p.selos.includes(x.id)

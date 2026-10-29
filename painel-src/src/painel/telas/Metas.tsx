@@ -27,12 +27,12 @@ export default function Metas(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Metas" sub={`Hoje ${pct(passou, 0)} de ${nomeMes(mes)} passou. A projeção segue o ritmo do mês até aqui.`} />
+      <Topo titulo="Metas do mês" sub={`Hoje ${pct(passou, 0)} de ${nomeMes(mes)} passou. A previsão mostra como o mês fecha se continuar nesse ritmo.`} />
       {atual && (
         <section className="metas-3">
           {(
             [
-              ['faturamento', 'Faturamento', true],
+              ['faturamento', 'Vendas (R$)', true],
               ['lucro', 'Lucro', true],
               ['vendas', 'Vendas', false],
             ] as const
@@ -83,7 +83,7 @@ export default function Metas(_: { s: Sessao }) {
         <section className="painel">
           <div className="painel-t">
             <h3>Meses anteriores</h3>
-            <span className="mut">meta de faturamento</span>
+            <span className="mut">meta de vendas</span>
           </div>
           <ul className="det-itens">
             {passadas.map((m) => {
@@ -116,8 +116,8 @@ function EditarMeta({ mes, m, rotulo, sugestao }: { mes: string; m?: Meta; rotul
       <p className="det-rot">{rotulo}</p>
       <div className="form-g form-g--3">
         <label className="campo">
-          Faturamento
-          <CampoDinheiro rotulo={`Meta de faturamento de ${rotulo}`} valor={x.faturamento} mudar={(v) => setX({ ...x, faturamento: v })} />
+          Meta de vendas (R$)
+          <CampoDinheiro rotulo={`Meta de vendas de ${rotulo}`} valor={x.faturamento} mudar={(v) => setX({ ...x, faturamento: v })} />
         </label>
         <label className="campo">
           Lucro

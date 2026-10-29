@@ -94,7 +94,7 @@ export default function Calendario(_: { s: Sessao }) {
       </Topo>
 
       <section className="kpis-menores" aria-label="Totais do mês">
-        <MiniKpi rotulo="Faturamento" valor={'R$ ' + brl(fat)} nota={fatAnt ? `${fat >= fatAnt ? '+' : '−'}${pct(Math.abs(variacao(fat, fatAnt) ?? 0))} que ${nomeMes(antDe)}` : undefined} classe={fat >= fatAnt ? 'sobe' : 'desce'} />
+        <MiniKpi rotulo="Total vendido" valor={'R$ ' + brl(fat)} nota={fatAnt ? `${fat >= fatAnt ? '+' : '−'}${pct(Math.abs(variacao(fat, fatAnt) ?? 0))} que ${nomeMes(antDe)}` : undefined} classe={fat >= fatAnt ? 'sobe' : 'desce'} />
         <MiniKpi rotulo="Lucro" valor={(lucro < 0 ? '−R$ ' : 'R$ ') + brl(Math.abs(lucro))} nota={`${comLucro} dias com lucro, ${noVermelho} no vermelho`} />
         <MiniKpi rotulo="Melhor dia" valor={melhor && melhor.fat ? `${SEMANA_LONGA[new Date(melhor.dia + 'T12:00:00Z').getUTCDay()].slice(0, 3)}, ${Number(melhor.dia.slice(8))}` : '—'} nota={melhor && melhor.fat ? `R$ ${brl(melhor.fat)} em ${melhor.vendas} vendas` : undefined} />
       </section>
@@ -123,7 +123,7 @@ export default function Calendario(_: { s: Sessao }) {
                   className={cls}
                   style={{ '--hc': cor, '--ho': forca } as CSSProperties}
                   aria-pressed={d.dia === sel}
-                  aria-label={`${mostrarSel(d.dia)}: ${d.fat ? `R$ ${brl(d.fat)} de faturamento` : 'sem vendas'}${d.pagar ? `, R$ ${brl(d.pagar)} a pagar` : ''}`}
+                  aria-label={`${mostrarSel(d.dia)}: ${d.fat ? `R$ ${brl(d.fat)} vendidos` : 'sem vendas'}${d.pagar ? `, R$ ${brl(d.pagar)} a pagar` : ''}`}
                   onClick={() => setSel(d.dia)}
                 >
                   <span className="n">{Number(d.dia.slice(8))}</span>
@@ -168,7 +168,7 @@ export default function Calendario(_: { s: Sessao }) {
           </div>
           <div className="det-num">
             <div>
-              <p>Faturamento</p>
+              <p>Vendido</p>
               <b>R$ {brl(diaSel?.fat ?? 0)}</b>
             </div>
             <div>
@@ -230,7 +230,7 @@ export default function Calendario(_: { s: Sessao }) {
                 </span>
                 <span className="agenda-txt">
                   <strong>{d.descricao}</strong>
-                  <span>{d.categoria === 'estoque' ? 'Compra de estoque (fica fora do lucro)' : 'Despesa da loja'}</span>
+                  <span>{d.categoria === 'estoque' ? 'Compra de material (não diminui o lucro na hora)' : 'Conta da gráfica'}</span>
                 </span>
                 <span className="val sai">− R$ {brl(d.valor)}</span>
               </li>

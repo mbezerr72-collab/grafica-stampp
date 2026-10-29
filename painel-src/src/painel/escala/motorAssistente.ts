@@ -142,7 +142,7 @@ export const motorLocal: Motor = async (pergunta, s) => {
     if (p) return { texto: `${p.nome} é feito sob encomenda: não tem estoque, o que conta são os insumos.`, link: { rotulo: 'Insumos', rota: 'insumos' } }
     const baixo = insumos.filter((x) => x.estoque < x.minimo)
     return {
-      texto: baixo.length ? `${baixo.length} ${baixo.length === 1 ? 'insumo está abaixo' : 'insumos estão abaixo'} do mínimo:` : 'Todos os insumos estão acima do mínimo.',
+      texto: baixo.length ? `${baixo.length} ${baixo.length === 1 ? 'insumo está abaixo' : 'insumos estão abaixo'} do mínimo:` : 'Todo o material estão acima do mínimo.',
       itens: baixo.slice(0, 8).map((x) => `${x.nome}: ${x.estoque.toLocaleString('pt-BR')} ${x.unidade} (mínimo ${x.minimo})`),
       link: { rotulo: 'Insumos', rota: 'insumos' },
     }
@@ -162,7 +162,7 @@ export const motorLocal: Motor = async (pergunta, s) => {
     const per = periodoDa(q)
     const iv = intervalo({ tipo: per.tipo })
     const l = porProduto(noPeriodo(vendas, iv.de, iv.ate)).sort((a, b) => b.fat - a.fat).slice(0, 5)
-    return { texto: `O que mais vendeu ${per.nome}, por faturamento:`, itens: l.map((x) => `${x.nome}: ${x.un} un, ${brl(x.fat)}`) }
+    return { texto: `O que mais vendeu ${per.nome}, em reais:`, itens: l.map((x) => `${x.nome}: ${x.un} un, ${brl(x.fat)}`) }
   }
 
   // ── Contas ──
@@ -202,8 +202,8 @@ export const motorLocal: Motor = async (pergunta, s) => {
     const iv = ontem ? { de: somaDias(h, -1), ate: somaDias(h, -1) } : intervalo({ tipo: per.tipo })
     const r = resumo(vendas, despesas, iv.de, iv.ate)
     const itens = [`${r.vendas} vendas, ticket médio de ${brl(r.ticket)}`]
-    if (dono) itens.push(`Lucro: ${brl(r.lucro)} (faturamento − custo − despesas da gráfica)`, `Caixa: ${brl(r.caixa)} (entrou − saiu, com compra de insumos)`)
-    return { texto: `Faturamento ${per.nome}: ${brl(r.faturamento)}.`, itens, link: { rotulo: 'Ver no Início', rota: 'inicio' } }
+    if (dono) itens.push(`Lucro: ${brl(r.lucro)} (vendido − custo − contas da gráfica)`, `Saldo: ${brl(r.caixa)} (entrou − saiu, com compra de material)`)
+    return { texto: `Vendido ${per.nome}: ${brl(r.faturamento)}.`, itens, link: { rotulo: 'Ver no Início', rota: 'inicio' } }
   }
 
   if (tem(q, 'oi', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'ajuda')) return { texto: `Oi! Pergunte sobre vendas, lucro, pedidos, orçamentos, insumos, contas, metas ou aniversários. Também posso preparar um reajuste ou uma promoção para você confirmar.`, itens: SUGESTOES }

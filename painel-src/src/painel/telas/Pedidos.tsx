@@ -97,7 +97,7 @@ export default function Pedidos({ id }: { s: Sessao; id?: string }) {
                 {diasEntre(o.prazo, h) - 1 || 1} dia{diasEntre(o.prazo, h) - 1 > 1 ? 's' : ''} atrasado
               </span>
             ) : o.status === 'pronto' || o.status === 'aprovacao' ? (
-              <span className={'pill ' + (avisado ? 'ent' : 'ate')}>{avisado ? 'avisado' : 'não avisado'}</span>
+              <span className={'pill ' + (avisado ? 'ent' : 'ate')}>{avisado ? 'cliente avisado' : 'falta avisar'}</span>
             ) : o.status !== 'entregue' ? (
               <span className="pill neu">prazo {quando(o.prazo, h) === 'hoje' ? 'hoje' : `${o.prazo.slice(8)}/${o.prazo.slice(5, 7)}`}</span>
             ) : null}
@@ -108,7 +108,7 @@ export default function Pedidos({ id }: { s: Sessao; id?: string }) {
           </span>
           <span className="os-val num">
             R$ {brl(totalPedido(o))}
-            {o.sinal > 0 && o.status !== 'entregue' ? ` · sinal R$ ${brl(o.sinal)}` : ''}
+            {o.sinal > 0 && o.status !== 'entregue' ? ` · entrada R$ ${brl(o.sinal)}` : ''}
           </span>
         </button>
         {prox && (
@@ -123,7 +123,7 @@ export default function Pedidos({ id }: { s: Sessao; id?: string }) {
 
   return (
     <>
-      <Topo titulo="Pedidos" sub="Do pedido novo à entrega. Cada mudança de etapa já prepara a mensagem do WhatsApp.">
+      <Topo titulo="Pedidos" sub="Encomendas, do pedido novo até a entrega. Cada vez que o pedido anda, a mensagem do WhatsApp já fica pronta.">
         <Baixar rel={() => relPedidos(pedidos, clientes, somaDias(h, -89), h, 'Últimos 90 dias. Gráfica Estamp.')} />
         <button type="button" className="bt bt-forte acao-principal" onClick={() => setNovo({})}>
           <Icone nome="somar" tamanho={18} />
@@ -256,7 +256,7 @@ function Entregar({ o, fechar }: { o: Pedido; fechar: (ok?: boolean) => void }) 
   return (
     <Gaveta
       titulo={`Entregar o pedido ${o.numero}`}
-      sub={`${titulo(o)}. Total R$ ${brl(totalPedido(o))}${o.sinal ? `, sinal de R$ ${brl(o.sinal)} já pago` : ''}.`}
+      sub={`${titulo(o)}. Total R$ ${brl(totalPedido(o))}${o.sinal ? `, entrada de R$ ${brl(o.sinal)} já paga` : ''}.`}
       fechar={() => fechar()}
       pe={
         <button type="button" className="btn btn-p" onClick={entregar}>
@@ -276,7 +276,7 @@ function Entregar({ o, fechar }: { o: Pedido; fechar: (ok?: boolean) => void }) 
         ))}
         {o.sinal > 0 && (
           <li>
-            <span>Sinal pago</span>
+            <span>Entrada já paga</span>
             <span className="num">− R$ {brl(o.sinal)}</span>
           </li>
         )}
@@ -303,7 +303,7 @@ function Entregar({ o, fechar }: { o: Pedido; fechar: (ok?: boolean) => void }) 
           )}
         </div>
       )}
-      <p className="mut pequeno">O pedido vira venda (entra no faturamento e nos relatórios).</p>
+      <p className="mut pequeno">O pedido entra nas vendas e nos relatórios.</p>
     </Gaveta>
   )
 }
@@ -447,7 +447,7 @@ function DetalhePedido({ o, fechar, mudar, responsavel }: { o: Pedido; fechar: (
             <span className="num">R$ {brl(total)}</span>
           </li>
           <li>
-            <span>Sinal recebido{o.formaSinal ? ` (${NOMES_FORMA[o.formaSinal]})` : ''}</span>
+            <span>Entrada recebida{o.formaSinal ? ` (${NOMES_FORMA[o.formaSinal]})` : ''}</span>
             <span className="num">R$ {brl(o.sinal)}</span>
           </li>
           <li className="det-total">
@@ -457,8 +457,8 @@ function DetalhePedido({ o, fechar, mudar, responsavel }: { o: Pedido; fechar: (
         </ul>
         {!o.vendaId && o.sinal < total && (
           <div className="cli-novo-acoes">
-            <CampoDinheiro compacto rotulo="Valor do sinal" valor={sinal || Math.round((total * pct) / 100)} mudar={setSinal} />
-            <select aria-label="Forma do sinal" value={forma} onChange={(e) => setForma(e.target.value as FormaPag)}>
+            <CampoDinheiro compacto rotulo="Valor da entrada" valor={sinal || Math.round((total * pct) / 100)} mudar={setSinal} />
+            <select aria-label="Como pagou a entrada" value={forma} onChange={(e) => setForma(e.target.value as FormaPag)}>
               {(Object.keys(NOMES_FORMA) as FormaPag[]).map((f) => (
                 <option key={f} value={f}>
                   {NOMES_FORMA[f]}
@@ -471,11 +471,11 @@ function DetalhePedido({ o, fechar, mudar, responsavel }: { o: Pedido; fechar: (
               onClick={() => {
                 const v = sinal || Math.round((total * pct) / 100)
                 negocio.receberSinal(o.id, Math.min(v, total - o.sinal), forma)
-                avisar(`Sinal de R$ ${brl(v)} recebido.`)
+                avisar(`Entrada de R$ ${brl(v)} recebida.`)
                 setSinal(0)
               }}
             >
-              Receber sinal
+              Receber entrada
             </button>
           </div>
         )}
