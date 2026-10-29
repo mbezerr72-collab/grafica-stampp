@@ -1,0 +1,542 @@
+/* Menu fixo, atalhos de venda, seção Xiaomi, catálogo, painel do produto e lista de interesse.
+   Usa os tokens de styles.css. O amarelo continua só como etiqueta de preço. */
+
+:root { --menu-h: 56px; }
+
+/* ---------------- Menu fixo ---------------- */
+.topmenu {
+  position: fixed; z-index: 40; inset: 0 0 auto;
+  display: flex; align-items: center; gap: 20px;
+  height: calc(var(--menu-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) var(--gutter-r) 0 var(--gutter);
+  background: var(--night); color: var(--night-ink);
+  box-shadow: 0 1px 0 rgba(233, 230, 223, .08);
+  transform: translateY(-100%); transition: transform .45s var(--ease-out);
+}
+.topmenu[data-visible="true"] { transform: none; }
+.topmenu-mark { font-stretch: var(--wide); font-weight: 800; letter-spacing: -.02em; flex: none; }
+.topmenu-mark span { color: var(--tag); }
+.topmenu-items { display: flex; gap: 4px; margin: 0 auto 0 12px; padding: 0; list-style: none; min-width: 0; }
+.topmenu-items :is(button, a) {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px;
+  background: none; border: 0; border-radius: 999px; color: var(--night-ink);
+  font: 500 .9375rem/1 var(--font); text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.topmenu-items :is(button, a):hover { background: rgba(233, 230, 223, .08); }
+.cta-sm { min-height: 40px; padding: 0 16px; font-size: .875rem; }
+.cta-wa { background: var(--night-ink); color: var(--ink); }
+.topmenu-wa { flex: none; }
+.topmenu-open {
+  display: none; align-items: center; min-height: 40px; padding: 0 18px; border: 1px solid rgba(233, 230, 223, .35); border-radius: 999px;
+  background: none; color: var(--night-ink); font: 600 .9375rem/1 var(--font); cursor: pointer;
+}
+/* Gaveta do menu (celular): desce do topo, um item por linha. */
+.menu-sheet {
+  inset: 0 0 auto; width: 100vw; max-width: 100vw; margin: 0; padding: 0 var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter);
+  border: 0; border-radius: 0 0 18px 18px; background: var(--night); color: var(--night-ink);
+}
+.menu-sheet::backdrop { background: rgba(14, 16, 19, .6); }
+.menu-sheet-head { display: flex; justify-content: space-between; align-items: center; height: calc(var(--menu-h) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
+.menu-sheet-close { min-height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--night-ink); color: var(--ink); font: 600 .9375rem/1 var(--font); cursor: pointer; }
+.menu-sheet-list { margin: 8px 0 18px; padding: 0; list-style: none; }
+.menu-sheet-list button {
+  display: block; width: 100%; padding: 14px 0; border: 0; border-bottom: 1px solid rgba(233, 230, 223, .12); background: none;
+  color: inherit; text-align: left; font: 800 1.5rem/1.1 var(--font); font-stretch: var(--wide); letter-spacing: -.02em; cursor: pointer;
+}
+.menu-sheet-wa { width: 100%; justify-content: center; }
+
+/* ---------------- Atalho de venda ---------------- */
+.shortcut {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px;
+  padding: clamp(40px, 8vh, 80px) var(--gutter-r) clamp(40px, 8vh, 80px) var(--gutter);
+  background: var(--paper); color: var(--ink);
+}
+.shortcut[data-tom="escuro"] { background: var(--night); color: var(--night-ink); }
+.shortcut-link {
+  padding: 4px 0; text-align: left; background: none; border: 0; color: inherit; cursor: pointer;
+  font: 800 clamp(1.7rem, 3.6vw, 3rem)/1 var(--font); font-stretch: var(--wide); letter-spacing: -.03em;
+  text-decoration: underline; text-decoration-color: var(--tag); text-decoration-thickness: .14em; text-underline-offset: .16em;
+}
+.shortcut-link span { display: inline-block; transition: transform .25s var(--ease-out); }
+.shortcut-link:hover span { transform: translateX(6px); }
+.shortcut-meta { font-size: var(--t-small); opacity: .75; }
+
+/* ---------------- Xiaomi: dentro da lente ---------------- */
+.xiaomi { --iris: 0; position: relative; background: var(--night); color: var(--night-ink); }
+.xiaomi-pin {
+  position: relative; height: 100svh; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 24px;
+  padding: 0 var(--gutter-r) 0 var(--gutter);
+}
+/* A traseira real do 17T Pro, à direita. O zoom cresce a partir da lente principal. */
+.xiaomi-stage { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.xiaomi-phone {
+  position: absolute; right: 13%; top: 50%; height: 74%; aspect-ratio: 575 / 1200; margin-top: -37svh;
+  transform-origin: 23% 10.8%; will-change: transform;
+}
+.xiaomi-phone img { display: block; width: 100%; height: 100%; filter: drop-shadow(0 34px 34px rgba(0, 0, 0, .6)); user-select: none; }
+/* Diafragma: a borda escurece nos últimos passos da entrada na lente. */
+.xiaomi-iris {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: var(--iris);
+  background: radial-gradient(circle at 50% 50%, transparent calc(62% - var(--iris) * 58%), #050506 calc(64% - var(--iris) * 54%));
+}
+.xiaomi[data-step="2"] .xiaomi-iris { opacity: 0; }
+.xiaomi[data-step="2"] .xiaomi-stage { visibility: hidden; }
+/* O texto fica numa área escura sólida, acima do zoom e do diafragma: sempre legível. */
+.xiaomi-copy {
+  position: relative; z-index: 3; background: var(--night); border-radius: 18px; padding: 22px 24px; margin-left: -24px; grid-column: 1; align-self: center; display: grid; gap: 28px;
+  padding-top: var(--menu-h);
+  transition: opacity .3s;
+}
+.xiaomi[data-step="2"] .xiaomi-copy { opacity: 0; }
+.xiaomi-title {
+  margin: 0; max-width: 11em;
+  font-stretch: var(--wide); font-weight: 800; font-size: clamp(2rem, min(4.2vw, 7vh), 4.6rem);
+  line-height: .92; letter-spacing: -.035em; text-wrap: balance;
+}
+.xiaomi-flash { position: absolute; inset: 0; z-index: 5; background: #fff; pointer-events: none; animation: flash .6s ease-out forwards; }
+@keyframes flash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Depois do flash: a prateleira da vitrine, direto sobre o fundo escuro, com o spot de cima. */
+.xi-shelf {
+  --tag-zona: 150px; /* barbante + etiqueta, embaixo da prateleira */
+  position: absolute; inset: 0; z-index: 4; display: grid; grid-template-rows: minmax(0, 1fr) auto; align-items: end;
+  padding: calc(var(--menu-h) + 3vh) var(--gutter-r) clamp(16px, 3.5vh, 32px) var(--gutter);
+  opacity: 0; visibility: hidden; transition: opacity .5s var(--ease-out) .15s, visibility 0s .65s;
+}
+.xi-shelf[data-show="true"] { opacity: 1; visibility: visible; transition-delay: .15s, 0s; }
+/* O mesmo cone de luz do hero, apontado para a prateleira. */
+.xi-spot {
+  position: absolute; inset: 0 0 0 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(233, 230, 223, .1), rgba(233, 230, 223, 0) 85%);
+  clip-path: polygon(40% 0, 60% 0, 96% 100%, 4% 100%);
+}
+.xi-row {
+  position: relative; display: flex; justify-content: center; align-items: flex-end; gap: clamp(20px, 4.5vw, 72px);
+  margin: 0; padding: 0; list-style: none;
+}
+/* Prateleira de vidro/acrílico: uma faixa fina com brilho na borda da frente. */
+.xi-row::before {
+  content: ""; position: absolute; left: 50%; translate: -50% 0; width: min(1120px, 100%); height: 12px;
+  bottom: var(--tag-zona);
+  background: linear-gradient(180deg, rgba(233, 230, 223, .28), rgba(233, 230, 223, .06) 60%, rgba(233, 230, 223, .14));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 18px 30px -12px rgba(0, 0, 0, .9);
+  border-radius: 2px;
+}
+.xi-row li { position: relative; display: grid; justify-items: center; }
+.xi-item { position: relative; display: block; padding: 0; background: none; border: 0; cursor: pointer; border-radius: 10px; }
+.xi-phone, .xi-reflex { display: block; }
+.xi-phone .art-svg { display: block; width: auto; height: var(--h); filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .55)); transition: transform .35s var(--ease-out); }
+/* Do menor (Redmi A5) ao maior (17T Pro), alinhados pela base. */
+.xi-row li:nth-child(1) { --h: clamp(110px, 21vh, 190px); }
+.xi-row li:nth-child(2) { --h: clamp(130px, 25vh, 225px); }
+.xi-row li:nth-child(3) { --h: clamp(150px, 29vh, 260px); }
+.xi-row li:nth-child(4) { --h: clamp(170px, 33vh, 300px); }
+/* Reflexo suave no vidro, logo abaixo da base. */
+.xi-reflex { position: absolute; left: 0; right: 0; top: 100%; height: 34px; overflow: hidden; pointer-events: none; opacity: .22;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent); mask-image: linear-gradient(180deg, #000, transparent); }
+.xi-reflex .art-svg { display: block; height: var(--h); width: auto; margin: 0 auto; transform: scaleY(-1); filter: none; }
+/* Etiqueta da loja pendurada na borda da prateleira, embaixo do aparelho. */
+.xi-tag-rig { --hole: 22px; --string: 14px; height: var(--tag-zona); padding-top: 12px; display: flex; justify-content: center; }
+.xi-tag-rig .tag-swing { transform-origin: var(--hole) 0; }
+.xi-tag { width: 132px; padding: 24px 11px 10px; cursor: default; }
+.xi-tag .tag-model { font-size: .9rem; }
+.xi-from { margin: 4px 0 0; font-stretch: 75%; font-size: .72rem; }
+.xi-tag .tag-price { margin-top: 0; font-size: 1.6rem; }
+.xi-tag .tag-demo { margin-top: 6px; }
+/* Entrada: sobem da prateleira um de cada vez; a etiqueta balança ao chegar. */
+.xi-row .xi-phone { transform: translateY(26%); opacity: 0; transition: transform .7s var(--ease-out), opacity .45s var(--ease-out); transition-delay: calc(.35s + var(--i) * 120ms); }
+.xi-shelf[data-show="true"] .xi-phone { transform: none; opacity: 1; }
+.xi-shelf[data-show="true"] .tag-swing { animation: xi-balanco 1.6s var(--ease-out) calc(.6s + var(--i) * 120ms) both; }
+.xi-row li:hover .xi-phone .art-svg, .xi-item:focus-visible .xi-phone .art-svg { transform: translateY(-10px); }
+.xi-shelf[data-show="true"] .xi-row li:hover .tag-swing { animation: xi-balanco 1.2s var(--ease-out) both; }
+@keyframes xi-balanco { 0% { rotate: 9deg; } 30% { rotate: -6deg; } 55% { rotate: 3deg; } 78% { rotate: -1.2deg; } 100% { rotate: 0deg; } }
+.xi-foot {
+  position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 20px;
+  margin: 8px 0 0; font-stretch: var(--narrow); font-weight: 600; font-size: 1.05rem; text-align: center;
+}
+.photo-cta {
+  min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--night-ink); color: var(--ink);
+  font: 700 .9375rem/1 var(--font); font-stretch: 100%; cursor: pointer; white-space: nowrap;
+}
+.demo-note { color: #57544c; font-weight: 400; }
+
+.xiaomi[data-reduced="true"] .xiaomi-pin { height: auto; min-height: 100svh; }
+.xiaomi[data-reduced="true"] .xi-shelf { position: relative; inset: auto; grid-column: 1 / -1; min-height: 100svh; }
+
+/* Menu fixo por cima das seções presas: o título não fica embaixo dele. */
+.iphone-copy { padding-top: max(clamp(28px, 8vh, 96px), calc(var(--menu-h) + 16px)); }
+
+/* ---------------- Catálogo ---------------- */
+.catalog { position: relative; background: var(--paper); color: var(--ink); padding-bottom: 120px; }
+.catalog-head { display: grid; gap: 12px; padding: clamp(64px, 10vh, 120px) var(--gutter-r) 28px var(--gutter); }
+.catalog-title { margin: 0; font-stretch: var(--wide); font-weight: 800; font-size: clamp(2.6rem, 7vw, 6rem); line-height: .9; letter-spacing: -.04em; }
+.catalog-sub { max-width: 40em; color: #4a473f; }
+
+.catalog-bar {
+  position: sticky; z-index: 6; top: var(--menu-h);
+  display: grid; gap: 10px;
+  padding: 12px var(--gutter-r) 12px var(--gutter);
+  background: var(--paper); box-shadow: 0 1px 0 rgba(22, 20, 15, .1);
+}
+.tabs { display: flex; gap: 6px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px;
+  background: transparent; border: 1.5px solid rgba(22, 20, 15, .18); border-radius: 12px; color: var(--ink); cursor: pointer;
+  font: 800 1.25rem/1 var(--font); font-stretch: var(--wide); letter-spacing: -.02em;
+}
+.tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.tab-count { font: 500 .75rem/1 var(--font); opacity: .7; }
+.lines { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.lines::-webkit-scrollbar { display: none; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; flex: none;
+  background: transparent; border: 1px solid rgba(22, 20, 15, .22); border-radius: 999px; color: var(--ink); cursor: pointer;
+  font: 500 .875rem/1 var(--font); white-space: nowrap;
+}
+.chip:hover { border-color: rgba(22, 20, 15, .5); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.badge {
+  display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px;
+  background: var(--paper); color: var(--ink); font: 700 .75rem/1 var(--font);
+}
+.filters-open { display: none; }
+
+.catalog-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 16px var(--gutter-r) 0 var(--gutter); }
+.search {
+  display: flex; align-items: center; gap: 8px; flex: 1 1 260px; max-width: 420px; min-height: 44px; padding: 0 14px;
+  border: 1px solid rgba(22, 20, 15, .22); border-radius: 999px; background: #EFEDE8; color: #4a473f;
+}
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; font: 400 1rem/1 var(--font); color: var(--ink); outline: none; }
+.search input::placeholder { color: #5f5c54; }
+.search:focus-within { outline: 3px solid var(--ink); outline-offset: 2px; }
+.sort select {
+  min-height: 44px; padding: 0 36px 0 14px; border: 1px solid rgba(22, 20, 15, .22); border-radius: 999px;
+  background: #EFEDE8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2316140F' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center / 11px;
+  appearance: none; font: 500 .9375rem/1 var(--font); color: var(--ink); cursor: pointer;
+}
+.view-toggle { display: none; }
+
+.catalog-body { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; padding: 20px var(--gutter-r) 0 var(--gutter); align-items: start; }
+.catalog-side { position: sticky; top: calc(var(--menu-h) + 128px); }
+.filters { display: grid; gap: 22px; }
+.filter-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; border: 0; }
+.filter-group legend { width: 100%; margin-bottom: 8px; font: 700 .9375rem/1.2 var(--font); font-stretch: 112%; }
+.filters-clear { justify-self: start; padding: 6px 0; background: none; border: 0; color: var(--ink); font: 500 .875rem/1 var(--font); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.results-count { font-size: var(--t-small); color: #4a473f; margin-bottom: 8px; }
+.empty { display: grid; gap: 8px; max-width: 34em; padding: 40px 0; font-size: 1.0625rem; }
+.empty p:first-child { font-stretch: 112%; font-weight: 700; font-size: 1.3rem; }
+
+/* Prateleira: os aparelhos ficam em pé sobre uma régua de vidro contínua. */
+.shelf-group + .shelf-group { margin-top: 48px; }
+.shelf-title { margin: 0 0 8px; font-stretch: var(--wide); font-weight: 800; font-size: clamp(1.3rem, 2.2vw, 1.8rem); letter-spacing: -.025em; }
+/* Prateleira: 2 cards até 959px, 3 a partir de 960px, 4 a partir de 1280px. */
+.shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+@media (min-width: 960px) { .shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); } .catalog-body { grid-template-columns: 236px minmax(0, 1fr); gap: 32px; } }
+
+.card { position: relative; display: grid; grid-template-rows: auto 1fr; padding: 0 12px; min-width: 0; }
+.card-hit { position: absolute; inset: 0; z-index: 1; background: transparent; border: 0; border-radius: 12px; cursor: pointer; }
+.card-hit:focus-visible { outline-offset: -3px; }
+.card-art {
+  position: relative; display: grid; place-items: end center; height: 228px; margin: 0 -12px; padding: 18px 12px 0;
+  border-bottom: 7px solid #F7F6F2; box-shadow: 0 10px 10px -10px rgba(22, 20, 15, .35);
+}
+.art-svg { height: 196px; width: auto; filter: drop-shadow(0 10px 10px rgba(22, 20, 15, .22)); transition: transform .35s var(--ease-out); }
+/* Foto do produto: sempre inteira (contain), com respiro, nunca cortada nem esticada. */
+.art-photo { height: 196px; width: auto; max-width: 100%; object-fit: contain; }
+.card-art .art-photo { width: 100%; padding: 0 8px; object-position: 50% 100%; box-sizing: border-box; }
+/* Item sem foto de fabricante (película, capa genérica): ícone de traço e uma frase, no lugar da foto. */
+.art-sem-foto { display: grid; justify-items: center; align-content: center; gap: 14px; height: 196px; padding: 0 12px; text-align: center; }
+.art-sem-foto svg { height: 104px; width: auto; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.art-sem-foto .sf-vidro { fill: rgba(233, 230, 223, .72); }
+.art-sem-foto p { margin: 0; max-width: 16em; font-stretch: var(--narrow); font-weight: 600; font-size: .9375rem; line-height: 1.25; color: #45423b; }
+.panel-art .art-sem-foto { position: absolute; inset: 0; height: auto; }
+.panel-art .art-sem-foto svg { height: 40%; }
+.card:hover .art-svg { transform: translateY(-4px); }
+.sticker {
+  position: absolute; z-index: 2; top: 14px; left: 12px;
+  padding: 5px 8px; border-radius: 4px; font: 700 .75rem/1 var(--font); font-stretch: var(--narrow);
+  background: var(--ink); color: var(--paper); transform: rotate(-2deg);
+}
+.sticker-ultimas { background: #fff; color: #9b2a1c; box-shadow: inset 0 0 0 1.5px #9b2a1c; }
+
+.card-body { display: grid; align-content: start; gap: 8px; padding-top: 14px; min-width: 0; }
+/* Os botões do cartão ficam sempre numa linha só. */
+.card-actions .cta, .list-btn { white-space: nowrap; }
+.card-name { margin: 0; font-stretch: 112%; font-weight: 700; font-size: 1.05rem; line-height: 1.15; letter-spacing: -.01em; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: .8125rem; color: #4a473f; }
+.cond { font-size: .8125rem; }
+.cond-seminovo { color: #5b4a1f; }
+.dots { position: relative; z-index: 2; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.dot {
+  width: 26px; height: 26px; padding: 0; border-radius: 50%; cursor: pointer;
+  background: var(--dot); border: 2px solid var(--paper); box-shadow: 0 0 0 1px rgba(22, 20, 15, .3);
+}
+.dot[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.dot-name { margin-left: 4px; font-size: .75rem; color: #4a473f; }
+
+/* Etiqueta de preço: a mesma da vitrine, em tamanho de prateleira. */
+.price-tag {
+  position: relative; justify-self: start; display: grid; gap: 2px;
+  padding: 10px 12px 9px 22px; margin-top: 2px;
+  background: var(--tag); color: var(--tag-ink);
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+}
+.price-tag::before { content: ""; position: absolute; left: 9px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--paper); }
+.price-pix { font-stretch: var(--narrow); font-weight: 800; font-size: 1.7rem; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.price-cur { font-size: .45em; vertical-align: .9em; margin-right: 2px; }
+.price-terms { font-stretch: 75%; font-size: .75rem; font-variant-numeric: tabular-nums; }
+
+.card-actions { position: relative; z-index: 2; display: flex; gap: 6px; margin-top: 4px; }
+.card-actions .cta { flex: 1 1 auto; justify-content: center; }
+.list-btn {
+  min-height: 40px; padding: 0 14px; border: 1px solid rgba(22, 20, 15, .3); border-radius: 999px;
+  background: transparent; color: var(--ink); font: 600 .8125rem/1 var(--font); cursor: pointer; white-space: nowrap;
+}
+/* Na lista: tinta, não amarelo. O amarelo é só da etiqueta de preço. */
+.list-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* ---------------- Gaveta de filtros (celular) ---------------- */
+.drawer { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+.drawer-scrim { position: absolute; inset: 0; border: 0; background: rgba(14, 16, 19, .5); opacity: 0; transition: opacity .3s; }
+.drawer-sheet {
+  position: absolute; inset: auto 0 0; max-height: 86svh; overflow: auto; display: grid; gap: 20px;
+  padding: 20px var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter);
+  background: var(--paper); color: var(--ink); border-radius: 18px 18px 0 0;
+  transform: translateY(102%); transition: transform .4s var(--ease-out);
+}
+.drawer[data-open="true"] { pointer-events: auto; }
+.drawer[data-open="true"] .drawer-scrim { opacity: 1; }
+.drawer[data-open="true"] .drawer-sheet { transform: none; }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; }
+.drawer-head h3 { margin: 0; font-stretch: var(--wide); font-weight: 800; font-size: 1.4rem; }
+.drawer-close { min-height: 44px; padding: 0 4px; background: none; border: 0; font: 500 1rem/1 var(--font); text-decoration: underline; color: var(--ink); cursor: pointer; }
+.drawer-apply { justify-content: center; }
+
+/* ---------------- Painel do produto ---------------- */
+html.panel-open { overflow: hidden; }
+.panel {
+  width: min(1040px, 100vw); max-width: 100vw; height: min(720px, 100svh); max-height: 100svh;
+  padding: 0; border: 0; border-radius: 18px; background: var(--paper); color: var(--ink);
+}
+.panel::backdrop, .cmp-dialog::backdrop { background: rgba(14, 16, 19, .65); }
+/* Comparador em painel escuro (botão "Comparar" do catálogo): rola por dentro se não couber. */
+.cmp-dialog {
+  width: min(1100px, 100vw); max-width: 100vw; max-height: min(860px, 100svh); padding: 0; border: 0; border-radius: 18px;
+  background: var(--night); color: var(--night-ink); overflow: auto; overscroll-behavior: contain;
+}
+.cmp-dialog .cmp { padding: 56px clamp(16px, 4vw, 48px) 32px; }
+.cmp-dialog .cmp-title { font-size: clamp(1.8rem, min(3.4vw, 6vh), 3rem); margin-bottom: 24px; padding-right: 96px; }
+.cmp-dialog .panel-close { background: var(--night-ink); color: var(--ink); }
+.compare-open { margin-left: auto; }
+.panel-inner { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; height: 100%; }
+.panel-close {
+  position: absolute; z-index: 3; top: 12px; right: 12px; min-height: 44px; padding: 0 16px;
+  border: 0; border-radius: 999px; background: var(--ink); color: var(--paper); font: 600 .875rem/1 var(--font); cursor: pointer;
+}
+.panel-stage { position: relative; min-height: 0; background: radial-gradient(120% 90% at 50% 40%, #F4F3EF, #D9D6CE); }
+/* A foto ocupa o palco inteiro (altura definida), centrada, sem passar das bordas. */
+.panel-art { position: absolute; inset: 56px 24px 64px; }
+.panel-art .art-svg, .panel-art .art-photo { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: contain; }
+/* Frente, trás ou as duas: as vistas que a loja oficial publica para a cor escolhida. */
+.panel-views { position: absolute; z-index: 1; left: 0; right: 0; bottom: 16px; display: flex; justify-content: center; gap: 8px; }
+.panel-stage .sticker { top: 18px; left: 18px; }
+.panel-info { display: grid; align-content: start; gap: 16px; padding: 32px 32px 28px; overflow: auto; }
+.panel-title { margin: 0; padding-right: 90px; font-stretch: var(--wide); font-weight: 800; font-size: clamp(1.6rem, 2.6vw, 2.3rem); line-height: .98; letter-spacing: -.03em; }
+.panel-choice { margin: 0; padding: 0; border: 0; display: grid; gap: 10px; }
+.panel-choice legend { margin-bottom: 8px; font: 600 .9375rem/1 var(--font); }
+.dots-lg .dot { width: 34px; height: 34px; }
+.panel-gb { display: flex; flex-wrap: wrap; gap: 6px; }
+.price-tag-lg .price-pix { font-size: 2.4rem; }
+.price-tag-lg .price-terms { font-size: .8125rem; }
+.panel-specs { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.panel-specs li { padding-left: 18px; position: relative; }
+.panel-specs li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 2px; background: var(--ink); }
+.panel-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.panel-actions .cta { flex: 1 1 auto; justify-content: center; }
+.list-btn-lg { min-height: 52px; padding: 0 20px; font-size: .9375rem; }
+
+/* ---------------- Lista de interesse ---------------- */
+body.has-interest { padding-bottom: 88px; }
+.interest {
+  position: fixed; z-index: 45; right: var(--gutter-r); bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  width: min(420px, calc(100vw - 2 * 16px));
+  color: var(--night-ink);
+}
+/* Contorno claro: a barra continua visível sobre as seções escuras (rodapé, letreiro). */
+.interest-bar { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 999px; background: var(--night); border: 1px solid rgba(233, 230, 223, .22); box-shadow: 0 14px 30px -10px rgba(0, 0, 0, .55); }
+.interest-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; background: none; border: 0; color: var(--night-ink); font: 600 .9375rem/1 var(--font); cursor: pointer; }
+.interest-bar .cta { flex: 1; justify-content: center; min-height: 44px; font-size: .9375rem; }
+.interest-list {
+  margin-bottom: 8px; padding: 16px; border-radius: 16px; background: var(--night); max-height: 50svh; overflow: auto;
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, .55);
+}
+.interest-list ul { display: grid; gap: 12px; margin: 0 0 12px; padding: 0; list-style: none; }
+.interest-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.interest-name { display: grid; gap: 2px; font-weight: 600; font-size: .9375rem; }
+.interest-name small { font-weight: 400; font-size: .8125rem; color: var(--night-dim); }
+.interest-remove, .interest-clear {
+  min-height: 36px; padding: 0 10px; background: none; border: 1px solid rgba(233, 230, 223, .25); border-radius: 999px;
+  color: var(--night-ink); font: 500 .8125rem/1 var(--font); cursor: pointer;
+}
+
+/* ---------------- Celular ---------------- */
+@media (max-width: 820px) {
+  :root { --menu-h: 52px; }
+  /* Celular: a marca à esquerda e o botão Menu à direita; os itens vão para a gaveta. */
+  .topmenu { justify-content: space-between; }
+  .topmenu-items, .topmenu-wa { display: none; }
+  .topmenu-open { display: inline-flex; }
+
+  .xiaomi-pin { grid-template-columns: minmax(0, 1fr); }
+  .xiaomi-copy { align-self: end; margin: 0 calc(-1 * var(--gutter-r)) 0 calc(-1 * var(--gutter)); padding: 20px var(--gutter-r) calc(76px + env(safe-area-inset-bottom, 0px)) var(--gutter); border-radius: 18px 18px 0 0; }
+  .xiaomi-title { font-size: 8vw; }
+  .xiaomi-phone { right: auto; left: 50%; height: 46%; top: 8%; margin-top: 0; translate: -50% 0; }
+  /* Celular: a prateleira rola para o lado; o aparelho do meio fica maior. */
+  /* Embaixo fica a barra fixa (Ver preços / WhatsApp): o botão da prateleira sobe acima dela. */
+  .xi-shelf { --tag-zona: 138px; padding: calc(var(--menu-h) + 2vh) 0 calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .xi-row {
+    justify-content: flex-start; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding: 34px 23vw 0;
+  }
+  .xi-row::-webkit-scrollbar { display: none; }
+  .xi-row::before { width: 100%; left: 0; translate: none; }
+  .xi-row li { flex: 0 0 54vw; scroll-snap-align: center; --h: clamp(120px, 21svh, 180px) !important; }
+  .xi-phone .art-svg { width: 100%; max-width: 100%; object-fit: contain; object-position: 50% 100%; }
+  .xi-reflex .art-svg { width: 100%; object-fit: contain; object-position: 50% 0; }
+  .xi-item { transform-origin: 50% 100%; transition: transform .35s var(--ease-out); }
+  .xi-row li[data-centro="true"] .xi-item { transform: scale(1.16); }
+  .xi-row li:not([data-centro="true"]) { opacity: .75; }
+  .xi-tag { width: 118px; }
+  .xi-foot { padding-inline: var(--gutter); font-size: .95rem; }
+
+  .catalog-bar { padding-block: 10px; gap: 8px; }
+  .tab { flex: 1; justify-content: center; min-height: 44px; padding: 0 8px; font-size: 1.05rem; }
+  .tab-count { display: none; }
+  .lines { margin-right: calc(-1 * var(--gutter-r)); padding-right: var(--gutter-r); }
+  .filters-open { display: inline-flex; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .catalog-tools { padding-top: 12px; }
+  .search { flex: 1 1 100%; max-width: none; }
+  .sort { flex: 1; }
+  .sort select { width: 100%; }
+  .view-toggle { display: flex; gap: 4px; }
+  .view-toggle button {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px;
+    border: 1px solid rgba(22, 20, 15, .22); background: transparent; color: #8a867c; cursor: pointer;
+  }
+  .view-toggle button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+
+  .catalog-body { grid-template-columns: minmax(0, 1fr); padding-top: 12px; }
+  .catalog-side { display: none; }
+  .catalog-results[data-vista="grande"] .shelf { grid-template-columns: minmax(0, 1fr); }
+  .catalog-results[data-vista="compacta"] .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+
+  /* Card grande: desenho à esquerda, informações à direita. */
+  .catalog-results[data-vista="grande"] .card { grid-template-columns: 116px minmax(0, 1fr); grid-template-rows: auto; column-gap: 14px; padding: 0; }
+  .catalog-results[data-vista="grande"] .card-art { height: auto; min-height: 210px; margin: 0; padding: 30px 4px 0; border-bottom-width: 6px; }
+  .catalog-results[data-vista="grande"] .art-svg { height: 170px; max-width: 100%; object-fit: contain; object-position: 50% 100%; }
+  .catalog-results[data-vista="grande"] .card-body { padding-top: 6px; }
+
+  /* Card compacto: dois por linha, sem botão de lista (fica no painel). */
+  .catalog-results[data-vista="compacta"] .card { padding: 0 6px; }
+  .catalog-results[data-vista="compacta"] .card-art { height: 170px; margin: 0 -6px; }
+  .catalog-results[data-vista="compacta"] .art-svg { height: 140px; }
+  .catalog-results[data-vista="compacta"] .card-name { font-size: .9375rem; }
+  .catalog-results[data-vista="compacta"] .price-pix { font-size: 1.35rem; }
+  .catalog-results[data-vista="compacta"] .price-tag { padding-left: 18px; }
+  .catalog-results[data-vista="compacta"] .dot-name { display: none; }
+  .catalog-results[data-vista="compacta"] .list-btn { padding: 0 10px; }
+  .catalog-results[data-vista="compacta"] .card-actions { flex-wrap: wrap; }
+  .sticker { font-size: .6875rem; }
+
+  .panel { width: 100vw; height: 100svh; max-height: 100svh; border-radius: 0; }
+  .panel-inner { grid-template-columns: minmax(0, 1fr); grid-template-rows: 44svh minmax(0, 1fr); }
+  .panel-info { padding: 20px var(--gutter-r) calc(24px + env(safe-area-inset-bottom, 0px)) var(--gutter); }
+  .panel-title { padding-right: 0; }
+
+  .interest { left: 16px; right: 16px; width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topmenu, .drawer-sheet, .drawer-scrim, .xi-shelf, .xi-phone, .art-svg { transition: none; }
+  .xi-shelf .tag-swing { animation: none !important; }
+  .xiaomi-flash { display: none; }
+}
+
+/* ---------------- Compra logo no começo: atalhos, destaques e barra do celular ---------------- */
+button.cta { border: 0; font: 600 1rem/1 var(--font); cursor: pointer; }
+.cta-ghost { background: transparent; color: var(--night-ink); box-shadow: inset 0 0 0 1.5px rgba(233, 230, 223, .45); }
+.cta-ghost:hover { background: rgba(233, 230, 223, .1); }
+
+/* "O que você procura?": continua a vitrine escura do hero. */
+.quick { padding: clamp(28px, 5vh, 48px) var(--gutter-r) clamp(28px, 5vh, 48px) var(--gutter); background: var(--night); color: var(--night-ink); }
+.quick-title { margin: 0 0 16px; font: 600 1rem/1.2 var(--font); color: var(--night-dim); }
+.quick-list { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.quick-item {
+  display: grid; align-content: space-between; gap: 10px; width: 100%; min-height: 104px; padding: 16px;
+  border: 1px solid rgba(233, 230, 223, .2); border-radius: 14px; background: rgba(233, 230, 223, .04);
+  color: inherit; text-align: left; cursor: pointer; transition: background-color .2s, border-color .2s;
+}
+.quick-item:hover { background: rgba(233, 230, 223, .1); border-color: rgba(233, 230, 223, .45); }
+.quick-name { font-stretch: var(--wide); font-weight: 800; font-size: clamp(1.1rem, 1.6vw, 1.45rem); letter-spacing: -.025em; line-height: 1; }
+.quick-meta { font-size: .8125rem; color: var(--night-dim); }
+
+/* "Destaques da semana": a primeira prateleira com preço, logo depois dos atalhos. */
+.highlights { padding: clamp(36px, 6vh, 64px) var(--gutter-r) clamp(40px, 7vh, 72px) var(--gutter); background: var(--paper); color: var(--ink); }
+.highlights-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin-bottom: 18px; }
+.highlights-title { margin: 0; font-stretch: var(--wide); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.6rem); letter-spacing: -.03em; line-height: 1; }
+.highlights-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 36px; }
+@media (min-width: 1500px) { .highlights-shelf { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.highlights-all {
+  margin-top: 28px; padding: 0; background: none; border: 0; color: inherit; cursor: pointer;
+  font: 700 1.05rem/1.2 var(--font); font-stretch: 112%; text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px;
+}
+.sticker-destaque { background: var(--tag); color: var(--tag-ink); }
+
+/* Celular: barra fixa com "Ver preços" e "WhatsApp" (some no catálogo e com a lista aberta). */
+.buybar { display: none; }
+
+/* Comparar no catálogo; assistência e acessórios com atalhos. */
+.acc-actions, .quote-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+@media (max-width: 820px) {
+  .quick-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .quick-item { min-height: 64px; padding: 12px; gap: 4px; }
+  .quick-name { font-size: 1.05rem; }
+  .quick-meta { font-size: .75rem; }
+  /* Destaques: uma fileira que rola para o lado (o próximo cartão aparece pela metade);
+     cada cartão com a foto em cima e o texto embaixo, sem nada por cima de nada. */
+  .highlights-shelf {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 74%; column-gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gutter-r)) 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter-r) 6px var(--gutter);
+    scroll-padding-inline: var(--gutter) var(--gutter-r); /* o cartão encaixa respeitando a margem */
+    scrollbar-width: none;
+  }
+  .highlights-shelf::-webkit-scrollbar { display: none; }
+  .highlights-shelf .card { scroll-snap-align: start; padding: 0; }
+  .highlights-shelf .card-art { height: 200px; margin: 0; padding: 34px 8px 0; }
+  .highlights-shelf .art-svg { height: 150px; max-width: 100%; object-fit: contain; }
+  .buybar {
+    position: fixed; z-index: 30; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    display: block; transform: translateY(160%); transition: transform .35s var(--ease-out);
+  }
+  .buybar .cta { min-height: 44px; padding: 0 20px; font-size: .9375rem; box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .6), 0 0 0 1px rgba(14, 16, 19, .25); }
+  .buybar[data-visible="true"] { transform: none; }
+  body.has-interest .buybar { display: none; }
+  .cmp-dialog { width: 100vw; height: 100svh; max-height: 100svh; border-radius: 0; overflow-x: hidden; }
+  .cmp-dialog .cmp-head { gap: 8px; }
+  .cmp-dialog .cmp-side { min-width: 0; }
+  .cmp-dialog .cmp-art .art-svg { height: 130px; max-width: 100%; object-fit: contain; }
+  .cmp-dialog .cmp-select, .cmp-dialog .cmp-select select { width: 100%; max-width: 100%; min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .buybar { transition: none; } }
+
+/* Selos que vêm do painel do dono, e o aparelho esgotado (foto apagada, botão vira "Avise-me"). */
+.sticker-promo { background: #9b2a1c; color: #fff; }
+.sticker-esgotado { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); transform: none; }
+.card[data-esgotado] .art-photo { opacity: .45; filter: grayscale(.6); }
+.card[data-esgotado] .price-tag { background: #d9d6cf; }
+.panel-desc { margin: 0 0 12px; max-width: 38em; }

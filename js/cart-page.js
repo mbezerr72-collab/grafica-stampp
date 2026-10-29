@@ -1,7 +1,8 @@
-import { brl } from '../data/products.js?v=2610282008';
-import { cart, lineInfo, totals, MAX_QTY } from './cart.js?v=2610282008';
-import { SITE, waLink } from './config.js?v=2610282008';
-import { layout, icon, esc, toast, $ } from './ui.js?v=2610282008';
+import { brl } from '../data/products.js?v=2610282113';
+import { cart, lineInfo, totals, MAX_QTY } from './cart.js?v=2610282113';
+import { SITE, waLink } from './config.js?v=2610282113';
+import { layout, icon, esc, toast, $ } from './ui.js?v=2610282113';
+import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610282113';
 
 layout('');
 const root = $('#cartPage');
@@ -91,11 +92,27 @@ function orderText(items, ref) {
     + `\n\n*Total:* ${brl(totals(items).subtotal)}\n*Nome:* ${cust.nome}\n*WhatsApp:* ${cust.whatsapp}\n*Recebimento:* ${cust.entrega === 'entrega' ? `Entrega — ${cust.endereco}` : 'Retirada na gráfica'}`;
 }
 
+/** Cada item do carrinho entra no painel como um pedido do site (já com o valor). */
+function paraOPainel(items, ref) {
+  items.forEach((i, k) => {
+    const l = lineInfo(i);
+    if (!l) return;
+    registrarNoPainel({
+      numero: items.length > 1 ? `${ref}-${k + 1}` : ref,
+      produtoId: i.id, nome: cust.nome.trim(), telefone: cust.whatsapp, qtd: i.qty,
+      respostas: [['Opção', l.label], ['Recebimento', cust.entrega === 'entrega' ? `Entrega: ${cust.endereco}` : 'Retirada na gráfica']],
+      tipo: 'compra', total: Math.round(l.total * 100) / 100,
+    });
+  });
+}
+
 async function finish(how) {
   if (!valid()) return;
   const items = cart.items();
   if (how === 'wa') {
-    const url = waLink(orderText(items));
+    const ref = protocolo();
+    paraOPainel(items, ref);
+    const url = waLink(orderText(items, ref));
     // alguns navegadores bloqueiam a janela; o link no aviso serve de reserva
     if (!window.open(url, '_blank', 'noopener')) toast(`${icon('wa')}<span>Pedido pronto.</span><a href="${url}" target="_blank" rel="noopener">Abrir WhatsApp</a>`);
     return;
@@ -110,6 +127,7 @@ async function finish(how) {
     const data = await r.json().catch(() => ({}));
     if (!r.ok || !data.url) throw new Error(data.error);
     try { sessionStorage.setItem('estamp-ultimo-pedido', orderText(items, data.ref)); } catch { /* ok */ }
+    paraOPainel(items, data.ref);
     location.href = data.url;
   } catch {
     toast(`${icon('wa')}<span>Pagamento online indisponível agora. Finalize pelo WhatsApp.</span>`);

@@ -17,7 +17,34 @@ Loja virtual da Gráfica Estamp (Cruzeiro do Sul, AC), feita a partir da *Especi
 
 Os formulários mudam conforme o produto (`js/forms.js`): camisas (modelo, tecido, cor, gola, local da estampa, técnica, arte, quantidade por tamanho, prazo), impressos (formato, papel, acabamento), comunicação visual (medidas, material, instalação), brindes e design.
 
-A solicitação recebe um número (ex.: `EST-261028-AB12`) e vai para o WhatsApp da gráfica já organizada. **Ainda não há banco de dados nem painel administrativo**: foi decidido deixar isso para uma segunda fase. Por enquanto, o registro do pedido é a conversa no WhatsApp.
+A solicitação recebe um número (ex.: `EST-261028-AB12`) e vai para o WhatsApp da gráfica já organizada. Ela também fica guardada no navegador e entra no **painel de gestão** (`/painel`), na aba Orçamentos (veja abaixo o limite disso na demonstração).
+
+## Painel de gestão (`/painel`)
+
+O painel é o **Escala Business** (o mesmo visual e o mesmo layout do painel modelo), com as abas trocadas para o que uma gráfica precisa:
+
+| Grupo | Abas |
+|---|---|
+| Operação | Início, Balcão (xerox, impressão, pronta entrega), Vendas, Caixa do dia, Calendário |
+| Produção | **Pedidos** (quadro: novo → arte → aprovação → produção → pronto → entregue, com grade de tamanhos, sinal e ficha de produção em PDF), **Orçamentos** (o que chega do site e do WhatsApp; vira pedido em 1 toque), **Fila de produção** (por setor: arte, sublimação, DTF, silk, impressão…) |
+| Produtos e insumos | Produtos e preços (opções, setor, prazo, pronta entrega ou sob encomenda), **Insumos** (camisas lisas, papel, tinta, lona, brindes em branco, com mínimo e pedido ao fornecedor), Compras |
+| Financeiro | Contas e despesas, Metas, Relatórios |
+| Relacionamento | Clientes (empresas e grupos, pedido do ano passado, pedido pronto), Equipe e comissões (atendimento, designer, produção) |
+| Gráfica | Configurações (dados, pagamento, % do sinal, cópia de segurança, histórico) |
+
+Login da demonstração: `dono@graficaestamp.demo`, senha `demonstracao` (ou "Entrar como funcionário"). Os dados de exemplo (6 meses) são gerados no primeiro acesso e ficam no navegador.
+
+**Limite importante:** ainda não há servidor. Os dados do painel ficam no `localStorage` do aparelho, e o pedido feito no site só chega ao painel **se for aberto no mesmo navegador**. Para uso real (vários aparelhos, cliente em outro celular), é preciso um banco de dados (ex.: Supabase) e trocar `js/painel-ponte.js` e `painel-src/src/data/store.ts` por chamadas à API.
+
+Código-fonte em `painel-src/` (React + TypeScript + Vite). Para mudar:
+
+```bash
+cd painel-src
+npm install
+npm run build
+```
+
+O build sai em `painel/` (é essa pasta que a Vercel publica; `painel-src/` não vai para o ar).
 
 ## Páginas
 
@@ -29,6 +56,8 @@ A solicitação recebe um número (ex.: `EST-261028-AB12`) e vai para o WhatsApp
 | `carrinho.html` | Carrinho com retirada/entrega, dados do cliente e pagamento |
 | `pedido.html` | Retorno do Mercado Pago |
 | `api/checkout.js` | Função da Vercel que recalcula os preços e cria o pagamento |
+| `painel/` | Painel de gestão (gerado a partir de `painel-src/`) |
+| `js/painel-ponte.js` | Guarda cada orçamento/pedido do site para o painel importar |
 
 ## Onde mudar as coisas
 
