@@ -1,11 +1,11 @@
 // Página de um produto: compra direta (Tipo A) ou formulário de orçamento em etapas (Tipo B).
-import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610291430';
-import { cart, MAX_QTY } from './cart.js?v=2610291430';
-import { SITE, waLink } from './config.js?v=2610291430';
-import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610291430';
-import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610291430';
-import { worksOf } from './works.js?v=2610291430';
-import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610291430';
+import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610291901';
+import { cart, MAX_QTY } from './cart.js?v=2610291901';
+import { SITE, waLink } from './config.js?v=2610291901';
+import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610291901';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610291901';
+import { worksOf } from './works.js?v=2610291901';
+import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610291901';
 
 layout('produtos');
 const root = $('#prod');
@@ -253,10 +253,10 @@ function renderQuote() {
     const head = (tag = 'div') => `<${tag === 'label' ? `label for="f-${f.key}"` : 'div class="label"'}>${f.label}${req}</${tag === 'label' ? 'label' : 'div'}>${f.hint ? `<span class="hint">${f.hint}</span>` : ''}`;
     const radio = (c, cls = 'radio') => `<label class="${cls}"><input type="radio" name="${f.key}" value="${c.v}"${v === c.v ? ' checked' : ''}>
       <span>${c.i ? icon(c.i) : ''}${c.l}${c.s ? `<small>${esc(c.s)}</small>` : ''}</span></label>`;
-    const wrap = (inner, tag) => `<div class="field" data-field="${f.key}"${f.half ? ' data-half' : ''}>${head(tag)}${inner}<div class="err-msg" hidden></div></div>`;
+    const wrap = (inner, tag) => `<div class="field" data-field="${f.key}"${f.half ? ' data-half' : ''}>${head(tag)}${inner}<div class="err-msg" id="e-${f.key}" aria-live="polite" hidden></div></div>`;
     switch (f.type) {
-      case 'cards': return wrap(`<div class="cards" role="radiogroup">${f.choices.map((c) => radio(c)).join('')}</div>`);
-      case 'radios': return wrap(`<div class="radios${f.wide ? ' wide' : ''}" role="radiogroup">${f.choices.map((c) => radio(c)).join('')}</div>`);
+      case 'cards': return wrap(`<div class="cards" role="radiogroup" aria-label="${esc(f.label)}">${f.choices.map((c) => radio(c)).join('')}</div>`);
+      case 'radios': return wrap(`<div class="radios${f.wide ? ' wide' : ''}" role="radiogroup" aria-label="${esc(f.label)}">${f.choices.map((c) => radio(c)).join('')}</div>`);
       case 'multi': return wrap(`<div class="radios">${f.choices.map((c) => `<label class="radio"><input type="checkbox" name="${f.key}" value="${c.v}"${(v || []).includes(c.v) ? ' checked' : ''}><span>${c.l}${c.s ? `<small>${esc(c.s)}</small>` : ''}</span></label>`).join('')}</div>`);
       case 'colors': {
         const sel = v || [];
@@ -381,6 +381,8 @@ function renderQuote() {
       const err = box.querySelector('.err-msg');
       err.hidden = !msg; err.textContent = msg;
       box.querySelector('.input, .textarea')?.classList.toggle('err', !!msg);
+      // Leitor de tela: o campo fica marcado como inválido e a mensagem é lida junto.
+      box.querySelectorAll('input, textarea, select').forEach((el) => { if (msg) { el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', `e-${f.key}`); } else el.removeAttribute('aria-invalid'); });
       if (msg && !first) first = box;
     }
     if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); first.querySelector('input, textarea')?.focus({ preventScroll: true }); }

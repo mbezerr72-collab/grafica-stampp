@@ -1,7 +1,7 @@
-import { CATEGORIES, productById } from '../data/products.js?v=2610291430';
-import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610291430';
-import { worksOf } from './works.js?v=2610291430';
-import { layout, icon, shopCard, priceLine, rail, $ } from './ui.js?v=2610291430';
+import { CATEGORIES, productById } from '../data/products.js?v=2610291901';
+import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610291901';
+import { worksOf } from './works.js?v=2610291901';
+import { layout, icon, shopCard, priceLine, rail, $ } from './ui.js?v=2610291901';
 
 layout('inicio');
 document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN') el.outerHTML = icon(el.dataset.i); else el.innerHTML = icon(el.dataset.i); });
