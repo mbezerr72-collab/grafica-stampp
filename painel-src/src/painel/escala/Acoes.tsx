@@ -15,7 +15,7 @@ export const abrirAcoes = () => mudar(true)
 
 const ACOES = [
   { nome: 'Novo pedido', frase: 'Camisa, banner, cartão… com prazo e arte', icone: 'os', rota: ['pedidos'], pedido: { tela: 'pedidos', nova: true } as Pedido, permissao: 'vendas' as const },
-  { nome: 'Venda no balcão', frase: 'Xerox, impressão, pronta entrega', icone: 'pdv', rota: ['pdv'], permissao: 'vendas' as const },
+  { nome: 'Venda no balcão', frase: 'Cópia, impressão, plastificação e encadernação', icone: 'pdv', rota: ['pdv'], permissao: 'vendas' as const },
   { nome: 'Responder orçamento', frase: 'Os que chegaram do site e do WhatsApp', icone: 'mensagem', rota: ['orcamentos'], permissao: 'vendas' as const },
   { nome: 'Usei (tirar) em insumo', frase: 'Camisa lisa, papel, tinta, lona', icone: 'estoque', rota: ['insumos'], permissao: 'vendas' as const },
   { nome: 'Cadastrar produto', frase: 'Produto ou serviço com opções e preços', icone: 'produtos', rota: ['produtos', 'novo'], permissao: 'produtos' as const },

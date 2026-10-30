@@ -223,12 +223,15 @@ function Formulario({ inicial, novo, s }: { inicial: PProduto; novo: boolean; s:
                 </select>
               </label>
             </div>
+            {/* A gráfica só faz sob medida: o botão só aparece para desligar o que ainda estiver como pronta entrega. */}
+            {p.controlaEstoque && (
             <Interruptor ligado={p.controlaEstoque} mudar={(controlaEstoque) => mudar({ controlaEstoque })}>
               <span>
                 <strong>Pronta entrega (conta estoque)</strong>
                 <small>Desligado: é feito sob encomenda, por pedido. O material usado fica em “Material em estoque”.</small>
               </span>
             </Interruptor>
+            )}
           </section>
 
           <section className="bloco">

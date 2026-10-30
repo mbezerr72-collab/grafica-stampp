@@ -38,7 +38,7 @@ const lerVendedor = () => {
     return ''
   }
 }
-/** Balcão: xerox, impressão e pronta entrega. Tocar, cobrar e pronto; o resto o sistema preenche. */
+/** Balcão: cópia, impressão, plastificação e encadernação. Tocar, cobrar e pronto; o resto o sistema preenche. */
 /** Leva até o lugar do que falta e acende ele por um instante (a "seta" do aviso). */
 function mostrarOnde(sel: string) {
   const el = document.querySelector<HTMLElement>(sel)

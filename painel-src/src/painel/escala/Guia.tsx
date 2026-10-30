@@ -26,7 +26,7 @@ export const GUIAS: Record<string, GuiaTela> = {
   'inicio-vendedor': {
     passos: [
       { alvo: '.vendedor-bt.principal', texto: '1. Cliente quer camisa, banner, cartão? Toque em Novo pedido.' },
-      { alvo: '.vendedor-bts', texto: '2. Xerox e pronta entrega ficam no Balcão; o que fazer primeiro, na Fila de produção.' },
+      { alvo: '.vendedor-bts', texto: '2. Cópia, impressão e plastificação ficam no Balcão; o que fazer primeiro, na Fila de produção.' },
       { alvo: '.comissao-cartao', texto: '3. Aqui você vê quanto já ganhou de comissão no mês.' },
     ],
     perguntas: [{ p: 'Como vejo minha comissão?', passos: [{ alvo: '.comissao-cartao', texto: 'Toque no cartão para ver venda por venda.' }] }],

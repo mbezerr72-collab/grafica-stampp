@@ -122,6 +122,10 @@ export const NOMES_STATUS_PEDIDO: Record<StatusPedido, string> = {
 export type OrigemPedido = 'site' | 'balcao' | 'whatsapp' | 'instagram'
 export const NOME_ORIGEM_PEDIDO: Record<OrigemPedido, string> = { site: 'Site', balcao: 'Balcão', whatsapp: 'WhatsApp', instagram: 'Instagram' }
 export type ItemPedido = { produtoId: string; nome: string; opcao: string; qtd: number; preco: number; custo: number }
+/** Uma peça da lista de nomes e números (uniformes): sai na ficha de produção. */
+export type PecaLista = { tamanho: string; nome: string; numero: string }
+/** Serviço feito fora: o pedido está num fornecedor (letra caixa, offset, bordado…). */
+export type FeitoFora = { fornecedor: string; servico: string; custo: number; enviadoEm: string; previsao: string; voltouEm?: string }
 export type Pedido = {
   id: string
   numero: number
@@ -134,6 +138,10 @@ export type Pedido = {
   cores: string[]
   /** Quantidade por tamanho (camisas): 'M' → 8, 'GBL' → 3. */
   grade?: Record<string, number>
+  /** Nome e número de cada peça (uniformes). */
+  lista?: PecaLista[]
+  /** Quando o pedido vai para um fornecedor. */
+  fora?: FeitoFora
   /** Nomes das imagens que o cliente mandou (frente, costas…). */
   arquivos: string[]
   setor: Setor
