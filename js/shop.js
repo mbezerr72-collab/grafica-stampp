@@ -1,10 +1,9 @@
-import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610291901';
-import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610291901';
-
-layout('produtos');
+import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610301230';
+import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610301230';
 
 const params = new URLSearchParams(location.search);
 const cat = catById(params.get('cat')) ? params.get('cat') : null;
+layout(cat ? `cat:${cat}` : 'produtos');
 const q = (params.get('q') || '').trim().slice(0, 60);
 
 const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();

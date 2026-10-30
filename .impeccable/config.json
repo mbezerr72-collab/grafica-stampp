@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "css/style.css"
+        ],
+        "createdAt": "2026-10-30T12:19:50.288Z",
+        "reason": "João escolheu a direção C (laranja total) com o letreiro rolando; pausa no hover e para com reduzir movimento"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "js/ui.js"
+        ],
+        "createdAt": "2026-10-30T12:19:50.669Z",
+        "reason": "lightbox: o src é preenchido pelo JS antes de abrir o dialog"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-30T12:19:51.018Z",
+        "reason": "seções de largura total; o .wrap dá o recuo lateral e o padding vertical, conferido nos prints 390/1366"
+      }
+    ]
+  }
+}

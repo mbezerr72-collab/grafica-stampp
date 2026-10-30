@@ -1,7 +1,7 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610291901';
-import { cart, totals } from './cart.js?v=2610291901';
-import { SITE, waLink } from './config.js?v=2610291901';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610301230';
+import { cart, totals } from './cart.js?v=2610301230';
+import { SITE, waLink } from './config.js?v=2610301230';
 
 // Ícones (traço simples, 24×24)
 const P = {
@@ -61,28 +61,35 @@ export function layout(active) {
     const top = () => { scrollTo(0, 0); document.body.firstElementChild?.scrollIntoView({ block: 'start', behavior: 'instant' }); };
     top(); requestAnimationFrame(top); addEventListener('load', top, { once: true }); setTimeout(top, 300);
   }
-  const nav = [['index.html', 'Início', 'inicio'], ['produtos.html', 'Produtos', 'produtos'], ['index.html#sobre', 'Sobre', 'sobre'], ['index.html#contato', 'Contato', 'contato']];
+  document.documentElement.classList.add('js');
+  const nav = [['index.html', 'Início', 'inicio'], ['produtos.html', 'Todos os produtos', 'produtos']];
+  const navCats = CATEGORIES.map((c) => `<a href="produtos.html?cat=${c.id}"${active === `cat:${c.id}` ? ' aria-current="page"' : ''}>${c.label}</a>`).join('');
   document.body.insertAdjacentHTML('afterbegin', `
     <a class="sr" href="#conteudo">Pular para o conteúdo</a>
     <div class="topbar"><div class="wrap">
       <span>${icon('wa')}Atendimento pelo WhatsApp <a href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener">${SITE.phone}</a></span>
       <span class="hide-m">${icon('clock')}Seg a sex 7h30–17h30 · Sáb 7h30–11h30</span>
     </div></div>
-    <header class="hdr">
+    <header class="hdr" id="hdr">
       <div class="wrap">
         <a href="index.html" class="brand"><img src="assets/logo-dark.png" alt="Gráfica Estamp" width="150" height="30"></a>
-        <nav class="nav" id="nav" aria-label="Principal">
-          ${nav.map(([h, l, k]) => `<a href="${h}"${k === active ? ' aria-current="page"' : ''}>${l}</a>`).join('')}
-        </nav>
+        <form class="hdr-search" action="produtos.html" role="search"><input name="q" type="search" placeholder="O que você precisa? Ex.: cartão, caneca, banner" aria-label="Buscar produtos"><button aria-label="Buscar">${icon('search')}</button></form>
         <div class="hdr-actions">
           <button class="icon-btn" id="searchBtn" aria-label="Buscar produtos" aria-expanded="false">${icon('search')}</button>
           <a class="icon-btn" href="carrinho.html" aria-label="Carrinho">${icon('cart')}<span class="count" id="cartCount" hidden>0</span></a>
-          <a class="btn btn-dark btn-sm btn-quote" href="${waLink('Olá! Quero um orçamento.')}" target="_blank" rel="noopener">Pedir orçamento</a>
-          <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">${icon('menu')}</button>
+          <a class="btn btn-dark btn-sm btn-quote" href="${waLink('Olá! Quero um orçamento.')}" target="_blank" rel="noopener">${icon('wa')}Pedir orçamento</a>
+          <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="navBar">${icon('menu')}</button>
         </div>
       </div>
+      <div class="nav-bar" id="navBar"><div class="wrap">
+        <nav class="nav" id="nav" aria-label="Principal">
+          ${nav.map(([h, l, k]) => `<a href="${h}"${k === active ? ' aria-current="page"' : ''}${k === 'produtos' ? ' class="nav-all"' : ''}>${l}</a>`).join('')}
+          <span class="nav-sep" aria-hidden="true"></span>${navCats}<span class="nav-sep" aria-hidden="true"></span>
+          <a href="index.html#sobre">Sobre</a><a href="index.html#contato">Contato</a>
+        </nav>
+      </div></div>
       <div class="search" id="search" hidden><div class="wrap">
-        <form action="produtos.html" role="search"><input name="q" type="search" placeholder="O que você precisa? Ex.: cartão, caneca, banner" aria-label="Buscar produtos"><button class="btn btn-dark">Buscar</button></form>
+        <form action="produtos.html" role="search"><input name="q" type="search" placeholder="O que você precisa? Ex.: cartão, caneca" aria-label="Buscar produtos"><button class="btn btn-dark">Buscar</button></form>
       </div></div>
     </header>`);
 
@@ -91,7 +98,7 @@ export function layout(active) {
     <footer class="ftr">
       <div class="wrap">
         <div class="ftr-grid">
-          <div><img src="assets/logo-nav.png" alt="Gráfica Estamp" width="150" height="30">
+          <div><img src="assets/logo-dark.png" alt="Gráfica Estamp" width="150" height="30">
             <p>Gráfica, comunicação visual e personalizados em Cruzeiro do Sul desde ${SITE.since}.</p></div>
           <div><h4>Produtos</h4><ul>${cats}</ul></div>
           <div><h4>Atendimento</h4><ul>
@@ -103,7 +110,7 @@ export function layout(active) {
         <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento. <a href="painel/">Área da equipe</a></span></div>
       </div>
     </footer>
-    <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}</a>
+    <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}<b>Fale com a gente</b></a>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
 
   const menuBtn = $('#menuBtn'), navEl = $('#nav');
@@ -111,6 +118,10 @@ export function layout(active) {
   navEl.addEventListener('click', (e) => { if (e.target.closest('a')) { navEl.classList.remove('on'); menuBtn.setAttribute('aria-expanded', 'false'); } });
   const sBtn = $('#searchBtn'), sBox = $('#search');
   sBtn.addEventListener('click', () => { sBox.hidden = !sBox.hidden; sBtn.setAttribute('aria-expanded', !sBox.hidden); if (!sBox.hidden) $('input', sBox).focus(); });
+  // Seções entram com um deslize suave quando aparecem na tela
+  const io = 'IntersectionObserver' in window && new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  if (io) requestAnimationFrame(() => document.querySelectorAll('.reveal').forEach((el) => io.observe(el)));
+  else document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
   cart.onChange((items) => { const n = totals(items).count; const c = $('#cartCount'); c.textContent = n; c.hidden = !n; });
 }
 
