@@ -127,10 +127,22 @@ svg.i { width: 20px; height: 20px; flex: none; }
 .hero-alt { margin-top: 16px; font-size: 15px; font-weight: 500; color: var(--on-brand); }
 .hero-alt a { color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 .hero-art { position: relative; align-self: stretch; min-height: 520px; }
-.tri-shape, .tri-ph { position: absolute; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
-.tri-shape { inset: 0; background: var(--ink); }
-.tri-ph { inset: 22% 14% 0; background: url(../img/hero.jpg) 60% 60% / cover; animation: rise 1.2s var(--ease) both; }
-@keyframes rise { from { transform: translateY(14%); opacity: 0; } }
+.tri-shape { position: absolute; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.tri-shape { inset: 0; background: var(--ink); animation: rise 1.1s var(--ease) both; }
+@keyframes rise { from { transform: translateY(10%); opacity: 0; } }
+
+/* Versão 1: letreiro de produtos dentro do triângulo, um de cada vez */
+.tri-words { position: absolute; left: 14%; right: 14%; bottom: 24%; display: grid; grid-template-rows: auto auto; gap: 14px; justify-items: center; text-align: center; }
+.tri-words small { grid-area: 1 / 1; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--night-text); }
+.tri-words a { grid-area: 2 / 1; display: grid; gap: 10px; justify-items: center; color: #fff; opacity: 0; animation: word 18s var(--ease) infinite backwards; }
+.tri-words a:first-of-type { opacity: 1; }
+.tri-words b { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(24px, 2.7vw, 40px); line-height: 1; letter-spacing: -.03em; }
+.tri-words span { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: var(--brand); }
+.tri-words span .i { width: 17px; height: 17px; transition: transform .2s var(--ease); }
+.tri-words a:hover span .i { transform: translateX(4px); }
+.tri-words a:focus-visible { outline-offset: 6px; }
+@keyframes word { 0% { opacity: 0; transform: translateY(28px); } 3% { opacity: 1; transform: none; } 14% { opacity: 1; transform: none; } 17% { opacity: 0; transform: translateY(-28px); } 100% { opacity: 0; } }
+
 .hero-badge { position: absolute; left: 2%; top: 30%; width: 128px; height: 128px; border-radius: 50%; background: #fff; display: grid; place-items: center; text-align: center; font-family: var(--display); font-weight: 700; font-size: 13px; line-height: 1.15; animation: spin 18s linear infinite; }
 .hero-badge b { display: block; font-size: 30px; font-weight: 900; color: var(--brand-ink); }
 @keyframes spin { from { transform: rotate(-10deg); } to { transform: rotate(350deg); } }
@@ -321,6 +333,12 @@ svg.i { width: 20px; height: 20px; flex: none; }
 .scard-body b { font-size: 17px; font-weight: 800; margin-top: 10px; letter-spacing: -.01em; }
 .scard > .btn { margin: 0 6px; width: auto; }
 .grid .scard { height: 100%; }
+
+/* Selo "Seu logo aqui" sobre produto liso: mostra onde entra a marca do cliente */
+.scard-img, .g-main { position: relative; container-type: inline-size; }
+.logo-spot { position: absolute; left: var(--x); top: var(--y); width: calc(var(--s) * 1cqw); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(var(--r)); border: max(1.5px, .35cqw) solid currentColor; border-radius: 50%; display: grid; place-content: center; text-align: center; font-family: var(--display); font-size: calc(var(--s) * .1cqw); line-height: 1.05; text-transform: uppercase; color: rgba(18, 18, 18, .62); pointer-events: none; }
+.logo-spot b { font-size: 1.9em; font-weight: 900; letter-spacing: -.02em; }
+.logo-spot.claro { color: rgba(255, 255, 255, .85); }
 
 /* Mais pedidos: trilho com setas nas laterais */
 .rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
@@ -613,7 +631,7 @@ body.intro-on { overflow: hidden; }
   .hero .wrap { grid-template-columns: 1fr; gap: 0; }
   .hero-txt { padding-bottom: 36px; }
   .hero-art { min-height: 0; aspect-ratio: 1 / .78; }
-  .hero-badge { width: 104px; height: 104px; font-size: 11px; top: 26%; }
+  .hero-badge { width: 96px; height: 96px; font-size: 11px; top: 4%; left: 4%; }
   .hero-badge b { font-size: 23px; }
   .marq > div { font-size: 18px; padding: 16px 0; gap: 32px; }
   .marq span::after { margin-left: 32px; }

@@ -22,7 +22,8 @@ Gráfica completa local (desde 2013) que faz de cartão de visita a fachada, com
 
 ## Operating Context
 
-- Dois tipos de produto: compra direta (opções, preço calculado, carrinho, Mercado Pago ou WhatsApp) e sob encomenda (formulário em etapas, protocolo EST-AAMMDD-XXXX, abre o WhatsApp com tudo organizado).
+- A gráfica só faz projetos sob medida: nenhum produto sai pronto. Todo produto abre o pedido em etapas da sua categoria (camisa, impresso, brinde, comunicação visual, design), com protocolo EST-AAMMDD-XXXX, e abre o WhatsApp com tudo organizado. Os produtos e modelos do site são referência, com preço "a partir de" só para dar noção.
+- Carrinho e pagamento online (Mercado Pago) existem no código mas estão desligados (`VENDA_ONLINE = false` em js/config.js). Não religar sem o dono pedir.
 - Atendimento somente por mensagem no WhatsApp (68) 99996-7316. Instagram @graficaestampczs.
 - Endereço: R. 17 de Novembro, 1471, Telégrafo, Cruzeiro do Sul, AC, 69980-000. Seg–sex 7h30–17h30, sáb 7h30–11h30, domingo fechado.
 - Páginas: index, produtos (filtro e busca), produto?id=, carrinho, pedido (retorno do pagamento).

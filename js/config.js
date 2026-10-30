@@ -1,3 +1,6 @@
+// Carrinho e pagamento online (Mercado Pago). Desligado: todo produto vira pedido de projeto sob medida.
+export const VENDA_ONLINE = false;
+
 // Dados da loja (tirados do WhatsApp Business e do Instagram @graficaestampczs).
 export const SITE = {
   name: 'Gráfica Estamp',

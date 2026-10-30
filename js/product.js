@@ -1,18 +1,26 @@
 // Página de um produto: compra direta (Tipo A) ou formulário de orçamento em etapas (Tipo B).
-import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610301230';
-import { cart, MAX_QTY } from './cart.js?v=2610301230';
-import { SITE, waLink } from './config.js?v=2610301230';
-import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610301230';
-import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610301230';
-import { worksOf } from './works.js?v=2610301230';
-import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610301230';
+import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610301800';
+import { cart, MAX_QTY } from './cart.js?v=2610301800';
+import { SITE, waLink, VENDA_ONLINE } from './config.js?v=2610301800';
+import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610301800';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, logoSpot, logoOf, $ } from './ui.js?v=2610301800';
+import { worksOf } from './works.js?v=2610301800';
+import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610301800';
 
 layout('produtos');
 const root = $('#prod');
 const params = new URLSearchParams(location.search);
-const p = productById(params.get('id'));
+let p = productById(params.get('id'));
+// Sem venda online, os produtos de compra direta também viram pedido de projeto (formulário da categoria),
+// mantendo o "a partir de" com o menor preço da tabela.
+if (p && p.flow === 'compra' && !VENDA_ONLINE) {
+  const min = Math.min(...p.options.flatMap((o) => o.choices.map((c) => c.price).filter((x) => x != null)));
+  p = { ...p, flow: 'orcamento', form: { impressos: 'impresso', brindes: 'brinde' }[p.cat], from: min,
+    unit: p.options[0].key === 'qtd' ? p.options[0].choices[0].label : '',
+    preset: { 'cartao-visita': { formato: 'cartao' }, 'cartao-fotografico': { formato: 'a6' }, panfletos: { formato: 'a6' } }[p.id] };
+}
 const models = p ? worksOf(p.id) : [];
-const model = models[Number(params.get('m'))] || null; // modelo escolhido nas fileiras da página inicial
+const model = params.has('m') ? models[Number(params.get('m'))] || null : null; // modelo escolhido nas fileiras da página inicial
 
 
 // Ficha técnica por categoria
@@ -37,7 +45,7 @@ function render() {
     <nav class="crumbs" aria-label="Você está em" style="padding-top:24px"><a href="index.html">Início</a><span><a href="produtos.html?cat=${cat.id}">${cat.label}</a></span>${model ? `<span><a href="produto.html?id=${p.id}">${esc(p.name)}</a></span>` : ''}<span>${esc(title)}</span></nav>
     <div class="prod">
       <div class="gallery">
-        <button class="g-main fit-${first.fit}" id="gMain" aria-label="Ampliar foto"><img src="${first.src}" alt="${esc(first.cap)}" width="900" height="900"><span class="g-zoom">${icon('search')}</span></button>
+        <button class="g-main fit-${first.fit}" id="gMain" aria-label="Ampliar foto"><img src="${first.src}" alt="${esc(first.cap)}" width="900" height="900">${logoSpot(first.logo || logoOf(first.src))}<span class="g-zoom">${icon('search')}</span></button>
         ${shots.length > 1 ? `<div class="g-thumbs">${shots.map((w, i) => `<button class="fit-${w.fit}${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1}: ${esc(w.cap)}"><img src="${w.src}" alt=""></button>`).join('')}</div>` : ''}
       </div>
       <div class="prod-info">
@@ -51,7 +59,7 @@ function render() {
     </div>
     <section class="spec-wrap"><h2 class="h2" style="font-size:24px">Detalhes do produto</h2>
       <dl class="spec">${[['Produto', p.name], ...(model ? [['Modelo', model.cap]] : []), ['Categoria', cat.label],
-        ['Como comprar', p.flow === 'compra' ? 'Compra direta: escolha as opções e pague online ou pelo WhatsApp' : 'Sob encomenda: envie o pedido e receba o orçamento antes de pagar'],
+        ['Como pedir', p.flow === 'compra' ? 'Compra direta: escolha as opções e pague online ou pelo WhatsApp' : 'Sob medida: conte como quer, a equipe responde com preço e prazo antes de produzir'],
         ['Preço', priceLine(p)], ...(SPECS[p.cat] || []), ['Arte', 'Envie a sua ou peça para a equipe criar; você aprova antes de produzir'],
         ['Recebimento', `Retirada na gráfica (${SITE.address}) ou entrega em Cruzeiro do Sul`]].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></section>
     <div class="details" id="details"></div>
@@ -226,8 +234,8 @@ function renderQuote() {
   const files = {}; // imagens por posição
   let step = 0;
 
-  $('#facts').innerHTML = `<span class="fact b">${icon('chat')}Solicitação de orçamento</span>`
-    + (p.from ? `<span class="fact">A partir de ${brl(p.from)}/${p.unit}</span>` : '<span class="fact">Preço conforme o projeto</span>')
+  $('#facts').innerHTML = `<span class="fact b">${icon('chat')}Pedido sob medida</span>`
+    + (p.from ? `<span class="fact">A partir de ${brl(p.from)}${p.unit ? `/${p.unit}` : ''}</span>` : '<span class="fact">Preço conforme o projeto</span>')
     + '<span class="fact" id="factInfo"></span>';
   $('#action').innerHTML = `<div class="quote" id="quote">
       <div class="quote-head"><b id="qTitle"></b><div class="progress">${steps.map(() => '<i></i>').join('')}<i></i></div></div>

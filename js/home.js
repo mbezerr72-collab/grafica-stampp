@@ -1,8 +1,8 @@
-import { CATEGORIES, productById } from '../data/products.js?v=2610301230';
-import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610301230';
-import { worksOf } from './works.js?v=2610301230';
-import { layout, icon, shopCard, priceLine, rail, openLightbox, esc, $ } from './ui.js?v=2610301230';
-import { PRODUCTS } from '../data/products.js?v=2610301230';
+import { CATEGORIES, productById } from '../data/products.js?v=2610301800';
+import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610301800';
+import { worksOf } from './works.js?v=2610301800';
+import { layout, icon, shopCard, priceLine, rail, openLightbox, esc, $ } from './ui.js?v=2610301800';
+import { PRODUCTS } from '../data/products.js?v=2610301800';
 
 layout('inicio');
 document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN') el.outerHTML = icon(el.dataset.i); else el.innerHTML = icon(el.dataset.i); });
@@ -10,6 +10,11 @@ document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN
 // Letreiro rolando com as linhas de produto (duas voltas para emendar sem pulo)
 const MARQ = ['Cartões de visita', 'Camisas', 'Uniformes', 'Canecas', 'Banners', 'Fachadas', 'Adesivos', 'Troféus', 'Chaveiros'];
 $('#marq').innerHTML = [...MARQ, ...MARQ].map((t) => `<span>${t}</span>`).join('');
+
+// Triângulo do topo: letreiro com um produto de cada vez (só o primeiro recebe foco; os outros são enfeite da animação)
+const TRI = ['camisas-personalizadas', 'cartao-visita', 'canecas', 'banners-lonas', 'fachadas-letreiros', 'trofeus-medalhas'];
+const TRI_NOME = { 'camisas-personalizadas': 'Camisas', 'cartao-visita': 'Cartões', canecas: 'Canecas', 'banners-lonas': 'Banners', 'fachadas-letreiros': 'Fachadas', 'trofeus-medalhas': 'Troféus' };
+$('#triWords').innerHTML = '<small>A gente imprime</small>' + TRI.map((id, i) => `<a href="produto.html?id=${id}" style="animation-delay:${i * 3}s"${i ? ' tabindex="-1" aria-hidden="true"' : ''}><b>${TRI_NOME[id]}</b><span>${priceLine(productById(id))} ${icon('arrow')}</span></a>`).join('');
 
 // Categorias: blocos de cor com o nome em cima e a foto de um trabalho embaixo
 const CATS = [
@@ -39,7 +44,7 @@ const ROWS = [
   { title: 'Troféus e medalhas', href: 'produto.html?id=trofeus-medalhas', ids: ['trofeus-medalhas'] },
   { title: 'Chaveiros personalizados', href: 'produto.html?id=chaveiros', ids: ['chaveiros'] },
   { title: 'Comunicação visual', href: 'produtos.html?cat=comunicacao', ids: ['fachadas-letreiros', 'banners-lonas', 'adesivos-vitrine', 'placas-personalizadas'] },
-  { title: 'Design e criação', href: 'produtos.html?cat=design', ids: ['criacao-logotipo', 'arte-divulgacao'] },
+  { title: 'Design e criação', href: 'produtos.html?cat=design', ids: ['criacao-logotipo', 'arte-divulgacao', 'arte-camisas', 'identidade-visual', 'ajustes-arquivos'] },
 ];
 // Uma aba por linha de produto; só a aba escolhida mostra a fileira
 const rows = ROWS.map((r) => ({ ...r, items: r.ids.flatMap((id) => worksOf(id).map((w, m) => ({ ...w, m }))) })).filter((r) => r.items.length);
@@ -84,6 +89,7 @@ const works = WORK.map(([id, i]) => worksOf(id)[i]).filter(Boolean);
 $('#works').innerHTML = works.map((w, i) => `<button class="work-tile" data-w="${i}" aria-label="Ampliar: ${esc(w.cap)}"><img src="${w.src}" alt="${esc(w.cap)}" loading="lazy"><span>${esc(w.cap)}</span></button>`).join('');
 $('#works').addEventListener('click', (e) => { const b = e.target.closest('[data-w]'); if (b) openLightbox(works, Number(b.dataset.w)); });
 
+$('#flowWa').href = waLink('Olá! Tenho uma ideia de projeto: ');
 $('#ctaWa').href = waLink('Olá! Preciso de um orçamento personalizado. Minha ideia é: ');
 $('#badgeYear').textContent = SITE.since;
 $('#years').textContent = `+${new Date().getFullYear() - SITE.since}`;

@@ -1,5 +1,5 @@
-import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610301230';
-import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610301230';
+import { CATEGORIES, PRODUCTS } from '../data/products.js?v=2610301800';
+import { layout, icon, productCard, catById, esc, $ } from './ui.js?v=2610301800';
 
 const params = new URLSearchParams(location.search);
 const cat = catById(params.get('cat')) ? params.get('cat') : null;

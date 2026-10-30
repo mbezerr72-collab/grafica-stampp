@@ -1,7 +1,8 @@
 // Partes comuns a todas as páginas: cabeçalho, rodapé, ícones, card de produto e avisos.
-import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610301230';
-import { cart, totals } from './cart.js?v=2610301230';
-import { SITE, waLink } from './config.js?v=2610301230';
+import { CATEGORIES, PRODUCTS, brl } from '../data/products.js?v=2610301800';
+import { cart, totals } from './cart.js?v=2610301800';
+import { SITE, waLink, VENDA_ONLINE } from './config.js?v=2610301800';
+import { worksOf } from './works.js?v=2610301800';
 
 // Ícones (traço simples, 24×24)
 const P = {
@@ -76,7 +77,7 @@ export function layout(active) {
         <form class="hdr-search" action="produtos.html" role="search"><input name="q" type="search" placeholder="O que você precisa? Ex.: cartão, caneca, banner" aria-label="Buscar produtos"><button aria-label="Buscar">${icon('search')}</button></form>
         <div class="hdr-actions">
           <button class="icon-btn" id="searchBtn" aria-label="Buscar produtos" aria-expanded="false">${icon('search')}</button>
-          <a class="icon-btn" href="carrinho.html" aria-label="Carrinho">${icon('cart')}<span class="count" id="cartCount" hidden>0</span></a>
+          ${VENDA_ONLINE ? `<a class="icon-btn" href="carrinho.html" aria-label="Carrinho">${icon('cart')}<span class="count" id="cartCount" hidden>0</span></a>` : ''}
           <a class="btn btn-dark btn-sm btn-quote" href="${waLink('Olá! Quero um orçamento.')}" target="_blank" rel="noopener">${icon('wa')}Pedir orçamento</a>
           <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="navBar">${icon('menu')}</button>
         </div>
@@ -104,10 +105,10 @@ export function layout(active) {
           <div><h4>Atendimento</h4><ul>
             <li><a href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener">WhatsApp ${SITE.phone}</a></li>
             <li><a href="https://instagram.com/${SITE.instagram}" target="_blank" rel="noopener">@${SITE.instagram}</a></li>
-            <li><a href="carrinho.html">Meu carrinho</a></li></ul></div>
+            ${VENDA_ONLINE ? '<li><a href="carrinho.html">Meu carrinho</a></li>' : ''}</ul></div>
           <div><h4>Endereço</h4><p>${SITE.address}<br>${SITE.city}</p></div>
         </div>
-        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Preços e prazos confirmados no atendimento. <a href="painel/">Área da equipe</a></span></div>
+        <div class="ftr-bottom"><span>© ${new Date().getFullYear()} ${SITE.name}</span><span>Algumas fotos: Pexels · Preços e prazos confirmados no atendimento. <a href="painel/">Área da equipe</a></span></div>
       </div>
     </footer>
     <a class="wa-float" href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">${icon('wa')}<b>Fale com a gente</b></a>
@@ -122,7 +123,7 @@ export function layout(active) {
   const io = 'IntersectionObserver' in window && new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
   if (io) requestAnimationFrame(() => document.querySelectorAll('.reveal').forEach((el) => io.observe(el)));
   else document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
-  cart.onChange((items) => { const n = totals(items).count; const c = $('#cartCount'); c.textContent = n; c.hidden = !n; });
+  if (VENDA_ONLINE) cart.onChange((items) => { const n = totals(items).count; const c = $('#cartCount'); c.textContent = n; c.hidden = !n; });
 }
 
 // ===== Card de produto =====
@@ -131,7 +132,7 @@ export function priceTag(p) {
     const min = Math.min(...p.options.flatMap((o) => o.choices.map((c) => c.price).filter((x) => x != null)));
     return `<span class="price-sm">a partir de<b>${brl(min)}</b></span>`;
   }
-  return p.from ? `<span class="price-sm">a partir de<b>${brl(p.from)}<small style="font-size:12px;color:var(--muted)">/${p.unit}</small></b></span>` : '<span class="price-sm">Preço<b>Sob orçamento</b></span>';
+  return p.from ? `<span class="price-sm">a partir de<b>${brl(p.from)}<small style="font-size:12px;color:var(--muted)">${p.unit ? `/${p.unit}` : ''}</small></b></span>` : '<span class="price-sm">Preço<b>Sob orçamento</b></span>';
 }
 // Preço curto para os cards: valor fixo, "a partir de" ou "Consultar preço"
 export function priceLine(p) {
@@ -140,9 +141,13 @@ export function priceLine(p) {
 }
 
 // Card de produto (catálogo) e card de modelo (fileiras da página inicial): foto, selo, favorito, nome, detalhe, preço e botão
-export function shopCard({ href, img, fit = 'cover', badge, fav, title, sub, price }) {
+// Selo "Seu logo aqui" por cima das fotos de produto liso (posição vem de works.js)
+export const logoSpot = (l) => (l ? `<span class="logo-spot${l.t === 'claro' ? ' claro' : ''}" style="--x:${l.x}%;--y:${l.y}%;--s:${l.s};--r:${l.r || 0}deg" aria-hidden="true">Seu<b>logo</b>aqui</span>` : '');
+export const logoOf = (src) => worksOf(src.split('/')[2] || '').find((w) => w.src === src)?.logo;
+
+export function shopCard({ href, img, fit = 'cover', badge, fav, title, sub, price, logo = logoOf(img) }) {
   return `<article class="scard">
-    <a class="scard-img fit-${fit}" href="${href}"><img src="${img}" alt="${esc(title)}" loading="lazy" width="600" height="600"></a>
+    <a class="scard-img fit-${fit}" href="${href}"><img src="${img}" alt="${esc(title)}" loading="lazy" width="600" height="600">${logoSpot(logo)}</a>
     ${badge ? `<span class="scard-badge">${badge}</span>` : ''}
     <button class="fav${isFav(fav) ? ' on' : ''}" data-fav="${fav}" aria-label="Favoritar ${esc(title)}" aria-pressed="${isFav(fav)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></button>
     <a class="scard-body" href="${href}"><h3>${esc(title)}</h3><p>${esc(sub)}</p><b>${price}</b></a>
@@ -151,7 +156,7 @@ export function shopCard({ href, img, fit = 'cover', badge, fav, title, sub, pri
 }
 export function productCard(p, { showCat = true } = {}) {
   return shopCard({ href: `produto.html?id=${p.id}`, img: p.img, fit: p.fit, badge: p.badge, fav: p.id, title: p.name,
-    sub: showCat ? catById(p.cat)?.label : (p.flow === 'compra' ? 'Compra direta' : 'Sob encomenda'), price: priceLine(p) });
+    sub: showCat ? catById(p.cat)?.label : (p.flow === 'compra' && VENDA_ONLINE ? 'Compra direta' : 'Sob medida'), price: priceLine(p) });
 }
 
 // Favoritos (só neste navegador)
