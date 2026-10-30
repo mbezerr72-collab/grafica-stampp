@@ -10,9 +10,6 @@ export const WORKS = {
     ['02.jpg', 'Adesivo com logo 50×50 cm', 'cover'],
     ['03.jpg', 'Aplicação de adesivo promocional', 'cover'],
   ],
-  'arte-divulgacao': [
-    ['01.jpg', 'Arte para stories de ótica', 'cover'],
-  ],
   'banners-lonas': [
     ['01.jpg', 'Banner com tripé', 'contain'],
     ['02.jpg', 'Banner com bastão e corda', 'contain'],
@@ -22,9 +19,6 @@ export const WORKS = {
   'blocos-receituarios': [
     ['01.jpg', 'Blocos com espiral', 'contain'],
     ['02.jpg', 'Bloquinhos kraft', 'contain'],
-  ],
-  'kits-empresas': [
-    ['01.jpg', 'Cadernos kraft com caneta', 'contain'],
   ],
   'uniformes-esportivos': [
     ['01.jpg', 'Camisa de futebol com nome e número', 'contain'],
@@ -55,15 +49,14 @@ export const WORKS = {
     ['04.jpg', 'Camisas sociais com bordado', 'contain'],
     ['05.jpg', 'Camisas de botão', 'contain'],
   ],
-  'camisas-personalizadas': [
-    ['01.jpg', 'Logo na frente e nas costas', 'contain'],
-  ],
   'camisas-polo': [
     ['01.jpg', 'Polo com logo frente e costas', 'contain'],
     ['02.jpg', 'Polos com bordado', 'contain'],
     ['03.jpg', 'Polos para equipe', 'cover'],
   ],
   canecas: [
+    ['04.webp', 'Caneca branca lisa', 'cover', { x: 70, y: 57, s: 16 }],
+    ['05.webp', 'Caneca branca de cerâmica', 'cover', { x: 48, y: 48, s: 22 }],
     ['01.jpg', 'Caneca com foto', 'contain'],
     ['02.jpg', 'Canecas com frases', 'contain'],
     ['03.jpg', 'Caneca com nome e monograma', 'contain'],
@@ -74,23 +67,17 @@ export const WORKS = {
     ['03.jpg', 'Canetas brancas com marca', 'contain'],
     ['04.jpg', 'Canetas ecológicas kraft', 'contain'],
   ],
-  'cartazes-folders': [
-    ['01.jpg', 'Cartaz de oferta', 'contain'],
-  ],
-  'cartao-fotografico': [
-    ['01.jpg', 'Cartões fotográficos', 'contain'],
-  ],
   chaveiros: [
+    ['06.webp', 'Chaveiro liso para gravar', 'cover', { x: 43, y: 58, s: 16, r: -14 }],
     ['01.jpg', 'Chaveiros redondos', 'contain'],
     ['02.jpg', 'Chaveiro de couro e metal', 'cover'],
     ['03.jpg', 'Chaveiros emborrachados', 'cover'],
     ['04.jpg', 'Chaveiros de acrílico', 'contain'],
     ['05.jpg', 'Chaveiro de MDF', 'contain'],
   ],
-  'criacao-logotipo': [
-    ['01.jpg', 'Criação de logotipo', 'cover'],
-  ],
   'fachadas-letreiros': [
+    ['06.webp', 'Fachada pronta para a sua marca', 'cover', { x: 27, y: 50, s: 22 }],
+    ['07.webp', 'Painel na parede', 'cover', { x: 47, y: 57, s: 22 }],
     ['01.jpg', 'Fachada em ACM com letras', 'cover'],
     ['02.jpg', 'Letreiro em letra caixa', 'cover'],
     ['03.jpg', 'Letreiro iluminado', 'cover'],
@@ -108,14 +95,65 @@ export const WORKS = {
     ['08.jpg', 'Troféus coloridos', 'contain'],
     ['09.jpg', 'Troféu em acrílico espelhado', 'cover'],
   ],
-  panfletos: [
-    ['01.jpg', 'Panfletos 10×15 cm', 'contain'],
-  ],
   'placas-personalizadas': [
     ['01.jpg', 'Placa 60×40 cm', 'contain'],
     ['02.jpg', 'Placas em aço escovado', 'contain'],
     ['03.jpg', 'Plaquinhas de identificação', 'cover'],
   ],
+  'cartao-visita': [
+    ['02.webp', 'Cartões pretos lisos', 'cover', { x: 38, y: 58, s: 14, t: 'claro' }],
+    ['03.webp', 'Cartões pretos sobre mármore', 'cover', { x: 45, y: 23, s: 13, t: 'claro' }],
+    ['01.jpg', 'Cartão preto com nome em prata', 'cover'],
+  ],
+  'abadas': [
+    ['01.jpg', 'Regata estampada', 'cover'],
+  ],
+  'ecobags': [
+    ['01.jpg', 'Ecobag de algodão cru', 'cover'],
+  ],
+  'arte-camisas': [
+    ['01.jpg', 'Arte de camisa feita no computador', 'cover'],
+  ],
+  'identidade-visual': [
+    ['01.jpg', 'Papelaria da mesma marca', 'cover'],
+  ],
+  'ajustes-arquivos': [
+    ['01.jpg', 'Arquivo conferido antes de imprimir', 'cover'],
+    ['02.jpg', 'Cores e provas na mesa', 'cover'],
+  ],
+  'panfletos': [
+    ['01.jpg', 'Panfletos 10×15 cm', 'contain'],
+    ['02.jpg', 'Panfleto em papel couchê', 'cover'],
+  ],
+  'cartazes-folders': [
+    ['01.jpg', 'Cartaz de oferta', 'contain'],
+    ['02.jpg', 'Cartaz em papel kraft', 'cover'],
+  ],
+  'cartao-fotografico': [
+    ['01.jpg', 'Cartões fotográficos', 'contain'],
+    ['02.jpg', 'Fotos impressas', 'cover'],
+    ['03.jpg', 'Fotos no estilo instantânea', 'cover'],
+  ],
+  'camisas-personalizadas': [
+    ['01.jpg', 'Logo na frente e nas costas', 'contain'],
+    ['04.webp', 'Camiseta branca lisa', 'cover', { x: 46, y: 36, s: 18 }],
+    ['05.webp', 'Camiseta preta lisa', 'cover', { x: 44, y: 38, s: 16, t: 'claro' }],
+    ['02.jpg', 'Camiseta branca com estampa colorida', 'cover'],
+    ['03.jpg', 'Camiseta preta com estampa', 'cover'],
+  ],
+  'kits-empresas': [
+    ['01.jpg', 'Cadernos kraft com caneta', 'contain'],
+    ['02.jpg', 'Caderno, caneta e caneca', 'cover'],
+  ],
+  'criacao-logotipo': [
+    ['01.jpg', 'Criação de logotipo', 'cover'],
+    ['02.jpg', 'Esboços do logotipo', 'cover'],
+  ],
+  'arte-divulgacao': [
+    ['01.jpg', 'Arte para stories de ótica', 'cover'],
+    ['02.jpg', 'Post para redes sociais', 'cover'],
+  ],
 };
 
-export const worksOf = (id) => (WORKS[id] || []).map(([f, cap, fit]) => ({ src: `img/trabalhos/${id}/${f}`, cap, fit, id }));
+// logo: onde vai o selo "Seu logo aqui" nas fotos de produto liso (x/y = centro em %, s = largura em %, r = giro, t = 'claro' em produto escuro)
+export const worksOf = (id) => (WORKS[id] || []).map(([f, cap, fit, logo]) => ({ src: `img/trabalhos/${id}/${f}`, cap, fit, id, logo }));

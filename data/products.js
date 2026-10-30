@@ -20,7 +20,7 @@ export const PRODUCTS = [
   {
     id: 'cartao-visita', cat: 'impressos', flow: 'compra', name: 'Cartões de visita',
     desc: 'Couché 300g, cores vivas e corte reto. O cartão que a sua marca merece entregar.',
-    img: 'img/cards/prod-cartoes-body.jpg', fit: 'cover', badge: 'Mais pedido',
+    img: 'img/trabalhos/cartao-visita/02.webp', fit: 'cover', badge: 'Mais pedido',
     options: [
       { key: 'qtd', label: 'Quantidade', choices: [
         { v: '100', label: '100 unidades', price: 35 }, { v: '250', label: '250 unidades', price: 75 },
@@ -106,14 +106,14 @@ export const PRODUCTS = [
   {
     id: 'abadas', cat: 'camisas', flow: 'orcamento', form: 'camisa', preset: { tipo: 'tradicional', tecido: 'poliester' }, name: 'Abadás personalizados',
     desc: 'Abadás leves e coloridos para blocos, festas e eventos.',
-    img: 'img/cards/cat-camisas-top.jpg', fit: 'cover', from: 40, unit: 'un',
+    img: 'img/trabalhos/abadas/01.jpg', fit: 'cover', from: 40, unit: 'un',
   },
 
   // ===== Brindes personalizados =====
   {
     id: 'canecas', cat: 'brindes', flow: 'compra', name: 'Canecas personalizadas',
     desc: 'Cerâmica 325 ml com a sua foto, logo ou frase. Um presente que dura.',
-    img: 'img/trabalhos/canecas/01.jpg', fit: 'contain', badge: 'Presente',
+    img: 'img/trabalhos/canecas/04.webp', fit: 'cover', badge: 'Presente',
     options: [
       { key: 'modelo', label: 'Modelo', choices: [
         { v: 'ceramica', label: 'Cerâmica branca', price: 35 }, { v: 'magica', label: 'Mágica (a arte aparece com calor)', price: 55 }] },
@@ -132,7 +132,7 @@ export const PRODUCTS = [
   {
     id: 'chaveiros', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Chaveiros',
     desc: 'Chaveiros em acrílico ou MDF com a sua arte. Ótimos para lembrancinhas e times.',
-    img: 'img/trabalhos/chaveiros/01.jpg', fit: 'contain', from: 6, unit: 'un',
+    img: 'img/trabalhos/chaveiros/06.webp', fit: 'cover', from: 6, unit: 'un',
   },
   {
     id: 'canetas', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Canetas personalizadas',
@@ -142,7 +142,7 @@ export const PRODUCTS = [
   {
     id: 'ecobags', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Ecobags',
     desc: 'Sacolas de tecido personalizadas para lojas, eventos e brindes.',
-    img: 'img/cards/prod-ecobags-body.jpg', fit: 'cover', from: 18, unit: 'un',
+    img: 'img/trabalhos/ecobags/01.jpg', fit: 'cover', from: 18, unit: 'un',
   },
   {
     id: 'kits-empresas', cat: 'brindes', flow: 'orcamento', form: 'brinde', name: 'Kits para empresas',
@@ -159,7 +159,7 @@ export const PRODUCTS = [
   {
     id: 'fachadas-letreiros', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Fachadas e letreiros',
     desc: 'Letreiros em ACM, MDF e acrílico. Fazemos a medição e a instalação.',
-    img: 'img/trabalhos/fachadas-letreiros/01.jpg', fit: 'cover', from: 450, unit: 'projeto',
+    img: 'img/trabalhos/fachadas-letreiros/06.webp', fit: 'cover', from: 450, unit: 'projeto',
   },
   {
     id: 'adesivos-vitrine', cat: 'comunicacao', flow: 'orcamento', form: 'medida', name: 'Adesivos para vitrines e adesivação',
@@ -186,17 +186,17 @@ export const PRODUCTS = [
   {
     id: 'arte-camisas', cat: 'design', flow: 'orcamento', form: 'design', name: 'Arte para camisas',
     desc: 'Criamos a estampa ou o uniforme completo a partir da sua ideia.',
-    img: 'img/cards/cat-design-top.jpg', fit: 'cover', from: 50, unit: 'arte',
+    img: 'img/trabalhos/arte-camisas/01.jpg', fit: 'cover', from: 50, unit: 'arte',
   },
   {
     id: 'identidade-visual', cat: 'design', flow: 'orcamento', form: 'design', name: 'Identidade visual',
     desc: 'Logo, cores, fontes e aplicações para a sua marca ficar reconhecível.',
-    img: 'img/cards/cat-design-top.jpg', fit: 'cover', from: 400, unit: 'projeto',
+    img: 'img/trabalhos/identidade-visual/01.jpg', fit: 'cover', from: 400, unit: 'projeto',
   },
   {
     id: 'ajustes-arquivos', cat: 'design', flow: 'orcamento', form: 'design', name: 'Ajustes em arquivos para impressão',
     desc: 'Já tem a arte? Ajustamos tamanho, sangria e cores para imprimir sem erro.',
-    img: 'img/cards/cat-design-top.jpg', fit: 'cover', from: 20, unit: 'arquivo',
+    img: 'img/trabalhos/ajustes-arquivos/01.jpg', fit: 'cover', from: 20, unit: 'arquivo',
   },
 ];
 

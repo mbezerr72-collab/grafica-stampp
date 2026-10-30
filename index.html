@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Figtree:wght@400;500;600;700;800&family=Michroma&family=Krona+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=2610301230">
+  <link rel="stylesheet" href="css/style.css?v=2610301800">
   <link rel="preload" as="image" href="img/hero.jpg">
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -43,7 +43,7 @@
         </div>
         <div class="hero-art">
           <div class="tri-shape"></div>
-          <div class="tri-ph" role="img" aria-label="Camisa, caneca, garrafa e cartões com a marca Gráfica Estamp"></div>
+          <div class="tri-words" id="triWords"></div>
           <div class="hero-badge" aria-hidden="true"><span><b id="badgeYear">2013</b>desde<br>em CZS</span></div>
         </div>
       </div>
@@ -74,21 +74,21 @@
 
     <section class="sec" aria-labelledby="t-como">
       <div class="wrap reveal">
-        <div class="sec-head"><div><h2 id="t-como">Dois jeitos de pedir</h2><p>Cada produto já mostra qual é o caminho. Nos dois, a arte passa pela sua aprovação antes de ir para a produção.</p></div></div>
+        <div class="sec-head"><div><h2 id="t-como">Como <em>funciona</em></h2><p>Aqui nada sai pronto da prateleira: cada trabalho é feito do seu jeito, com a sua marca.</p></div></div>
         <div class="flows">
           <div class="flow dark">
-            <span class="flow-tag"><span data-i="cart"></span>Compra direta</span>
-            <h3>Preço na hora, pagamento online.</h3>
-            <ol><li>Escolha quantidade, papel e acabamento</li><li>Veja o preço calculado e ponha no carrinho</li><li>Pague pelo Mercado Pago ou finalize no WhatsApp</li></ol>
-            <p class="ex">Cartões de visita, panfletos, adesivos, canecas, troféus e mais.</p>
-            <a class="btn btn-brand" href="produtos.html?cat=impressos">Ver impressos</a>
+            <span class="flow-tag"><span data-i="doc"></span>Seu pedido em 3 passos</span>
+            <h3>Conte a ideia. A gente cria, você aprova, a gente produz.</h3>
+            <ol><li>Escolha o que quer fazer, ou um modelo para se inspirar</li><li>Conte do seu jeito: ideia, quantidade, cores, tamanhos e fotos</li><li>A equipe responde no WhatsApp com preço e prazo, e mostra a arte para você aprovar antes de produzir</li></ol>
+            <p class="ex">Você não paga nada para pedir. O pedido chega com número de protocolo e tudo organizado.</p>
+            <a class="btn btn-brand" href="produtos.html">Começar meu pedido</a>
           </div>
           <div class="flow orange">
-            <span class="flow-tag"><span data-i="doc"></span>Sob encomenda</span>
-            <h3>Conte a ideia, a gente responde com preço e prazo.</h3>
-            <ol><li>Preencha o pedido em etapas: modelo, cores, tamanhos, imagens</li><li>Receba um número de protocolo</li><li>O pedido chega organizado no WhatsApp da gráfica</li></ol>
-            <p class="ex">Camisas, uniformes, banners, fachadas e criação de arte. Você só paga depois de aprovar.</p>
-            <a class="btn btn-dark" href="produtos.html?cat=camisas">Ver camisas e uniformes</a>
+            <span class="flow-tag"><span data-i="bulb"></span>Não achou o que procura?</span>
+            <h3>Se dá para imprimir, a gente faz.</h3>
+            <p>Camisas, cartões, brindes, banners, fachadas, artes. Os modelos do site são só referências: mande a sua ideia, mesmo que seja só um rascunho ou uma foto.</p>
+            <p class="ex">Os preços "a partir de" são para você ter uma noção. O valor final depende do seu projeto.</p>
+            <a class="btn btn-dark" id="flowWa" target="_blank" rel="noopener"><span data-i="wa"></span>Mandar minha ideia</a>
           </div>
         </div>
       </div>
@@ -137,6 +137,6 @@
       </div>
     </section>
   </main>
-  <script type="module" src="js/home.js?v=2610301230"></script>
+  <script type="module" src="js/home.js?v=2610301800"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Formulários de orçamento (produtos do Tipo B). Cada formulário é uma lista de etapas com campos.
 // Tipos de campo: cards, radios, colors, multi, sizes, uploads, text, number, tel, email, date, textarea.
-import { SITE } from './config.js?v=2610301230';
+import { SITE } from './config.js?v=2610301800';
 
 // Descrição + imagens de referência, presente em todos os formulários
 const REF_SLOTS_CAMISA = [
@@ -75,7 +75,7 @@ export const FORMS = {
   impresso: [
     { title: 'Formato e acabamento', sub: 'O que você precisa imprimir.', fields: [
       { key: 'formato', type: 'radios', label: 'Formato', req: true, choices: [
-        { v: 'a5', l: 'A5', s: '15 × 21 cm' }, { v: 'a4', l: 'A4', s: '21 × 30 cm' }, { v: 'a3', l: 'A3', s: '30 × 42 cm' }, { v: 'outro', l: 'Outro tamanho' }] },
+        { v: 'cartao', l: 'Cartão de visita', s: '9 × 5 cm' }, { v: 'a6', l: 'A6', s: '10 × 15 cm' }, { v: 'a5', l: 'A5', s: '15 × 21 cm' }, { v: 'a4', l: 'A4', s: '21 × 30 cm' }, { v: 'a3', l: 'A3', s: '30 × 42 cm' }, { v: 'outro', l: 'Outro tamanho' }] },
       { key: 'medida', type: 'text', label: 'Qual tamanho?', req: true, when: (d) => d.formato === 'outro', placeholder: 'Ex.: 10 × 20 cm' },
       { key: 'quantidade', type: 'number', label: 'Quantidade', req: true, min: 1, placeholder: 'Ex.: 500' },
       { key: 'papel', type: 'radios', label: 'Papel', req: true, choices: [
