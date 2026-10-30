@@ -10,7 +10,7 @@ export type Pedido =
   | { tela: 'pdv'; produtoId?: string; cor?: string; clienteId?: string; forma?: FormaPag; parcelas?: number }
   | { tela: 'pedidos'; nova: true; clienteId?: string; abrir?: number }
   | { tela: 'pedidos'; abrir: number; nova?: false }
-  | { tela: 'despesas'; modo: 'pago' | 'pagar' | 'receber'; data?: string }
+  | { tela: 'despesas'; modo: 'pago' | 'pagar'; data?: string }
   | { tela: 'produtos'; reajuste?: { marca: 'todos' | Marca; pct: number } }
   | { tela: 'compras'; entrada: true; nfe?: boolean }
 

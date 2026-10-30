@@ -11,10 +11,10 @@ import { intervalo, usePeriodo, diasEntre, somaDias } from '../escala/periodo'
 
 const CAT: Record<CategoriaDespesa, string> = { estoque: 'Compra de material', aluguel: 'Aluguel', anuncios: 'Anúncios', salarios: 'Salários', contas: 'Contas', outros: 'Outros' }
 const COR: Record<CategoriaDespesa, string> = { estoque: 'var(--mut)', aluguel: 'var(--roxo)', anuncios: 'var(--inf)', salarios: 'var(--teal)', contas: 'var(--ate)', outros: 'var(--sai)' }
-type Aba = 'pagar' | 'receber' | 'pagas'
+type Aba = 'pagar' | 'pagas'
 const dataBr = (d: string) => d.split('-').reverse().join('/')
 
-/** Contas e despesas: a pagar, a receber e o que já saiu (sem conciliação bancária). */
+/** Contas a pagar: o que vence e o que já saiu (a gráfica não vende fiado: não tem conta a receber). */
 export default function Despesas(_: { s: Sessao }) {
   const p = usePeriodo()
   const iv = intervalo(p)
@@ -23,14 +23,14 @@ export default function Despesas(_: { s: Sessao }) {
   const h = hoje()
   const [aba, setAba] = useState<Aba>('pagar')
   // O Calendário e o "+" abrem este mesmo formulário, já com a data (sem cópia em outra tela).
-  const [form, setForm] = useState<Partial<Conta> & { modo: 'pago' | 'pagar' | 'receber' } | null>(() => {
+  const [form, setForm] = useState<Partial<Conta> & { modo: 'pago' | 'pagar' } | null>(() => {
     const pd = pegarPedido('despesas')
-    return pd ? { modo: pd.modo, categoria: 'outros', valor: 0, descricao: '', vencimento: pd.data ?? hoje(), recorrencia: 'nenhuma' } : null
+    return pd ? { modo: pd.modo === 'pagar' ? 'pagar' : 'pago', categoria: 'outros', valor: 0, descricao: '', vencimento: pd.data ?? hoje(), recorrencia: 'nenhuma' } : null
   })
   useEffect(() => {
     const f = () => {
       const pd = pegarPedido('despesas')
-      if (pd) setForm({ modo: pd.modo, categoria: 'outros', valor: 0, descricao: '', vencimento: pd.data ?? hoje(), recorrencia: 'nenhuma' })
+      if (pd) setForm({ modo: pd.modo === 'pagar' ? 'pagar' : 'pago', categoria: 'outros', valor: 0, descricao: '', vencimento: pd.data ?? hoje(), recorrencia: 'nenhuma' })
     }
     window.addEventListener('escala:pedido', f)
     return () => window.removeEventListener('escala:pedido', f)
@@ -38,7 +38,6 @@ export default function Despesas(_: { s: Sessao }) {
 
   const abertas = contas.filter((c) => !c.pagaEm)
   const pagar = abertas.filter((c) => c.tipo === 'pagar').sort((a, b) => a.vencimento.localeCompare(b.vencimento))
-  const receber = abertas.filter((c) => c.tipo === 'receber').sort((a, b) => a.vencimento.localeCompare(b.vencimento))
   const atrasadas = pagar.filter((c) => c.vencimento < h)
   const prox30 = pagar.filter((c) => c.vencimento >= h && c.vencimento <= somaDias(h, 30))
   const pagas = despesas.filter((d) => d.data >= iv.de && d.data <= iv.ate).sort((a, b) => b.data.localeCompare(a.data))
@@ -61,7 +60,7 @@ export default function Despesas(_: { s: Sessao }) {
           <b>{c.vencimento.slice(8)}</b>
           <small>{atraso ? 'atraso' : dataBr(c.vencimento).slice(3, 5) + '/' + c.vencimento.slice(2, 4)}</small>
         </span>
-        <button type="button" className="conta-txt" onClick={() => setForm({ ...c, modo: c.tipo })}>
+        <button type="button" className="conta-txt" onClick={() => setForm({ ...c, modo: 'pagar' })}>
           <b>{c.descricao}</b>
           <small>
             {CAT[c.categoria]}
@@ -79,8 +78,8 @@ export default function Despesas(_: { s: Sessao }) {
 
   return (
     <>
-      <Topo titulo="Contas a pagar" sub="O que vence, o que entra e o que já saiu. Aluguel, energia, internet e salários entram sozinhos todo mês.">
-        <Baixar rel={() => relDespesas(despesas, iv.de, iv.ate, `${iv.rotulo}. SmartCZS.`)} />
+      <Topo titulo="Contas a pagar" sub="O que vai vencer e o que já foi pago. Aluguel, energia, internet e salários entram sozinhos todo mês.">
+        <Baixar rel={() => relDespesas(despesas, iv.de, iv.ate, `${iv.rotulo}. Gráfica Estamp.`)} />
         <button type="button" className="bt bt-forte acao-principal" onClick={() => setForm({ modo: 'pago', categoria: 'outros', valor: 0, descricao: '', vencimento: h, recorrencia: 'nenhuma' })}>
           <Icone nome="somar" tamanho={18} />
           <span>Lançar despesa</span>
@@ -89,8 +88,8 @@ export default function Despesas(_: { s: Sessao }) {
       <section className="kpis-menores">
         <MiniKpi rotulo="Atrasadas" valor={'R$ ' + brl(atrasadas.reduce((t, c) => t + c.valor, 0))} nota={`${atrasadas.length} ${atrasadas.length === 1 ? 'conta' : 'contas'}`} classe={atrasadas.length ? 'desce' : undefined} />
         <MiniKpi rotulo="A pagar em 30 dias" valor={'R$ ' + brl(prox30.reduce((t, c) => t + c.valor, 0))} nota={`${prox30.length} contas`} />
-        <MiniKpi rotulo="A receber" valor={'R$ ' + brl(receber.reduce((t, c) => t + c.valor, 0))} nota="repasses e fiado" />
-        <MiniKpi rotulo="Gastos da gráfica" valor={'R$ ' + brl(loja.reduce((t, d) => t + d.valor, 0))} nota={`${iv.rotulo.toLowerCase()}, sem compra de material`} />
+        <MiniKpi rotulo="Já pago" valor={'R$ ' + brl(pagas.reduce((t, d) => t + d.valor, 0))} nota={`${pagas.length} ${pagas.length === 1 ? 'conta paga' : 'contas pagas'} no período`} />
+        <MiniKpi rotulo="Gastos da gráfica" valor={'R$ ' + brl(loja.reduce((t, d) => t + d.valor, 0))} nota="sem contar a compra de material" />
       </section>
       <div className="grade-2">
         <section className="painel">
@@ -98,7 +97,6 @@ export default function Despesas(_: { s: Sessao }) {
             {(
               [
                 ['pagar', `A pagar (${pagar.length})`],
-                ['receber', `A receber (${receber.length})`],
                 ['pagas', `Pagas no período (${pagas.length})`],
               ] as const
             ).map(([id, nome]) => (
@@ -108,7 +106,6 @@ export default function Despesas(_: { s: Sessao }) {
             ))}
           </div>
           {aba === 'pagar' && <ul className="contas">{pagar.slice(0, 40).map(linhaConta)}</ul>}
-          {aba === 'receber' && (receber.length ? <ul className="contas">{receber.map(linhaConta)}</ul> : <p className="mut">Nada a receber.</p>)}
           {aba === 'pagas' && (
             <ul className="contas">
               {pagas.slice(0, 60).map((d) => (
@@ -152,7 +149,7 @@ export default function Despesas(_: { s: Sessao }) {
   )
 }
 
-function FormConta({ f, fechar }: { f: Partial<Conta> & { modo: 'pago' | 'pagar' | 'receber' }; fechar: () => void }) {
+function FormConta({ f, fechar }: { f: Partial<Conta> & { modo: 'pago' | 'pagar' }; fechar: () => void }) {
   const [x, setX] = useState(f)
   const editando = !!f.id
   const ok = !!x.descricao?.trim() && (x.valor ?? 0) > 0
@@ -163,8 +160,8 @@ function FormConta({ f, fechar }: { f: Partial<Conta> & { modo: 'pago' | 'pagar'
       negocio.lancarDespesa({ data: x.vencimento ?? hoje(), valor: base.valor, categoria: base.categoria, descricao: base.descricao })
       avisar('Despesa lançada.')
     } else {
-      negocio.salvarConta({ ...base, id: f.id, tipo: x.modo, vencimento: x.vencimento ?? hoje() })
-      avisar(editando ? 'Conta salva.' : x.modo === 'pagar' ? 'Conta agendada.' : 'Conta a receber agendada.')
+      negocio.salvarConta({ ...base, id: f.id, tipo: 'pagar', vencimento: x.vencimento ?? hoje() })
+      avisar(editando ? 'Conta salva.' : 'Conta agendada.')
     }
     fechar()
   }
@@ -198,7 +195,6 @@ function FormConta({ f, fechar }: { f: Partial<Conta> & { modo: 'pago' | 'pagar'
             [
               ['pago', 'Já paguei'],
               ['pagar', 'Conta a pagar'],
-              ['receber', 'A receber'],
             ] as const
           ).map(([m, nome]) => (
             <button key={m} type="button" role="radio" className="ficha" aria-checked={x.modo === m} onClick={() => setX({ ...x, modo: m })}>
