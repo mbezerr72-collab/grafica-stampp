@@ -1,11 +1,11 @@
 // Página de um produto: compra direta (Tipo A) ou formulário de orçamento em etapas (Tipo B).
-import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610291901';
-import { cart, MAX_QTY } from './cart.js?v=2610291901';
-import { SITE, waLink } from './config.js?v=2610291901';
-import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610291901';
-import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610291901';
-import { worksOf } from './works.js?v=2610291901';
-import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610291901';
+import { productById, defaultSelection, unitPrice, selectionLabel, SIZES, BABY_SIZES, brl } from '../data/products.js?v=2610301230';
+import { cart, MAX_QTY } from './cart.js?v=2610301230';
+import { SITE, waLink } from './config.js?v=2610301230';
+import { FORMS, initialData, sizeTotal, faixa, cores as coresField } from './forms.js?v=2610301230';
+import { layout, icon, esc, catById, productCard, productsIn, shopCard, priceLine, toast, openLightbox, $ } from './ui.js?v=2610301230';
+import { worksOf } from './works.js?v=2610301230';
+import { protocolo, registrarNoPainel } from './painel-ponte.js?v=2610301230';
 
 layout('produtos');
 const root = $('#prod');

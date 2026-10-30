@@ -1,28 +1,32 @@
-import { CATEGORIES, productById } from '../data/products.js?v=2610291901';
-import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610291901';
-import { worksOf } from './works.js?v=2610291901';
-import { layout, icon, shopCard, priceLine, rail, $ } from './ui.js?v=2610291901';
+import { CATEGORIES, productById } from '../data/products.js?v=2610301230';
+import { SITE, waLink, hoursTable, isOpenNow } from './config.js?v=2610301230';
+import { worksOf } from './works.js?v=2610301230';
+import { layout, icon, shopCard, priceLine, rail, openLightbox, esc, $ } from './ui.js?v=2610301230';
+import { PRODUCTS } from '../data/products.js?v=2610301230';
 
 layout('inicio');
 document.querySelectorAll('[data-i]').forEach((el) => { if (el.tagName === 'SPAN') el.outerHTML = icon(el.dataset.i); else el.innerHTML = icon(el.dataset.i); });
 
-$('#trust').innerHTML = [['shield', `Desde ${SITE.since}`], ['wa', 'Atendimento pelo WhatsApp'], ['truck', 'Retirada ou entrega']]
-  .map(([i, t]) => `<span>${icon(i)}${t}</span>`).join('');
+// Letreiro rolando com as linhas de produto (duas voltas para emendar sem pulo)
+const MARQ = ['Cartões de visita', 'Camisas', 'Uniformes', 'Canecas', 'Banners', 'Fachadas', 'Adesivos', 'Troféus', 'Chaveiros'];
+$('#marq').innerHTML = [...MARQ, ...MARQ].map((t) => `<span>${t}</span>`).join('');
 
-// Categorias: arte em cima e a lista de produtos em texto, cada nome é um link
+// Categorias: blocos de cor com o nome em cima e a foto de um trabalho embaixo
 const CATS = [
-  ['impressos', 305, ['cartao-visita', 'cartao-fotografico', 'panfletos', 'cartazes-folders', 'adesivos-etiquetas']],
-  ['camisas', 296, ['camisas-personalizadas', 'camisas-polo', 'uniformes-profissionais', 'uniformes-esportivos', 'camisas-eventos']],
-  ['brindes', 271, ['canecas', 'trofeus-medalhas', 'chaveiros', 'canetas', 'ecobags']],
-  ['comunicacao', 298, ['banners-lonas', 'fachadas-letreiros', 'adesivos-vitrine', 'placas-personalizadas']],
-  ['design', 294, ['criacao-logotipo', 'arte-divulgacao', 'arte-camisas', 'identidade-visual', 'ajustes-arquivos']],
+  ['impressos', 'img/trabalhos/cartao-fotografico/01.jpg', 'contain'],
+  ['camisas', 'img/trabalhos/camisas-polo/03.jpg', 'cover'],
+  ['brindes', 'img/trabalhos/canecas/02.jpg', 'contain'],
+  ['comunicacao', 'img/trabalhos/fachadas-letreiros/03.jpg', 'cover'],
+  ['design', 'img/trabalhos/criacao-logotipo/01.jpg', 'cover'],
 ];
-$('#cats').innerHTML = CATS.map(([cat, w, ids]) => {
+$('#cats').innerHTML = CATS.map(([cat, img, fit]) => {
   const c = CATEGORIES.find((x) => x.id === cat);
-  return `<div class="cat-card" style="flex:${w} 1 0">
-    <a class="cat-art" href="produtos.html?cat=${cat}"><img src="img/cards/cat-${cat}-top.jpg" alt="${c.label}" loading="lazy"></a>
-    <ul class="cat-list">${ids.map((id) => `<li><a href="produto.html?id=${id}">${icon('check')}<span>${productById(id).name}</span></a></li>`).join('')}</ul>
-  </div>`;
+  const n = PRODUCTS.filter((p) => p.cat === cat).length;
+  return `<article class="cat-card">
+    <div class="cat-meta"><h3><a href="produtos.html?cat=${cat}">${c.label}</a></h3>
+      <span class="cat-n">${n} produtos ${icon('arrow')}</span></div>
+    <div class="cat-art fit-${fit}"><img src="${img}" alt="" loading="lazy" width="600" height="600"></div>
+  </article>`;
 }).join('');
 
 // Mais pedidos: uma fileira por linha de produto, com título em cima e os modelos lado a lado (cada um com página própria)
@@ -37,31 +41,55 @@ const ROWS = [
   { title: 'Comunicação visual', href: 'produtos.html?cat=comunicacao', ids: ['fachadas-letreiros', 'banners-lonas', 'adesivos-vitrine', 'placas-personalizadas'] },
   { title: 'Design e criação', href: 'produtos.html?cat=design', ids: ['criacao-logotipo', 'arte-divulgacao'] },
 ];
-$('#featured').innerHTML = ROWS.map((r, k) => {
-  const items = r.ids.flatMap((id) => worksOf(id).map((w, m) => ({ ...w, m })));
-  if (!items.length) return ''; // fileira sem modelos ainda não aparece
-  const cards = items.map((w, i) => {
+// Uma aba por linha de produto; só a aba escolhida mostra a fileira
+const rows = ROWS.map((r) => ({ ...r, items: r.ids.flatMap((id) => worksOf(id).map((w, m) => ({ ...w, m }))) })).filter((r) => r.items.length);
+$('#tabs').innerHTML = rows.map((r, k) => `<button class="tab" role="tab" id="tab-${k}" aria-controls="panel-${k}" aria-selected="${!k}" tabindex="${k ? -1 : 0}">${r.title}</button>`).join('');
+$('#featured').innerHTML = rows.map((r, k) => {
+  const cards = r.items.map((w, i) => {
     const p = productById(w.id);
     return shopCard({ href: `produto.html?id=${w.id}&m=${w.m}`, img: w.src, fit: w.fit, fav: `${w.id}:${w.m}`,
-      badge: i === 0 ? 'Mais pedido' : '',
-      title: w.cap, sub: p.name, price: priceLine(p) });
+      badge: i === 0 ? 'Mais pedido' : '', title: w.cap, sub: p.name, price: priceLine(p) });
   }).join('');
-  return `<section class="row" aria-labelledby="row-${k}">
-    <div class="row-head"><h3 id="row-${k}">${r.title}</h3>
-      <div class="row-nav"><a class="link-arrow" href="${r.href}">Ver todos</a></div></div>
+  return `<div class="rail-panel" role="tabpanel" id="panel-${k}" aria-labelledby="tab-${k}"${k ? ' hidden' : ''}>
     <div class="rail-wrap">
       <button class="rail-btn rail-side" data-prev aria-label="Ver os anteriores">${icon('arrow')}</button>
       <div class="rail">${cards}</div>
       <button class="rail-btn rail-side" data-next aria-label="Ver os próximos">${icon('arrow')}</button>
-    </div>
-  </section>`;
+    </div></div>`;
 }).join('');
-document.querySelectorAll('#featured .row').forEach((row) => rail(row.querySelector('.rail'), row.querySelector('[data-prev]'), row.querySelector('[data-next]')));
+const panels = [...document.querySelectorAll('#featured .rail-panel')];
+const tabs = [...document.querySelectorAll('#tabs .tab')];
+const ready = new Set();
+const pick = (k, focus) => {
+  tabs.forEach((t, i) => { t.setAttribute('aria-selected', i === k); t.tabIndex = i === k ? 0 : -1; });
+  panels.forEach((p, i) => { p.hidden = i !== k; });
+  if (!ready.has(k)) { ready.add(k); const p = panels[k]; rail(p.querySelector('.rail'), p.querySelector('[data-prev]'), p.querySelector('[data-next]')); }
+  $('#tabAll').href = rows[k].href;
+  $('#tabAll').firstChild.textContent = `Ver tudo de ${rows[k].title.toLowerCase()} `;
+  if (focus) { tabs[k].focus(); tabs[k].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' }); }
+};
+tabs.forEach((t, k) => t.addEventListener('click', () => pick(k)));
+$('#tabs').addEventListener('keydown', (e) => {
+  const k = tabs.indexOf(document.activeElement);
+  if (k < 0) return;
+  const to = { ArrowRight: k + 1, ArrowLeft: k - 1, Home: 0, End: tabs.length - 1 }[e.key];
+  if (to == null) return;
+  e.preventDefault(); pick((to + tabs.length) % tabs.length, true);
+});
+pick(0);
+
+// Ideias para o pedido: mosaico de fotos (as de foto inteira), ampliam no clique
+const WORK = [['fachadas-letreiros', 1], ['adesivos-vitrine', 2], ['adesivos-vitrine', 0], ['chaveiros', 2], ['placas-personalizadas', 2], ['trofeus-medalhas', 8], ['fachadas-letreiros', 3], ['chaveiros', 1]];
+const works = WORK.map(([id, i]) => worksOf(id)[i]).filter(Boolean);
+$('#works').innerHTML = works.map((w, i) => `<button class="work-tile" data-w="${i}" aria-label="Ampliar: ${esc(w.cap)}"><img src="${w.src}" alt="${esc(w.cap)}" loading="lazy"><span>${esc(w.cap)}</span></button>`).join('');
+$('#works').addEventListener('click', (e) => { const b = e.target.closest('[data-w]'); if (b) openLightbox(works, Number(b.dataset.w)); });
 
 $('#ctaWa').href = waLink('Olá! Preciso de um orçamento personalizado. Minha ideia é: ');
+$('#badgeYear').textContent = SITE.since;
 $('#years').textContent = `+${new Date().getFullYear() - SITE.since}`;
 
 const open = isOpenNow();
+$('#heroStatus').innerHTML = `<span class="status ${open ? 'on' : 'off'}">${open ? 'Aberta agora' : 'Fechada agora'}</span>${open ? 'Resposta no horário de atendimento' : 'Mande o pedido; respondemos quando abrir'}`;
 $('#contactBox').innerHTML = `
   <span class="status ${open ? 'on' : 'off'}">${open ? 'Aberta agora' : 'Fechada agora'}</span>
   <div class="c-row" style="margin-top:12px">${icon('wa')}<div><b><a href="${waLink('Olá! Vim pelo site.')}" target="_blank" rel="noopener">${SITE.phone}</a></b><span>WhatsApp · atendimento por mensagem</span></div></div>
