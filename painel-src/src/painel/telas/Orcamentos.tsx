@@ -230,6 +230,7 @@ function Detalhe({ o, nomeProduto, fechar }: { o: Orcamento; nomeProduto: string
               Pela tabela, {o.qtd} × {nomeProduto.toLowerCase()} sai a partir de R$ {brl(sugestao)}.
             </p>
           )}
+          {p && (p.unidade === 'm²' || p.variacoes.some((v) => v.cor.includes('m²'))) && <CalculaM2 o={o} variacoes={p.variacoes} usar={setValor} />}
           <p className="det-rot">Mensagem que vai para o cliente</p>
           <pre className="msg-previa">{texto}</pre>
           <div className="det-desfazer">
@@ -328,5 +329,69 @@ function NovoOrcamento({ fechar }: { fechar: (id?: string) => void }) {
         <textarea rows={3} value={pedido} onChange={(e) => setPedido(e.target.value)} placeholder="Ex.: 30 camisas brancas, logo no peito e nome nas costas" />
       </label>
     </Gaveta>
+  )
+}
+
+/** Lê a medida que o cliente escreveu ("200 × 100 cm", "2x1 m"): largura e altura em metros. Acima de 20 entende como cm. */
+export function lerMedida(texto: string): [number, number] | null {
+  const m = texto.replace(/,/g, '.').match(/(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(cm|m)?/i)
+  if (!m) return null
+  const emCm = m[3]?.toLowerCase() === 'cm' || (!m[3] && (Number(m[1]) > 20 || Number(m[2]) > 20))
+  const f = emCm ? 100 : 1
+  return [Number(m[1]) / f, Number(m[2]) / f]
+}
+
+/** Banner, lona e adesivo: largura × altura × quantidade × preço do m². Cobra no mínimo 1 m² por peça. */
+function CalculaM2({ o, variacoes, usar }: { o: Orcamento; variacoes: { cor: string; pix: number }[]; usar: (v: number) => void }) {
+  const doM2 = variacoes.filter((v) => v.cor.includes('m²'))
+  const opcoes = doM2.length ? doM2 : variacoes
+  const lida = o.respostas.map(([, v]) => lerMedida(v)).find(Boolean)
+  const [largura, setLargura] = useState(lida ? String(lida[0]).replace('.', ',') : '')
+  const [altura, setAltura] = useState(lida ? String(lida[1]).replace('.', ',') : '')
+  const [qtd, setQtd] = useState(o.qtd || 1)
+  const [preco, setPreco] = useState(opcoes[0]?.pix ?? 0)
+  const num = (s: string) => Number(s.replace(',', '.')) || 0
+  const area = num(largura) * num(altura)
+  const cobrada = Math.max(1, area) * qtd
+  const total = Math.round(cobrada * preco * 100) / 100
+  return (
+    <div className="det-bloco">
+      <p className="det-rot">Calcular por m²{lida ? ' · medida lida do pedido do cliente' : ''}</p>
+      <div className="form-g form-g--3">
+        <label className="campo">
+          Largura (m)
+          <input inputMode="decimal" placeholder="Ex.: 2" value={largura} onChange={(e) => setLargura(e.target.value.replace(/[^\d,.]/g, ''))} />
+        </label>
+        <label className="campo">
+          Altura (m)
+          <input inputMode="decimal" placeholder="Ex.: 1" value={altura} onChange={(e) => setAltura(e.target.value.replace(/[^\d,.]/g, ''))} />
+        </label>
+        <label className="campo">
+          Quantidade
+          <input inputMode="numeric" value={qtd} onChange={(e) => setQtd(Math.max(1, Number(e.target.value.replace(/\D/g, '')) || 1))} />
+        </label>
+        <label className="campo">
+          Material
+          <select value={preco} onChange={(e) => setPreco(Number(e.target.value))}>
+            {opcoes.map((v) => (
+              <option key={v.cor} value={v.pix}>
+                {v.cor}: R$ {brl(v.pix)}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      {area > 0 && (
+        <div className="cli-novo-acoes" style={{ flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p className="pequeno">
+            {area.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} m² por peça
+            {area < 1 ? ' (cobra 1 m², o mínimo)' : ''} × {qtd} = <b>{cobrada.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} m²</b> × R$ {brl(preco)} = <b className="num">R$ {brl(total)}</b>
+          </p>
+          <button type="button" className="bt bt-forte bt-pequeno" onClick={() => { usar(total); avisar(`Valor do orçamento: R$ ${brl(total)}.`) }}>
+            Usar este valor
+          </button>
+        </div>
+      )}
+    </div>
   )
 }

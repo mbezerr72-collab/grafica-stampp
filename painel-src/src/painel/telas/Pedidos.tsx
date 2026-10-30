@@ -11,6 +11,7 @@ import { fichaProducaoPdf, gradeTexto, linkAprovacao, linkWhats, mensagemPedido 
 import { Baixar } from '../escala/Baixar'
 import { relPedidos } from '../escala/relatorios'
 import { pegarPedido } from '../escala/pedido'
+import { FeitoFora, ListaNomes } from './PedidoExtras'
 
 const COR: Record<StatusPedido, string> = { novo: 'var(--inf)', arte: 'var(--roxo)', aprovacao: 'var(--ate)', producao: 'var(--teal)', pronto: 'var(--ent)', entregue: 'var(--mut)' }
 const PROXIMO: Partial<Record<StatusPedido, [StatusPedido, string]>> = {
@@ -415,6 +416,7 @@ function DetalhePedido({ o, fechar, mudar, responsavel }: { o: Pedido; fechar: (
           </div>
         </div>
       )}
+      {(grade.length > 0 || (o.lista?.length ?? 0) > 0 || ['sublimacao', 'dtf', 'silk', 'bordado'].includes(o.setor)) && <ListaNomes key={o.id + (o.lista?.length ?? 0)} o={o} />}
       {o.cores.length > 0 && (
         <div className="det-bloco">
           <p className="det-rot">Cores</p>
@@ -438,6 +440,8 @@ function DetalhePedido({ o, fechar, mudar, responsavel }: { o: Pedido; fechar: (
           </ul>
         </div>
       )}
+
+      {!o.vendaId && <FeitoFora o={o} />}
 
       <div className="det-bloco">
         <p className="det-rot">Pagamento</p>

@@ -90,7 +90,6 @@ function Lista({ s, abas }: { s: Sessao; abas: React.ReactNode }) {
         <select value={situacao} onChange={(e) => setSituacao(e.target.value as Situacao)} aria-label="Situação">
           <option value="todas">Todas as situações</option>
           <option value="venda">Ativos</option>
-          <option value="esgotados">Pronta entrega esgotada</option>
           <option value="desativados">Desativados</option>
         </select>
       </div>

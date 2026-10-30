@@ -90,7 +90,13 @@ export default function Producao(_: { s: Sessao }) {
                       <span className="os-cli">
                         {cli?.nome ?? 'Cliente'} · {nomeDe(o.responsavelId)}
                       </span>
+                      {o.fora && !o.fora.voltouEm && (
+                        <span className={'pill ' + (o.fora.previsao < h ? 'sai' : 'ate')}>
+                          No fornecedor: {o.fora.fornecedor}, volta {o.fora.previsao.slice(8)}/{o.fora.previsao.slice(5, 7)}
+                        </span>
+                      )}
                       {o.grade && <span className="os-cli">{gradeTexto(o.grade)}</span>}
+                      {(o.lista?.length ?? 0) > 0 && <span className="os-cli">Lista de nomes: {o.lista!.length} peças</span>}
                       {o.cores.length > 0 && <span className="os-cli">Cores: {o.cores.join(', ')}</span>}
                       {o.descricao && <span className="os-cli">{o.descricao}</span>}
                     </a>

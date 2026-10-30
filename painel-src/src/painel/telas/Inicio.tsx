@@ -258,7 +258,7 @@ function InicioVendedor({ s }: { s: Sessao }) {
         <a className="vendedor-bt" href={link('pdv')}>
           <Icone nome="pdv" tamanho={34} />
           <b>Balcão</b>
-          <small>Xerox, impressão e pronta entrega</small>
+          <small>Cópia, impressão, plastificação e encadernação</small>
         </a>
         <a className="vendedor-bt" href={link('producao')}>
           <Icone nome="pincel" tamanho={34} />

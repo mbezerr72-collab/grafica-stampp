@@ -63,7 +63,7 @@ function Caixa({ s }: { s: Sessao }) {
   const todos = useMemo<Item[]>(() => {
     const acoes: Item[] = [
       { id: 'a-pedido', grupo: 'Ações', nome: 'Novo pedido', sub: 'Camisa, banner, cartão, caneca…', icone: 'os', fazer: () => pedir({ tela: 'pedidos', nova: true }) },
-      { id: 'a-venda', grupo: 'Ações', nome: 'Venda no balcão', sub: 'Xerox, impressão e pronta entrega', icone: 'pdv', fazer: () => ir('pdv') },
+      { id: 'a-venda', grupo: 'Ações', nome: 'Venda no balcão', sub: 'Cópia, impressão, plastificação e encadernação', icone: 'pdv', fazer: () => ir('pdv') },
       { id: 'a-orc', grupo: 'Ações', nome: 'Responder orçamentos', sub: 'Os que chegaram do site e do WhatsApp', icone: 'mensagem', fazer: () => ir('orcamentos') },
       { id: 'a-produto', grupo: 'Ações', nome: 'Cadastrar produto', sub: 'Produto ou serviço com opções e preços', icone: 'somar', fazer: () => ir('produtos', 'novo') },
       { id: 'a-ass', grupo: 'Ações', nome: 'Abrir o Assistente', sub: 'Pergunte sobre vendas, pedidos, contas…', icone: 'assistente', fazer: () => abrirAssistente() },

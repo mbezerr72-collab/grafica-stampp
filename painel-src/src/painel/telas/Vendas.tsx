@@ -138,7 +138,7 @@ function DetalheVenda({ v, fechar, dono }: { v: Venda; fechar: () => void; dono:
   const desfazer = async (status: 'cancelada' | 'devolvida') => {
     const ok = await confirmar({
       titulo: status === 'cancelada' ? `Cancelar a venda nº ${v.numero}?` : `Registrar a devolução da venda nº ${v.numero}?`,
-      texto: status === 'cancelada' ? 'O que era de pronta entrega volta ao estoque. A venda sai do total vendido.' : 'O dinheiro volta para o cliente e a venda sai do faturamento.',
+      texto: status === 'cancelada' ? 'A venda sai do total vendido. O que tinha estoque contado (balcão) volta para ele.' : 'O dinheiro volta para o cliente e a venda sai do faturamento.',
       botao: status === 'cancelada' ? 'Cancelar venda' : 'Registrar devolução',
       perigo: true,
     })
